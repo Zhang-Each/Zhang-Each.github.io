@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="RandomStar">
+    
+    <title>
+        
+            手写神经网络9：三层CNN |
+        
+        在那不遥远的地方
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"zhang-each.github.io","root":"/","language":"zh-cn","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的背影。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                在那不遥远的地方
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                主页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                关于
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">主页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">关于</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">手写神经网络9：三层CNN</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/skadi.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">RandomStar</span>
+                        
+                            <span class="author-label">Lv5</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;2021-05-15 12:51:07
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%9E%E8%B7%B5/">代码实践</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Python/">Python</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">神经网络</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>1.3k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>5 分钟</span>
+        </span>
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="手写神经网络9三层cnn">手写神经网络9：三层CNN</h1>
+<blockquote>
+<p>这个系列是我在完成斯坦福公开课CS231N的作业时候所做的一些记录，这门课程是公认的深度学习入门的神课，其作业也非常硬核，需要从底层实现各种神经网络模型，包括前馈神经网络、卷积神经网络和循环神经网络，LSTM等等。</p>
+<p>作业不仅要求掌握numpy等python库的api用法，更要对神经网络的数学理论和公式推导有非常深的理解，实现起来难度比较大，因此我也将在这个系列的博客中记录自己推导和coding的过程</p>
+<p>限于个人水平实在有限，我尽量减少参考网上代码的次数</p>
+</blockquote>
+<h2 id="三层cnn的架构">1.三层CNN的架构</h2>
+<ul>
+<li>写了这么久我们终于来到了手写CNN的环节，当然我们前面写的一些东西比较naive，不堪大用，只能用于理解和学习CNN中各个层的作用，因此CS231N的assignment2为我们提供了一些写好的层，将原来的一些层进行了组合，比如<code>affine_relu_forward</code>，<code>conv_relu_forward</code>和<code>conv_bn_relu_forward</code>，其实也只是在我们写好的layers上面封装了一层函数，将全连接层+ReLU，卷积层+ReLU组合成了完整的一个层</li>
+<li>CNN通常来说是这样的架构：</li>
+</ul>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20210514131337907.png" alt="CNN架构图" style="zoom:67%;"></p>
+<ul>
+<li>而我们需要实现的三层CNN的架构就是：<code>conv - relu - 2x2 max pool - affine - relu - affine - softmax</code> 和上面的图基本一致。</li>
+</ul>
+<h2 id="代码实现">2.代码实现</h2>
+<h3 id="初始化">2.1初始化</h3>
+<ul>
+<li><p>我们定义了一个类<code>ThreeLayerConvNet</code>，并需要实现类的初始化和前向反向传播</p></li>
+<li><p>初始化和前面的全连接神经网络基本一致，这里需要注意的就是，我们需要实现的三层神经网络架构中的参数主要有：</p>
+<ul>
+<li>卷积层的卷积核W1和偏差b1</li>
+<li>第一个全连接层的参数W2和b2</li>
+<li>第二个全连接层的参数W3和b3</li>
+</ul></li>
+<li><p>以上这些参数都要按照正态分布的规则进行随机初始化，这一部分代码比较简单，就不放出来了。</p></li>
+</ul>
+<h3 id="前向传播和反向传播">2.2前向传播和反向传播</h3>
+<ul>
+<li>我们需要在loss函数中实现前向传播和反向传播，并求出所有参数的梯度和总的损失函数</li>
+<li>前向传播的过程比较简单，就是用现成的api一层层计算下去：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">loss</span>(<span class="params">self, X, y=<span class="literal">None</span></span>):</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Evaluate loss and gradient for the three-layer convolutional network.</span></span><br><span class="line"><span class="string">        Input / output: Same API as TwoLayerNet in fc_net.py.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        W1, b1 = self.params[<span class="string">"W1"</span>], self.params[<span class="string">"b1"</span>]</span><br><span class="line">        W2, b2 = self.params[<span class="string">"W2"</span>], self.params[<span class="string">"b2"</span>]</span><br><span class="line">        W3, b3 = self.params[<span class="string">"W3"</span>], self.params[<span class="string">"b3"</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># pass conv_param to the forward pass for the convolutional layer</span></span><br><span class="line">        <span class="comment"># Padding and stride chosen to preserve the input spatial size</span></span><br><span class="line">        filter_size = W1.shape[<span class="number">2</span>]</span><br><span class="line">        conv_param = {<span class="string">"stride"</span>: <span class="number">1</span>, <span class="string">"pad"</span>: (filter_size - <span class="number">1</span>) // <span class="number">2</span>}</span><br><span class="line"></span><br><span class="line">        <span class="comment"># pass pool_param to the forward pass for the max-pooling layer</span></span><br><span class="line">        pool_param = {<span class="string">"pool_height"</span>: <span class="number">2</span>, <span class="string">"pool_width"</span>: <span class="number">2</span>, <span class="string">"stride"</span>: <span class="number">2</span>}</span><br><span class="line">        scores = <span class="literal">None</span></span><br><span class="line">        <span class="comment"># 逐层实现反向传播</span></span><br><span class="line">        out1, cache1 = conv_relu_pool_forward(X, W1, b1, conv_param, pool_param)</span><br><span class="line">        out2, cache2 = affine_relu_forward(out1, W2, b2)</span><br><span class="line">        scores, cache3 = affine_forward(out2, W3, b3)</span><br><span class="line">        <span class="keyword">if</span> y <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> scores</span><br></pre></td></tr></table></figure>
+<ul>
+<li>然后反向传播就是用已经写好的单层反向传播组合起来，同时也可以算出loss函数，注意最后要加上正则项</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">loss, grads = <span class="number">0</span>, {}</span><br><span class="line">  </span><br><span class="line">   loss, dout = softmax_loss(scores, y)</span><br><span class="line">   dout3, grads[<span class="string">'W3'</span>], grads[<span class="string">'b3'</span>] = affine_backward(dout, cache3)</span><br><span class="line">   dout2, grads[<span class="string">'W2'</span>], grads[<span class="string">'b2'</span>] = affine_relu_backward(dout3, cache2)</span><br><span class="line">   dout1, grads[<span class="string">'W1'</span>], grads[<span class="string">'b1'</span>] = conv_relu_pool_backward(dout2, cache1)</span><br><span class="line">   <span class="comment"># 加上正则项</span></span><br><span class="line">   loss += <span class="number">0.5</span> * self.reg * (np.<span class="built_in">sum</span>(W1 * W1) + np.<span class="built_in">sum</span>(W2 * W2) + np.<span class="built_in">sum</span>(W3 * W3))</span><br><span class="line">   grads[<span class="string">'W3'</span>] += self.reg * W3</span><br><span class="line">   grads[<span class="string">'W2'</span>] += self.reg * W2</span><br><span class="line">   grads[<span class="string">'W1'</span>] += self.reg * W1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>最后这个自己搭建的简单三层神经网络在CIFAR数据集上的表现如下图所示，可以看到在训练集上的表现非常不错，但是在测试集上的表现比较糟糕，原因也很简单，就是因为神经网络训练过程中过拟合了，如果考虑使用标准化层和DropOut可能表现效果会更好一点。</li>
+</ul>
+<figure>
+<img lazyload="" src="/images/loading.svg" data-src="image-20210515001728149.png" alt="简易三层CNN的loss曲线和预测准确度"><figcaption aria-hidden="true">简易三层CNN的loss曲线和预测准确度</figcaption>
+</figure>
+<h2 id="三层cnn的pytorch实现">3.三层CNN的Pytorch实现</h2>
+<ul>
+<li>这部分作业的最后也要求我们用Pytorch实现一个架构和上面相同的CNN，而Pytorch框架有自动求梯度的功能，相比之下搭建神经网络就简单了很多。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThreeLayerConvNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, in_channel, channel_1, channel_2, num_classes</span>):</span></span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(in_channel, channel_1, <span class="number">5</span>, padding=<span class="number">2</span>, bias=<span class="literal">True</span>)</span><br><span class="line">        nn.init.kaiming_normal_(self.conv1.weight)</span><br><span class="line">        self.conv2 = nn.Conv2d(channel_1, channel_2, <span class="number">3</span>, padding=<span class="number">1</span>, bias=<span class="literal">True</span>)</span><br><span class="line">        nn.init.kaiming_normal_(self.conv2.weight)</span><br><span class="line">        self.fc = nn.Linear(channel_2 * <span class="number">32</span> * <span class="number">32</span>, num_classes)</span><br><span class="line">        nn.init.kaiming_normal_(self.fc.weight)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        scores = Nonex = self.conv1(x)</span><br><span class="line">        x = F.relu(x)</span><br><span class="line">        x = self.conv2(x)</span><br><span class="line">        x = F.relu(x)</span><br><span class="line">        x = flatten(x) <span class="comment"># 这是一个另外定义的将张量压缩成一维的函数</span></span><br><span class="line">        scores = self.fc(x)</span><br><span class="line">        <span class="keyword">return</span> scores</span><br></pre></td></tr></table></figure>
+<ul>
+<li>我们用这样几行代码就做好了一个简单的三层神经网络，使用Pytorch的<code>nn.Module API</code>搭建神经网络的时候只需要继承<code>nn.Module</code>类，并在init函数中定义好所需要的层，在forward函数中定义神经网络的计算过程就可以了</li>
+<li>模型的训练也很简单，只需要定义优化器和编写简单的每个epoch代码，Pytorch就会自动完成求梯度和反向传播的过程。</li>
+</ul>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>本文标题：手写神经网络9：三层CNN</li>
+        <li>本文作者：RandomStar</li>
+        <li>创建时间：2021-05-15 12:51:07</li>
+        <li>
+            本文链接：https://zhang-each.github.com/2021/05/15/coding9/
+        </li>
+        <li>
+            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2021/05/16/intern1/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">2021春招实习-MySQL知识整理</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2021/05/14/coding-ml3/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">机器学习代码实现3：KNN算法</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+            <div class="comment-container">
+                <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fas fa-comments">&nbsp;评论</i>
+    </div>
+    
+
+        
+            
+    <div class="valine-container">
+        <script 
+                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+            function loadValine() {
+                new Valine({
+                    el: '#vcomments',
+                    appId: 'b6BpXpwUq5wyUMcLtbnNMD8N-gzGzoHsz',
+                    appKey: 'Qtl7JkpdLDat2Niacks6SyT5',
+                    meta: ['nick', 'mail', 'link'],
+                    avatar: 'wavatar',
+                    enableQQ: true,
+                    placeholder: '快来发表你的看法吧！',
+                    lang: 'zh-cn'.toLowerCase()
+                });
+
+                function getAuthor(language) {
+                    switch (language) {
+                        case 'en':
+                            return 'Author';
+                        case 'zh-CN':
+                            return '博主';
+                        default:
+                            return 'Master';
+                    }
+                }
+
+                // Add "Author" identify
+                const getValineDomTimer = setInterval(() => {
+                    const vcards = document.querySelectorAll('#vcomments .vcards .vcard');
+                    if (vcards.length > 0) {
+                        let author = 'RandomStar';
+
+                        if (author) {
+                            for (let vcard of vcards) {
+                                const vnick_dom = vcard.querySelector('.vhead .vnick');
+                                const vnick = vnick_dom.innerHTML;
+                                if (vnick === author) {
+                                    vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                                }
+                            }
+                        }
+                        clearInterval(getValineDomTimer);
+                    } else {
+                        clearInterval(getValineDomTimer);
+                    }
+                }, 2000);
+            }
+
+            if ('false') {
+                const loadValineTimeout = setTimeout(() => {
+                    loadValine();
+                    clearTimeout(loadValineTimeout);
+                }, 1000);
+            } else {
+                window.addEventListener('DOMContentLoaded', loadValine);
+            }
+        </script>
+    </div>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2021&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">RandomStar</a>
+        </div>
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+        </script>
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">283.5k</span>&nbsp;字
+            <span>
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            <span>
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%8B%E5%86%99%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C9%E4%B8%89%E5%B1%82cnn"><span class="nav-number">1.</span> <span class="nav-text">手写神经网络9：三层CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%B1%82cnn%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">1.三层CNN的架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.</span> <span class="nav-text">2.代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD%E5%92%8C%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2前向传播和反向传播</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%B1%82cnn%E7%9A%84pytorch%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.</span> <span class="nav-text">3.三层CNN的Pytorch实现</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>

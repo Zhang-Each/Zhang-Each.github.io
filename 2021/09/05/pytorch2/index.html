@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="RandomStar">
+    
+    <title>
+        
+            PyTorch学习笔记02：Geometric库与GNN |
+        
+        在那不遥远的地方
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"zhang-each.github.io","root":"/","language":"zh-cn","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的背影。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                在那不遥远的地方
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                主页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                关于
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">主页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">关于</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">PyTorch学习笔记02：Geometric库与GNN</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/skadi.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">RandomStar</span>
+                        
+                            <span class="author-label">Lv5</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;2021-09-05 22:22:26
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%9E%E8%B7%B5/">代码实践</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Python/">Python</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/PyTorch/">PyTorch</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>1.3k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>5 分钟</span>
+        </span>
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <span id="more"></span>
+<!-- excerpt -->
+<h1 id="pytorch学习笔记02geometric库与gnn">PyTorch学习笔记02：Geometric库与GNN</h1>
+<!-- toc -->
+<blockquote>
+<p>之前学习Stanford的公开课CS224W的时候用到了torch_grometric, torch_scatter和torch_sparse等PyTorch扩展库来实现一些经典的图神经网络模型(当然还有networkx和deepsnap等辅助库，不过这些主要是用来保存图结构的，和PyTorch关系不大)，来记录一下学习这些库编写GNN的经验</p>
+</blockquote>
+<h2 id="pytorch_geometric库">PyTorch_Geometric库</h2>
+<p>PyTorch_Geometric是一个开源的PyTorch扩展库，提供了一系列开箱即用的图神经网络结构，可以在使用PyTorch编写深度学习模型的基础上，非常方便地进行调用，而CS224W提供了一系列lab需要你实现GCN，GraphSAGE和GAT等多种图神经网络结构，并要求使用<code>PyTorch_Geometric(torch_geometric)</code>进行编写和实现，下面来总结一下coding过程中学到的一些东西。</p>
+<p>同时<code>torch_geometric</code>和另外两个torch扩展库<code>torch_sparse</code>，<code>torch_scatter</code>，这两个库分别提供了优化后的稀疏矩阵操作和scatter操作，可以在GNN场景下优化模型的计算速度，一部分api也会在具体编写的时候用到。</p>
+<h2 id="直接调用gnn组件">直接调用GNN组件</h2>
+<p>PyTorch中提供了一些现成的组件可以直接调用并嵌入到模型中，比如图卷积网络中的图卷积层， <code>torch_geometric</code>提供了<code>GCNConv</code>可以直接进行调用，我们在编写模型的时候还是让整个模型继承<code>nn.Module</code>类并在init函数中定义若干卷积层，然后在forward函数中实现模型的前向传播即可。</p>
+<p>值得注意的是这类组件可能需要额外的参数来进行前向传播，比如<code>GCNConv</code>在前向传播的过程中需要提供途中结点的特征和图的<strong>邻接表</strong>以便进行卷积操作。下面这段代码就是一个很简单的多层图卷积网络的具体实现： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GCN</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        A graph convolution neural network with the architecture:</span></span><br><span class="line"><span class="string">        x --&gt; GCNconv --&gt; BN --&gt; ReLU --&gt; Dropout --&gt; x </span></span><br><span class="line"><span class="string">        …… x --&gt; GCNconv --&gt; log softmax --&gt; out</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,</span></span></span><br><span class="line"><span class="function"><span class="params">                    input_dim,</span></span></span><br><span class="line"><span class="function"><span class="params">                    hidden_dim,</span></span></span><br><span class="line"><span class="function"><span class="params">                    output_dim,</span></span></span><br><span class="line"><span class="function"><span class="params">                    num_layers,</span></span></span><br><span class="line"><span class="function"><span class="params">                    dropout,</span></span></span><br><span class="line"><span class="function"><span class="params">                    return_emdeds=<span class="literal">False</span></span>):</span></span><br><span class="line">            <span class="built_in">super</span>(GCN, self).__init__()</span><br><span class="line">            <span class="comment"># initialize the layers which have a repetitive unit </span></span><br><span class="line">            <span class="comment"># "x --&gt; GCNconv --&gt; BN --&gt; ReLU --&gt; Dropout"</span></span><br><span class="line">            self.num = num_layers</span><br><span class="line">            <span class="comment"># n graph-convolution layers &amp; batch-norm layers</span></span><br><span class="line">            self.convs = nn.ModuleList([</span><br><span class="line">                GCNConv(in_channels=hidden_dim, out_channels=hidden_dim)</span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self.num - <span class="number">2</span>)</span><br><span class="line">            ])</span><br><span class="line">            self.convs.insert(<span class="number">0</span>, GCNConv(in_channels=input_dim, out_channels=hidden_dim))</span><br><span class="line">            self.convs.append(GCNConv(in_channels=hidden_dim, out_channels=output_dim))</span><br><span class="line">            self.bns = nn.ModuleList(</span><br><span class="line">                nn.BatchNorm1d(hidden_dim) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self.num - <span class="number">1</span>)</span><br><span class="line">            )</span><br><span class="line">            self.softmax = nn.LogSoftmax()</span><br><span class="line">            self.dropout = dropout</span><br><span class="line">            self.return_embeds = return_emdeds</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x, adj</span>):</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self.num - <span class="number">1</span>):</span><br><span class="line">                x = self.convs[i](x, adj)</span><br><span class="line">                x = self.bns[i](x)</span><br><span class="line">                x = F.dropout(F.relu(x), self.dropout)</span><br><span class="line">            x = self.convs[-<span class="number">1</span>](x, adj)</span><br><span class="line">            out = self.softmax(x)</span><br><span class="line">            <span class="keyword">return</span> out</span><br></pre></td></tr></table></figure> 在写好其他一大串训练测试的代码之后，我是用<strong>Open-Graph-Benchmark</strong>中的ogbn-arxiv数据集对模型进行了训练和测试，最终得到的准确率变化曲线如下图所示：</p>
+<center>
+<img lazyload="" src="/images/loading.svg" data-src="image-20210902125600222.png" alt="image-20210902125600222" style="zoom:50%;">
+</center>
+<p>同时还有像<code>global_mean_pool</code>这样的图池化层可以实现不同类型的图池化操作。</p>
+<h2 id="自定义gnn层">自定义GNN层</h2>
+<p>除了直接调用现成的组件之外，<code>torch_geometric</code>还提供了编写自定义组件的方式来实现个性化的需求，比如实验中需要编写GraphSAGE和GAT两个模型的关键代码，这里就需要用自定义的GNN组件来实现两个模型。</p>
+<blockquote>
+<p>事实上这些经典的GNN都是基于消息传递机制而设计的，整个GNN层可以分成message passing---aggregate两个主要过程，message passing是让每个节点向周边的领域扩散自己的特征，而aggregate则是每个节点接收到邻居结点传递过来的消息，并进行聚合处理更新自己的特征表示。关于GNN的通用架构和GraphSAGE/GAT的具体实现可以看我写的<a href="https://zhang-each.github.io/2021/07/13/gml5/">另一篇博客</a></p>
+</blockquote>
+<p>而GraphSAGE和GAT实际上也是遵循了这种模式的，只不过它们在消息传递的过程中用的传播方式和聚合过程中的聚合函数不同。<code>torch_geometric</code>提供了自定义GNN层的方式，首先需要自己编写一个组件类来继承<code>torch_geometric.nn.conv</code>中的<code>MessagePassing</code>类，然后在此基础上实现<code>message</code>方法和<code>aggregate</code>方法以及所有的神经网络层都要实现的<code>init</code>和<code>forward</code>方法，就可以自己定义需要的图卷积组件。<code>message</code>方法主要实现图卷积中的消息传递操作，而<code>aggregate</code>主要实现聚合操作，同时在forward的函数中用<code>propagate</code>函数来调用模块的图卷积操作即可，<code>propagate</code>函数不需要自己给出实现。下面的代码给出了一个简单的GraphSAGE层的实现方式： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GraphSAGE</span>(<span class="params">MessagePassing</span>):</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,</span></span></span><br><span class="line"><span class="function"><span class="params">                    in_channel,</span></span></span><br><span class="line"><span class="function"><span class="params">                    out_channel,</span></span></span><br><span class="line"><span class="function"><span class="params">                    normalize=<span class="literal">True</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                    bias=<span class="literal">False</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                    **kwargs</span>):</span></span><br><span class="line">            <span class="built_in">super</span>(GraphSAGE, self).__init__(**kwargs)</span><br><span class="line">            self.in_channel = in_channel</span><br><span class="line">            self.out_channel = out_channel</span><br><span class="line">            self.normalize = normalize</span><br><span class="line">            self.linear_l = nn.Linear(self.in_channel, self.out_channel)</span><br><span class="line">            self.linear_r = nn.Linear(self.in_channel, self.out_channel)</span><br><span class="line">            self.reset_parameters()</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x, edge_index, size=<span class="literal">None</span></span>):</span></span><br><span class="line">            <span class="comment"># the propagate method will call the message passing procedure</span></span><br><span class="line">            x_agg = self.propagate(edge_index, x=(x, x), size=size)</span><br><span class="line">            result = self.linear_l(x) + x_agg</span><br><span class="line">            <span class="keyword">if</span> self.normalize:</span><br><span class="line">                result = F.normalize(result)</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">message</span>(<span class="params">self, x_j: Tensor</span>) -&gt; Tensor:</span></span><br><span class="line">            result = self.linear_r(x_j)</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line">        <span class="comment"># aggregate the neighbor information</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">aggregate</span>(<span class="params">self,</span></span></span><br><span class="line"><span class="function"><span class="params">                inputs: Tensor,</span></span></span><br><span class="line"><span class="function"><span class="params">                index: Tensor,</span></span></span><br><span class="line"><span class="function"><span class="params">                dim_size: <span class="type">Optional</span>[<span class="built_in">int</span>] = <span class="literal">None</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                ptr: <span class="type">Optional</span>[Tensor] = <span class="literal">None</span></span></span></span><br><span class="line"><span class="function"><span class="params">                </span>) -&gt; Tensor:</span></span><br><span class="line">            node_dim = self.node_dim</span><br><span class="line">            result = torch_scatter.scatter(inputs, index, dim=node_dim, reduce=<span class="string">"mean"</span>)</span><br><span class="line">            <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>聚合函数可以使用<code>torch_scatter.scatter</code>中提供的优化后的内置函数来提高效率，不需要自己实现</li>
+</ul>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>本文标题：PyTorch学习笔记02：Geometric库与GNN</li>
+        <li>本文作者：RandomStar</li>
+        <li>创建时间：2021-09-05 22:22:26</li>
+        <li>
+            本文链接：https://zhang-each.github.com/2021/09/05/pytorch2/
+        </li>
+        <li>
+            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2021/09/09/reading13/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">论文阅读笔记13：NSCaching</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2021/09/05/pytorch1/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">PyTorch学习笔记01：PyTorch的pipeline</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+            <div class="comment-container">
+                <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fas fa-comments">&nbsp;评论</i>
+    </div>
+    
+
+        
+            
+    <div class="valine-container">
+        <script 
+                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+            function loadValine() {
+                new Valine({
+                    el: '#vcomments',
+                    appId: 'b6BpXpwUq5wyUMcLtbnNMD8N-gzGzoHsz',
+                    appKey: 'Qtl7JkpdLDat2Niacks6SyT5',
+                    meta: ['nick', 'mail', 'link'],
+                    avatar: 'wavatar',
+                    enableQQ: true,
+                    placeholder: '快来发表你的看法吧！',
+                    lang: 'zh-cn'.toLowerCase()
+                });
+
+                function getAuthor(language) {
+                    switch (language) {
+                        case 'en':
+                            return 'Author';
+                        case 'zh-CN':
+                            return '博主';
+                        default:
+                            return 'Master';
+                    }
+                }
+
+                // Add "Author" identify
+                const getValineDomTimer = setInterval(() => {
+                    const vcards = document.querySelectorAll('#vcomments .vcards .vcard');
+                    if (vcards.length > 0) {
+                        let author = 'RandomStar';
+
+                        if (author) {
+                            for (let vcard of vcards) {
+                                const vnick_dom = vcard.querySelector('.vhead .vnick');
+                                const vnick = vnick_dom.innerHTML;
+                                if (vnick === author) {
+                                    vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                                }
+                            }
+                        }
+                        clearInterval(getValineDomTimer);
+                    } else {
+                        clearInterval(getValineDomTimer);
+                    }
+                }, 2000);
+            }
+
+            if ('false') {
+                const loadValineTimeout = setTimeout(() => {
+                    loadValine();
+                    clearTimeout(loadValineTimeout);
+                }, 1000);
+            } else {
+                window.addEventListener('DOMContentLoaded', loadValine);
+            }
+        </script>
+    </div>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2021&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">RandomStar</a>
+        </div>
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+        </script>
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">283.5k</span>&nbsp;字
+            <span>
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            <span>
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pytorch%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B002geometric%E5%BA%93%E4%B8%8Egnn"><span class="nav-number">1.</span> <span class="nav-text">PyTorch学习笔记02：Geometric库与GNN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pytorch_geometric%E5%BA%93"><span class="nav-number">1.1.</span> <span class="nav-text">PyTorch_Geometric库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E8%B0%83%E7%94%A8gnn%E7%BB%84%E4%BB%B6"><span class="nav-number">1.2.</span> <span class="nav-text">直接调用GNN组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89gnn%E5%B1%82"><span class="nav-number">1.3.</span> <span class="nav-text">自定义GNN层</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>
