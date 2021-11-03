@@ -138,8 +138,8 @@ mjx-container[display="true"] {
 mjx-container[display="true"] + br {
   display: none;
 }
-</style><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+</style><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 
 <body>
@@ -361,23 +361,15 @@ mjx-container[display="true"] + br {
 <span id="more"></span>
 <!-- excerpt -->
 <!-- toc -->
-<h1 id="实习笔记1gpu的体系架构">实习笔记1：GPU的体系架构</h1>
-<blockquote>
+<h1 id="实习笔记1：GPU的体系架构"><a href="#实习笔记1：GPU的体系架构" class="headerlink" title="实习笔记1：GPU的体系架构"></a>实习笔记1：GPU的体系架构</h1><blockquote>
 <p>在阿里云基础平台开发实习期间学习的一些笔记，当然处于保密性原则，这些笔记只包含网络中可以搜索的公开内容，不包含任何涉密信息。</p>
 </blockquote>
-<p>​ GPU是图形处理单元(Graph Processing Unit)，一开始是为了绘制图形和渲染设计的，但是逐渐增加了很多新的功能，GPU是显卡最核心的组成部分，但是显卡还包括了很多其他的组成部分，比如散热器，通讯组件和各种接口。</p>
-<h2 id="gpu和cpu的异构计算">GPU和CPU的异构计算</h2>
-<p>​ GPU需要和CPU进行协同工作，不能作为一个单独的计算平台来使用，可以看成是CPU的协处理器，因此所谓的GPU并行计算实际上是指CPU+GPU的异构计算架构，这种架构中CPU和GPU通过PCle总线进行连接并且CPU是host，而GPU是device，相比于CPU，GPU更加适合计算密集的任务，比如大型的矩阵运算，而CPU的运算核心比较少，但是可以实现复杂的逻辑运算，因此CPU适合做控制密集型的任务。</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20210726132435440.png" alt="image-20210726132435440"><figcaption aria-hidden="true">image-20210726132435440</figcaption>
-</figure>
-<p>​ 同时CPU上的线程是重量级的线程，上下文切换的过程开销比较大，而GPU中的线程是轻量级的线程，因此可以用CPU负责处理逻辑复杂的串行程序，而用GPU处理数据密集型的并行计算程序，互相取长补短。</p>
-<h2 id="gpu的体系架构">GPU的体系架构</h2>
-<h3 id="总体架构">总体架构</h3>
-<p>​ 一个典型的GPU由如下这些组件组成整体架构：</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20210726132609313.png" alt="image-20210726132609313"><figcaption aria-hidden="true">image-20210726132609313</figcaption>
-</figure>
+<p>​      GPU是图形处理单元(Graph Processing Unit)，一开始是为了绘制图形和渲染设计的，但是逐渐增加了很多新的功能，GPU是显卡最核心的组成部分，但是显卡还包括了很多其他的组成部分，比如散热器，通讯组件和各种接口。</p>
+<h2 id="GPU和CPU的异构计算"><a href="#GPU和CPU的异构计算" class="headerlink" title="GPU和CPU的异构计算"></a>GPU和CPU的异构计算</h2><p>​      GPU需要和CPU进行协同工作，不能作为一个单独的计算平台来使用，可以看成是CPU的协处理器，因此所谓的GPU并行计算实际上是指CPU+GPU的异构计算架构，这种架构中CPU和GPU通过PCle总线进行连接并且CPU是host，而GPU是device，相比于CPU，GPU更加适合计算密集的任务，比如大型的矩阵运算，而CPU的运算核心比较少，但是可以实现复杂的逻辑运算，因此CPU适合做控制密集型的任务。</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20210726132435440.png" alt="image-20210726132435440"></p>
+<p>​      同时CPU上的线程是重量级的线程，上下文切换的过程开销比较大，而GPU中的线程是轻量级的线程，因此可以用CPU负责处理逻辑复杂的串行程序，而用GPU处理数据密集型的并行计算程序，互相取长补短。</p>
+<h2 id="GPU的体系架构"><a href="#GPU的体系架构" class="headerlink" title="GPU的体系架构"></a>GPU的体系架构</h2><h3 id="总体架构"><a href="#总体架构" class="headerlink" title="总体架构"></a>总体架构</h3><p>​      一个典型的GPU由如下这些组件组成整体架构：</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20210726132609313.png" alt="image-20210726132609313"></p>
 <ul>
 <li>PCI Express 3.0：GPU与CPU的连接总线，负责传输指令和数据</li>
 <li>Giga Thread Engine：负责将线程块Block分配给SM</li>
@@ -388,11 +380,8 @@ mjx-container[display="true"] + br {
 <li>High Speed Hub：HSHUB，高速集线器，负责GPU间的内存访问</li>
 <li>NVLink：GPU间的高速互联接口</li>
 </ul>
-<h3 id="流多处理器架构">流多处理器架构</h3>
-<p>​ 每个流多处理器(SM)其实都像一个小型的计算机，并且组合成了一个计算集群，首先由CPU通过PCIE总线将任务传递给Giga线程引擎，然后引擎将任务进行分解并传递到每个SM上面，而SM的组成部分如下图所示：</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20210726140113495.png" alt="image-20210726140113495"><figcaption aria-hidden="true">image-20210726140113495</figcaption>
-</figure>
+<h3 id="流多处理器架构"><a href="#流多处理器架构" class="headerlink" title="流多处理器架构"></a>流多处理器架构</h3><p>​      每个流多处理器(SM)其实都像一个小型的计算机，并且组合成了一个计算集群，首先由CPU通过PCIE总线将任务传递给Giga线程引擎，然后引擎将任务进行分解并传递到每个SM上面，而SM的组成部分如下图所示：</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20210726140113495.png" alt="image-20210726140113495"></p>
 <ul>
 <li>Instruction Cache：指令缓存</li>
 <li>Warp Scheduler：线程束调度器，包含了数十个Core，每个Core都可以执行一个线程</li>
@@ -406,24 +395,14 @@ mjx-container[display="true"] + br {
 <li>Shared Memcoy：共享内存</li>
 </ul>
 <p>每个流多处理器接到任务之后，会由Warp Scheduler对其进行进一步的分解，并由Core来执行细分之后的任务。</p>
-<h3 id="gpu计算的层级化结构">GPU计算的层级化结构</h3>
-<p>​ 因此GPU的计算结构实际上分成了三层，即Device--SM--Core，整个GPU就是一个设备，包含了众多的SM，而每个SM里面又有多个core，这也和CUDA的任务分配相对应，CUDA将任务分成三个层级，分别是Grid--Block和Thread，每个GPU执行一个对应的Grid，而每个SM执行一个block(也叫做线程块)，每个core负责执行一个对应的thread</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20210726162227371.png" alt="image-20210726162227371"><figcaption aria-hidden="true">image-20210726162227371</figcaption>
-</figure>
-<p>​ 而各个SM之间只能通过全局内存间接通信，没有其它互联通道，所以GPU只适合进行纯并行化计算。如果在计算过程中每个SM之间还需要通信，则整体运行效率很低。</p>
-<h2 id="关于gpu的核心问题">关于GPU的核心问题</h2>
-<h3 id="如何与cpu协同工作">如何与CPU协同工作</h3>
-<p>​ CPU和GPU通过内存映射IO(Memory-Mapped IO)进行的，CPU通过MMIO访问GPU的寄存器状态，任何的命令的批示CPU发出，然后被提交到GPU</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20210726161054700.png" alt="image-20210726161054700"><figcaption aria-hidden="true">image-20210726161054700</figcaption>
-</figure>
-<h3 id="gpu的存储架构">GPU的存储架构</h3>
-<p>​ GPU中的存储结构最多可以分为五层，分别是寄存器，L1缓存(SM中)，L2缓存(GPU上面)，GPU显存，系统的显存，其存取速度依次变慢。</p>
-<h3 id="simd和simt">SIMD和SIMT</h3>
-<p>​ SIMD是单指令多数据，SIMT是单指令多线程，是SIMD的升级版，可以对GPU中的单个SM的多个Core同时处理同一个指令，并且每个Core存取的数据可以是不同的，这是的SIMD的运算单元可以被充分利用。</p>
-<h3 id="cuda编程模型">CUDA编程模型</h3>
-<p>​ 在CUDA中，<strong>host</strong>和<strong>device</strong>是两个重要的概念，我们用host指代CPU及其内存，而用device指代GPU及其内存。CUDA程序中既包含host程序，又包含device程序，它们分别在CPU和GPU上运行。同时，host与device之间可以进行通信，这样它们之间可以进行数据拷贝。典型的CUDA程序的执行流程如下：</p>
+<h3 id="GPU计算的层级化结构"><a href="#GPU计算的层级化结构" class="headerlink" title="GPU计算的层级化结构"></a>GPU计算的层级化结构</h3><p>​      因此GPU的计算结构实际上分成了三层，即Device—SM—Core，整个GPU就是一个设备，包含了众多的SM，而每个SM里面又有多个core，这也和CUDA的任务分配相对应，CUDA将任务分成三个层级，分别是Grid—Block和Thread，每个GPU执行一个对应的Grid，而每个SM执行一个block(也叫做线程块)，每个core负责执行一个对应的thread</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20210726162227371.png" alt="image-20210726162227371"></p>
+<p>​      而各个SM之间只能通过全局内存间接通信，没有其它互联通道，所以GPU只适合进行纯并行化计算。如果在计算过程中每个SM之间还需要通信，则整体运行效率很低。</p>
+<h2 id="关于GPU的核心问题"><a href="#关于GPU的核心问题" class="headerlink" title="关于GPU的核心问题"></a>关于GPU的核心问题</h2><h3 id="如何与CPU协同工作"><a href="#如何与CPU协同工作" class="headerlink" title="如何与CPU协同工作"></a>如何与CPU协同工作</h3><p>​      CPU和GPU通过内存映射IO(Memory-Mapped IO)进行的，CPU通过MMIO访问GPU的寄存器状态，任何的命令的批示CPU发出，然后被提交到GPU</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20210726161054700.png" alt="image-20210726161054700"></p>
+<h3 id="GPU的存储架构"><a href="#GPU的存储架构" class="headerlink" title="GPU的存储架构"></a>GPU的存储架构</h3><p>​      GPU中的存储结构最多可以分为五层，分别是寄存器，L1缓存(SM中)，L2缓存(GPU上面)，GPU显存，系统的显存，其存取速度依次变慢。</p>
+<h3 id="SIMD和SIMT"><a href="#SIMD和SIMT" class="headerlink" title="SIMD和SIMT"></a>SIMD和SIMT</h3><p>​      SIMD是单指令多数据，SIMT是单指令多线程，是SIMD的升级版，可以对GPU中的单个SM的多个Core同时处理同一个指令，并且每个Core存取的数据可以是不同的，这是的SIMD的运算单元可以被充分利用。</p>
+<h3 id="CUDA编程模型"><a href="#CUDA编程模型" class="headerlink" title="CUDA编程模型"></a>CUDA编程模型</h3><p>​      在CUDA中，<strong>host</strong>和<strong>device</strong>是两个重要的概念，我们用host指代CPU及其内存，而用device指代GPU及其内存。CUDA程序中既包含host程序，又包含device程序，它们分别在CPU和GPU上运行。同时，host与device之间可以进行通信，这样它们之间可以进行数据拷贝。典型的CUDA程序的执行流程如下：</p>
 <ul>
 <li>分配host内存，并进行数据初始化</li>
 <li>分配device内存，并从host将数据拷贝到device上</li>
@@ -431,23 +410,19 @@ mjx-container[display="true"] + br {
 <li>将device上的运算结果拷贝到host上</li>
 <li>释放device和host上分配的内存</li>
 </ul>
-<h1 id="实习笔记02cuda编程模型">实习笔记02：CUDA编程模型</h1>
-<blockquote>
+<h1 id="实习笔记02：CUDA编程模型"><a href="#实习笔记02：CUDA编程模型" class="headerlink" title="实习笔记02：CUDA编程模型"></a>实习笔记02：CUDA编程模型</h1><blockquote>
 <p>阅读CUDA Programming Guide官方文档的过程中做的一些笔记。</p>
 </blockquote>
-<h2 id="cuda编程模型-1">CUDA编程模型</h2>
-<p>​ 在有了多核的CPU和GPU之后，编程的挑战就变成了构建一个可以根据处理器数量自由地扩展其并行性的应用程序。而CUDA为了解决这个问题，对并行编程做出了三个关键的抽象，包括线程组，共享内存和障碍同步，并将这些特性作为编程语言的借口暴露给开发者供其使用。</p>
-<p>​ 这些抽象提供了细粒度的数据并行和线程并行，并且引导程序猿将问题分解成若干个粗粒度的，可以用若干个线程独立解决的子问题，并且将每个子问题分解成可以在一个线程块中并行完成的子任务。同时开发者不需要在意到底有多少个GPU，物理意义上的多处理器数量只需要让运行时系统掌握并进行调度集合，比如说同样是8个Block的线程，在面对不同SM个数的GPU时候的表现如下：</p>
+<h2 id="CUDA编程模型-1"><a href="#CUDA编程模型-1" class="headerlink" title="CUDA编程模型"></a>CUDA编程模型</h2><p>​      在有了多核的CPU和GPU之后，编程的挑战就变成了构建一个可以根据处理器数量自由地扩展其并行性的应用程序。而CUDA为了解决这个问题，对并行编程做出了三个关键的抽象，包括线程组，共享内存和障碍同步，并将这些特性作为编程语言的借口暴露给开发者供其使用。</p>
+<p>​      这些抽象提供了细粒度的数据并行和线程并行，并且引导程序猿将问题分解成若干个粗粒度的，可以用若干个线程独立解决的子问题，并且将每个子问题分解成可以在一个线程块中并行完成的子任务。同时开发者不需要在意到底有多少个GPU，物理意义上的多处理器数量只需要让运行时系统掌握并进行调度集合，比如说同样是8个Block的线程，在面对不同SM个数的GPU时候的表现如下：</p>
 <p><img lazyload="" src="/images/loading.svg" data-src="image-20210727173657628.png" alt="image-20210727173657628" style="zoom:50%;"></p>
 <p>如果一个GPU的SM数量多，对于同一个任务的处理就会更快。</p>
-<h3 id="kernel">Kernel</h3>
-<p>​ CUDA C++可以让开饭着定义kernel函数，当调用kernel函数的时候会由N个CUDA线程并行执行N次，定义kernel函数需要有<code>__global__</code>关键字并且在调用这个kernel函数的时候要用<code>&lt;&lt;&lt;...&gt;&gt;&gt;</code>来指定调用这个函数的时候需要并发执行的线程数，每个执行这个函数的线程都会有一个专门的id存储在内置变量<code>threadIdx</code>中，比如下面这段代码可以进行向量的加法计算：</p>
+<h3 id="Kernel"><a href="#Kernel" class="headerlink" title="Kernel"></a>Kernel</h3><p>​      CUDA C++可以让开饭着定义kernel函数，当调用kernel函数的时候会由N个CUDA线程并行执行N次，定义kernel函数需要有<code>__global__</code>关键字并且在调用这个kernel函数的时候要用<code>&lt;&lt;&lt;...&gt;&gt;&gt;</code>来指定调用这个函数的时候需要并发执行的线程数，每个执行这个函数的线程都会有一个专门的id存储在内置变量<code>threadIdx</code>中，比如下面这段代码可以进行向量的加法计算：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="keyword">void</span> <span class="title">VecAdd</span><span class="params">(Float *A, Float *B, Float *C)</span> </span>{</span><br><span class="line">		<span class="keyword">int</span> i = threadIdx.x;</span><br><span class="line">  	C[i] = A[i] + B[i];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">  	VecAdd&lt;&lt;&lt;<span class="number">1</span>, N&gt;&gt;&gt;(A, B, C);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 <ul>
 <li>这种调用方式使用了N个线程，每个线程给N维向量的一个维度进行相加</li>
 </ul>
-<h3 id="thread">Thread</h3>
-<p>​ 为了方便，threadIdx是一个有三个元素的结构体(文档中说是3-component vector)，这样一来线程就可以用一维，二维和三维的索引进行表示，这样就能更好的支持向量，矩阵和张量等运算，这些一维，二维和三维的线程索引可以对应到一维，二维和三位的线程块，比如下面这样一段矩阵相加的代码就用了二维的索引：</p>
+<h3 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h3><p>​      为了方便，threadIdx是一个有三个元素的结构体(文档中说是3-component vector)，这样一来线程就可以用一维，二维和三维的索引进行表示，这样就能更好的支持向量，矩阵和张量等运算，这些一维，二维和三维的线程索引可以对应到一维，二维和三位的线程块，比如下面这样一段矩阵相加的代码就用了二维的索引：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="keyword">void</span> <span class="title">MatAdd</span><span class="params">(<span class="keyword">float</span> A[N][N], <span class="keyword">float</span> B[N][N],</span></span></span><br><span class="line"><span class="function"><span class="params">                       <span class="keyword">float</span> C[N][N])</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="keyword">int</span> i = threadIdx.x;</span><br><span class="line">    <span class="keyword">int</span> j = threadIdx.y;</span><br><span class="line">    C[i][j] = A[i][j] + B[i][j];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// Kernel invocation with one block of N * N * 1 threads</span></span><br><span class="line">    <span class="keyword">int</span> numBlocks = <span class="number">1</span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">threadsPerBlock</span><span class="params">(N, N)</span></span>;</span><br><span class="line">    MatAdd&lt;&lt;&lt;numBlocks, threadsPerBlock&gt;&gt;&gt;(A, B, C);</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 <ul>
 <li>当然每个block里面线程的个数是有上限的，一般是1024个，这是因为一个block的线程必须被放在一个处理器核中执行，并且必须共享有限的内存和系统资源</li>
@@ -459,38 +434,26 @@ mjx-container[display="true"] + br {
 <li>下面给出一个用多个block实现的矩阵加法的代码：</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="keyword">void</span> <span class="title">MatAdd</span><span class="params">(<span class="keyword">float</span> A[N][N], <span class="keyword">float</span> B[N][N],</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">float</span> C[N][N])</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="keyword">int</span> i = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="keyword">int</span> j = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    <span class="keyword">if</span> (i &lt; N &amp;&amp; j &lt; N)</span><br><span class="line">        C[i][j] = A[i][j] + B[i][j];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// Kernel invocation</span></span><br><span class="line">    <span class="function">dim3 <span class="title">threadsPerBlock</span><span class="params">(<span class="number">16</span>, <span class="number">16</span>)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">numBlocks</span><span class="params">(N / threadsPerBlock.x, N / threadsPerBlock.y)</span></span>;</span><br><span class="line">    MatAdd&lt;&lt;&lt;numBlocks, threadsPerBlock&gt;&gt;&gt;(A, B, C);</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<p>但是线程块必须要能够独立地执行，并且任意改变执行的顺序不能影响运算的结果。一个block内的线程需要通过共享内存来共享一些数据，并且需要对内存的访问进行同步，因此CUDA提供了共享内存和<code>__syncthreads</code></p>
-<h3 id="memory">Memory</h3>
-<p>​ CUDA线程可以执行的过程中可以访问多个内存空间中的数据，每个线程有一个私有的局部内存空间，每个block内有可以共享的存储空间。</p>
-<h1 id="用户态文件系统fuse">用户态文件系统FUSE</h1>
-<h2 id="fuse文件系统">FUSE文件系统</h2>
-<p>​ 我们都知道一般的操作系统可以分为用户态和内核态两种mode，用户态的程序在用户栈中执行，而内核态的程序在操作系统的内核中执行，内核态可以执行很多用户态不能执行的指令，并且可以掌管整个计算机的资源。用户态可以通过系统调用切换到内核态，比如打开一个文件，我们需要调用用户态的打开文件的api，然后这个api会进行系统调用切换到内核态并调用内核态的打开文件api来打开一个文件。</p>
-<p>​ 而用户态的文件系统，就是说是指一个文件系统的data和metadata都是由用户态的进程提供的(这种进程被称为是daemon)，对于微内核的操作系统来说实现一个用户态文件系统没啥问题，但是对于宏内核架构的Linux架构来说有着不同的意义。用户态文件系统不代表其完全不需要内核的参与，因为在Linux中，对文件的访问都是统一通过<strong>VFS</strong>层提供的内核接口进行的（比如open/read），因此当一个进程（称为"user"）访问由daemon实现的文件系统时，依然需要途径VFS。Linux中实现了FUSE(File system in User Space)</p>
-<p>​ 事实上这个过程变成了VFS收到用户的文件操作请求之后，将这些请求转接到了Linux Kernel中的FUSE模块中，再让这个模块将请求按照指定的协议格式传递给用户态中的文件系统管理模块FUSE，然后由FUSE进行文件系统的请求的响应。</p>
+<p>但是线程块必须要能够独立地执行，并且任意改变执行的顺序不能影响运算的结果。一个block内的线程需要通过共享内存来共享一些数据，并且需要对内存的访问进行同步，因此CUDA提供了共享内存和<code>__syncthreads</code> </p>
+<h3 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h3><p>​      CUDA线程可以执行的过程中可以访问多个内存空间中的数据，每个线程有一个私有的局部内存空间，每个block内有可以共享的存储空间。</p>
+<h1 id="用户态文件系统FUSE"><a href="#用户态文件系统FUSE" class="headerlink" title="用户态文件系统FUSE"></a>用户态文件系统FUSE</h1><h2 id="FUSE文件系统"><a href="#FUSE文件系统" class="headerlink" title="FUSE文件系统"></a>FUSE文件系统</h2><p>​      我们都知道一般的操作系统可以分为用户态和内核态两种mode，用户态的程序在用户栈中执行，而内核态的程序在操作系统的内核中执行，内核态可以执行很多用户态不能执行的指令，并且可以掌管整个计算机的资源。用户态可以通过系统调用切换到内核态，比如打开一个文件，我们需要调用用户态的打开文件的api，然后这个api会进行系统调用切换到内核态并调用内核态的打开文件api来打开一个文件。</p>
+<p>​      而用户态的文件系统，就是说是指一个文件系统的data和metadata都是由用户态的进程提供的(这种进程被称为是daemon)，对于微内核的操作系统来说实现一个用户态文件系统没啥问题，但是对于宏内核架构的Linux架构来说有着不同的意义。用户态文件系统不代表其完全不需要内核的参与，因为在Linux中，对文件的访问都是统一通过<strong>VFS</strong>层提供的内核接口进行的（比如open/read），因此当一个进程（称为”user”）访问由daemon实现的文件系统时，依然需要途径VFS。Linux中实现了FUSE(File system in User Space)</p>
+<p>​      事实上这个过程变成了VFS收到用户的文件操作请求之后，将这些请求转接到了Linux Kernel中的FUSE模块中，再让这个模块将请求按照指定的协议格式传递给用户态中的文件系统管理模块FUSE，然后由FUSE进行文件系统的请求的响应。</p>
 <p><img lazyload="" src="/images/loading.svg" data-src="image-20210729145748319.png" alt="image-20210729145748319" style="zoom: 33%;"></p>
 <p>简单来说FUSE文件系统实际上就是实现了一个对文件系统访问的回调，整个系统分成用户态的库和内核态的库两个部分。用户态的库是提供给开发者的一些借口，我们可以通过这些接口将文件注册到FUSE中，内核态模块是具体的数据流程的功能实现，可以截获文件的访问请求，然后调用用户态注册的函数进行处理。</p>
-<h2 id="libfuse">libfuse</h2>
-<p>​ libfuse是一个实现了Linux FUSE系统的开源项目，其中FUSE的内核代码在Linux Kernel的仓库中维护，而用户态的库在<a class="link" target="_blank" rel="noopener" href="https://github.com/libfuse/libfuse">这个仓库<i class="fas fa-external-link-alt"></i></a>中进行维护，这个用户态的库提供了挂起/卸载文件系统、从内核中读取请求并且发送回复等功能。</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20210729163634704.png" alt="image-20210729163634704"><figcaption aria-hidden="true">image-20210729163634704</figcaption>
-</figure>
-<p>​ 同时linfuse提供了高级和低级两套api系统，高级api是同步的，低级的api是异步的，但是二者都使用了回调的方式将内核发送过来的请求传递到了主程序中，当使用高级api的时候这些回调通过文件名和路径来执行，并且在回调函数返回的时候结束一个请求的处理过程，而低级api往往是通过inode来调用并且必须用一些独立的api函数来显式地进行返回。</p>
-<h2 id="系统调用拦截syscall-intercept">系统调用拦截(Syscall Intercept)</h2>
-<p>​ libsyscall_intercept是一个开源的系统调用拦截库，提供了一个低层级的接口用于在用户空间中阻断系统调用。这个过程是通过对进程内存中的机器代码打上热补丁的方式进行了，同时这个库还停工了在用户空间实现几乎所有系统调用的功能，并且api比较简单，形式如下：</p>
+<h2 id="libfuse"><a href="#libfuse" class="headerlink" title="libfuse"></a>libfuse</h2><p>​      libfuse是一个实现了Linux FUSE系统的开源项目，其中FUSE的内核代码在Linux Kernel的仓库中维护，而用户态的库在<a class="link" target="_blank" rel="noopener" href="https://github.com/libfuse/libfuse">这个仓库<i class="fas fa-external-link-alt"></i></a>中进行维护，这个用户态的库提供了挂起/卸载文件系统、从内核中读取请求并且发送回复等功能。</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20210729163634704.png" alt="image-20210729163634704"></p>
+<p>​      同时linfuse提供了高级和低级两套api系统，高级api是同步的，低级的api是异步的，但是二者都使用了回调的方式将内核发送过来的请求传递到了主程序中，当使用高级api的时候这些回调通过文件名和路径来执行，并且在回调函数返回的时候结束一个请求的处理过程，而低级api往往是通过inode来调用并且必须用一些独立的api函数来显式地进行返回。</p>
+<h2 id="系统调用拦截-Syscall-Intercept"><a href="#系统调用拦截-Syscall-Intercept" class="headerlink" title="系统调用拦截(Syscall Intercept)"></a>系统调用拦截(Syscall Intercept)</h2><p>​      libsyscall_intercept是一个开源的系统调用拦截库，提供了一个低层级的接口用于在用户空间中阻断系统调用。这个过程是通过对进程内存中的机器代码打上热补丁的方式进行了，同时这个库还停工了在用户空间实现几乎所有系统调用的功能，并且api比较简单，形式如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> (*intercept_hook_point)(<span class="keyword">long</span> syscall_number,</span><br><span class="line">			<span class="keyword">long</span> arg0, <span class="keyword">long</span> arg1,</span><br><span class="line">			<span class="keyword">long</span> arg2, <span class="keyword">long</span> arg3,</span><br><span class="line">			<span class="keyword">long</span> arg4, <span class="keyword">long</span> arg5,</span><br><span class="line">			<span class="keyword">long</span> *result);</span><br></pre></td></tr></table></figure>
 <p>这实际上是一个回调函数的形式，用户可以用libsyscall_intercept库来调用这个回调函数，并且有非零的返回值来表示系统调用没有被拦截并且需要被执行，如果返回值是0那么就表明这个系统调用被拦截了，并且系统调用的结果会存储在result指针中，并且被拦截的系统调用由libsyscall_intercept来进行执行。</p>
-<p>​ 系统调用拦截让我们可以自定义一些底层的操作并加快系统调用api的执行，因为完整执行一个系统调用涉及到内核态和用户态的切换，会消耗大量的时间，如果我们在用户态实现了自定义的系统调用就可以达到加速的目的。</p>
-<h1 id="实习笔记04rdma通信协议">实习笔记04：RDMA通信协议</h1>
-<h2 id="背景">背景</h2>
-<p>​ 传统的TCP/IP技术在处理数据包的过程中需要经过操作系统和其他软件层，占用了大量的服务器资源和内存总线带宽，数据在系统内存，处理器缓存和网络控制器的缓存之间反复移动，给服务器的内存和CPU带来了大量的负担，加剧了网络的延迟效应。</p>
-<p>​ 远程内存直接访问(RDMA)重点解决了这种网络带宽，处理器速度和内存带宽之间的mismatch问题，用于高性能计算集群的互联，这是一种新型的内存访问技术，可以让计算机直接存取和访问其他计算机的内容，并且不需要经过CPU的处理，可以直接将数据从一个系统快速移动到远程系统的存储器中而不对操作系统造成任何影响。</p>
-<p>​ Socket通信的数据需要经过Socket，TCP，IP，网络设备等多个层级之后才能到达设备驱动器中，而RDMA可以直接访问远端计算机的设备驱动器进行内存的读写。</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20210802113425991.png" alt="image-20210802113425991"><figcaption aria-hidden="true">image-20210802113425991</figcaption>
-</figure>
-<h2 id="rdma的传输方式分类">RDMA的传输方式分类</h2>
-<p>​ RDMA的传输方式可以分成可信的和不可信的，其中可信的方式中NIC网卡使用确认的形式来保证消息的按顺序传递，而不可信的传输方式中不会进行确认。也可以分成有连接和无连接的两种，有连接的传输需要维护队列对的数据结构并进行一对一的通信，而无连接的通信方式可以进行一对多的通信。</p>
-<p>​ RDMA支持可信有连接，不可信有连接和不可信无连接三种大的通信方式，可以执行的操作包括收发，写和读等等，其中可信有连接的通信支持所有操作，而不可信连接不能进行读，不可信无连接只支持收发操作。</p>
+<p>​      系统调用拦截让我们可以自定义一些底层的操作并加快系统调用api的执行，因为完整执行一个系统调用涉及到内核态和用户态的切换，会消耗大量的时间，如果我们在用户态实现了自定义的系统调用就可以达到加速的目的。</p>
+<h1 id="实习笔记04：RDMA通信协议"><a href="#实习笔记04：RDMA通信协议" class="headerlink" title="实习笔记04：RDMA通信协议"></a>实习笔记04：RDMA通信协议</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>​      传统的TCP/IP技术在处理数据包的过程中需要经过操作系统和其他软件层，占用了大量的服务器资源和内存总线带宽，数据在系统内存，处理器缓存和网络控制器的缓存之间反复移动，给服务器的内存和CPU带来了大量的负担，加剧了网络的延迟效应。</p>
+<p>​      远程内存直接访问(RDMA)重点解决了这种网络带宽，处理器速度和内存带宽之间的mismatch问题，用于高性能计算集群的互联，这是一种新型的内存访问技术，可以让计算机直接存取和访问其他计算机的内容，并且不需要经过CPU的处理，可以直接将数据从一个系统快速移动到远程系统的存储器中而不对操作系统造成任何影响。</p>
+<p>​      Socket通信的数据需要经过Socket，TCP，IP，网络设备等多个层级之后才能到达设备驱动器中，而RDMA可以直接访问远端计算机的设备驱动器进行内存的读写。</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20210802113425991.png" alt="image-20210802113425991"></p>
+<h2 id="RDMA的传输方式分类"><a href="#RDMA的传输方式分类" class="headerlink" title="RDMA的传输方式分类"></a>RDMA的传输方式分类</h2><p>​      RDMA的传输方式可以分成可信的和不可信的，其中可信的方式中NIC网卡使用确认的形式来保证消息的按顺序传递，而不可信的传输方式中不会进行确认。也可以分成有连接和无连接的两种，有连接的传输需要维护队列对的数据结构并进行一对一的通信，而无连接的通信方式可以进行一对多的通信。</p>
+<p>​      RDMA支持可信有连接，不可信有连接和不可信无连接三种大的通信方式，可以执行的操作包括收发，写和读等等，其中可信有连接的通信支持所有操作，而不可信连接不能进行读，不可信无连接只支持收发操作。</p>
 
         </div>
 
@@ -653,7 +616,7 @@ mjx-container[display="true"] + br {
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
         </script>
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">283.5k</span>&nbsp;字
+                class="white-color">299.6k</span>&nbsp;字
             <span>
                 |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -746,7 +709,7 @@ mjx-container[display="true"] + br {
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AE%B01gpu%E7%9A%84%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">实习笔记1：GPU的体系架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gpu%E5%92%8Ccpu%E7%9A%84%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97"><span class="nav-number">1.1.</span> <span class="nav-text">GPU和CPU的异构计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gpu%E7%9A%84%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">GPU的体系架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.1.</span> <span class="nav-text">总体架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.2.</span> <span class="nav-text">流多处理器架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gpu%E8%AE%A1%E7%AE%97%E7%9A%84%E5%B1%82%E7%BA%A7%E5%8C%96%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.3.</span> <span class="nav-text">GPU计算的层级化结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Egpu%E7%9A%84%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98"><span class="nav-number">1.3.</span> <span class="nav-text">关于GPU的核心问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%B8%8Ecpu%E5%8D%8F%E5%90%8C%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.3.1.</span> <span class="nav-text">如何与CPU协同工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gpu%E7%9A%84%E5%AD%98%E5%82%A8%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.2.</span> <span class="nav-text">GPU的存储架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#simd%E5%92%8Csimt"><span class="nav-number">1.3.3.</span> <span class="nav-text">SIMD和SIMT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cuda%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.4.</span> <span class="nav-text">CUDA编程模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AE%B002cuda%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">实习笔记02：CUDA编程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cuda%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B-1"><span class="nav-number">2.1.</span> <span class="nav-text">CUDA编程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#kernel"><span class="nav-number">2.1.1.</span> <span class="nav-text">Kernel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thread"><span class="nav-number">2.1.2.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#memory"><span class="nav-number">2.1.3.</span> <span class="nav-text">Memory</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%80%81%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9Ffuse"><span class="nav-number">3.</span> <span class="nav-text">用户态文件系统FUSE</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#fuse%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.1.</span> <span class="nav-text">FUSE文件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#libfuse"><span class="nav-number">3.2.</span> <span class="nav-text">libfuse</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E6%8B%A6%E6%88%AAsyscall-intercept"><span class="nav-number">3.3.</span> <span class="nav-text">系统调用拦截(Syscall Intercept)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AE%B004rdma%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="nav-number">4.</span> <span class="nav-text">实习笔记04：RDMA通信协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">4.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rdma%E7%9A%84%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F%E5%88%86%E7%B1%BB"><span class="nav-number">4.2.</span> <span class="nav-text">RDMA的传输方式分类</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AE%B01%EF%BC%9AGPU%E7%9A%84%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">实习笔记1：GPU的体系架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GPU%E5%92%8CCPU%E7%9A%84%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97"><span class="nav-number">1.1.</span> <span class="nav-text">GPU和CPU的异构计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPU%E7%9A%84%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">GPU的体系架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.1.</span> <span class="nav-text">总体架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.2.</span> <span class="nav-text">流多处理器架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GPU%E8%AE%A1%E7%AE%97%E7%9A%84%E5%B1%82%E7%BA%A7%E5%8C%96%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.3.</span> <span class="nav-text">GPU计算的层级化结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8EGPU%E7%9A%84%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98"><span class="nav-number">1.3.</span> <span class="nav-text">关于GPU的核心问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%B8%8ECPU%E5%8D%8F%E5%90%8C%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.3.1.</span> <span class="nav-text">如何与CPU协同工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GPU%E7%9A%84%E5%AD%98%E5%82%A8%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.2.</span> <span class="nav-text">GPU的存储架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SIMD%E5%92%8CSIMT"><span class="nav-number">1.3.3.</span> <span class="nav-text">SIMD和SIMT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CUDA%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.4.</span> <span class="nav-text">CUDA编程模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AE%B002%EF%BC%9ACUDA%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">实习笔记02：CUDA编程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CUDA%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B-1"><span class="nav-number">2.1.</span> <span class="nav-text">CUDA编程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kernel"><span class="nav-number">2.1.1.</span> <span class="nav-text">Kernel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread"><span class="nav-number">2.1.2.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Memory"><span class="nav-number">2.1.3.</span> <span class="nav-text">Memory</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%80%81%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9FFUSE"><span class="nav-number">3.</span> <span class="nav-text">用户态文件系统FUSE</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FUSE%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.1.</span> <span class="nav-text">FUSE文件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#libfuse"><span class="nav-number">3.2.</span> <span class="nav-text">libfuse</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E6%8B%A6%E6%88%AA-Syscall-Intercept"><span class="nav-number">3.3.</span> <span class="nav-text">系统调用拦截(Syscall Intercept)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AE%B004%EF%BC%9ARDMA%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="nav-number">4.</span> <span class="nav-text">实习笔记04：RDMA通信协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">4.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDMA%E7%9A%84%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F%E5%88%86%E7%B1%BB"><span class="nav-number">4.2.</span> <span class="nav-text">RDMA的传输方式分类</span></a></li></ol></li></ol>
     </div>
 </div>
         </aside>

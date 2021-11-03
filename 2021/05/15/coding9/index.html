@@ -138,8 +138,8 @@ mjx-container[display="true"] {
 mjx-container[display="true"] + br {
   display: none;
 }
-</style><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+</style><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 
 <body>
@@ -351,14 +351,12 @@ mjx-container[display="true"] + br {
         
 
         <div class="article-content markdown-body">
-            <h1 id="手写神经网络9三层cnn">手写神经网络9：三层CNN</h1>
-<blockquote>
+            <h1 id="手写神经网络9：三层CNN"><a href="#手写神经网络9：三层CNN" class="headerlink" title="手写神经网络9：三层CNN"></a>手写神经网络9：三层CNN</h1><blockquote>
 <p>这个系列是我在完成斯坦福公开课CS231N的作业时候所做的一些记录，这门课程是公认的深度学习入门的神课，其作业也非常硬核，需要从底层实现各种神经网络模型，包括前馈神经网络、卷积神经网络和循环神经网络，LSTM等等。</p>
 <p>作业不仅要求掌握numpy等python库的api用法，更要对神经网络的数学理论和公式推导有非常深的理解，实现起来难度比较大，因此我也将在这个系列的博客中记录自己推导和coding的过程</p>
 <p>限于个人水平实在有限，我尽量减少参考网上代码的次数</p>
 </blockquote>
-<h2 id="三层cnn的架构">1.三层CNN的架构</h2>
-<ul>
+<h2 id="1-三层CNN的架构"><a href="#1-三层CNN的架构" class="headerlink" title="1.三层CNN的架构"></a>1.三层CNN的架构</h2><ul>
 <li>写了这么久我们终于来到了手写CNN的环节，当然我们前面写的一些东西比较naive，不堪大用，只能用于理解和学习CNN中各个层的作用，因此CS231N的assignment2为我们提供了一些写好的层，将原来的一些层进行了组合，比如<code>affine_relu_forward</code>，<code>conv_relu_forward</code>和<code>conv_bn_relu_forward</code>，其实也只是在我们写好的layers上面封装了一层函数，将全连接层+ReLU，卷积层+ReLU组合成了完整的一个层</li>
 <li>CNN通常来说是这样的架构：</li>
 </ul>
@@ -366,20 +364,19 @@ mjx-container[display="true"] + br {
 <ul>
 <li>而我们需要实现的三层CNN的架构就是：<code>conv - relu - 2x2 max pool - affine - relu - affine - softmax</code> 和上面的图基本一致。</li>
 </ul>
-<h2 id="代码实现">2.代码实现</h2>
-<h3 id="初始化">2.1初始化</h3>
-<ul>
-<li><p>我们定义了一个类<code>ThreeLayerConvNet</code>，并需要实现类的初始化和前向反向传播</p></li>
+<h2 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2.代码实现"></a>2.代码实现</h2><h3 id="2-1初始化"><a href="#2-1初始化" class="headerlink" title="2.1初始化"></a>2.1初始化</h3><ul>
+<li><p>我们定义了一个类<code>ThreeLayerConvNet</code>，并需要实现类的初始化和前向反向传播</p>
+</li>
 <li><p>初始化和前面的全连接神经网络基本一致，这里需要注意的就是，我们需要实现的三层神经网络架构中的参数主要有：</p>
 <ul>
 <li>卷积层的卷积核W1和偏差b1</li>
 <li>第一个全连接层的参数W2和b2</li>
 <li>第二个全连接层的参数W3和b3</li>
-</ul></li>
-<li><p>以上这些参数都要按照正态分布的规则进行随机初始化，这一部分代码比较简单，就不放出来了。</p></li>
 </ul>
-<h3 id="前向传播和反向传播">2.2前向传播和反向传播</h3>
-<ul>
+</li>
+<li>以上这些参数都要按照正态分布的规则进行随机初始化，这一部分代码比较简单，就不放出来了。</li>
+</ul>
+<h3 id="2-2前向传播和反向传播"><a href="#2-2前向传播和反向传播" class="headerlink" title="2.2前向传播和反向传播"></a>2.2前向传播和反向传播</h3><ul>
 <li>我们需要在loss函数中实现前向传播和反向传播，并求出所有参数的梯度和总的损失函数</li>
 <li>前向传播的过程比较简单，就是用现成的api一层层计算下去：</li>
 </ul>
@@ -391,11 +388,8 @@ mjx-container[display="true"] + br {
 <ul>
 <li>最后这个自己搭建的简单三层神经网络在CIFAR数据集上的表现如下图所示，可以看到在训练集上的表现非常不错，但是在测试集上的表现比较糟糕，原因也很简单，就是因为神经网络训练过程中过拟合了，如果考虑使用标准化层和DropOut可能表现效果会更好一点。</li>
 </ul>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20210515001728149.png" alt="简易三层CNN的loss曲线和预测准确度"><figcaption aria-hidden="true">简易三层CNN的loss曲线和预测准确度</figcaption>
-</figure>
-<h2 id="三层cnn的pytorch实现">3.三层CNN的Pytorch实现</h2>
-<ul>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20210515001728149.png" alt="简易三层CNN的loss曲线和预测准确度"></p>
+<h2 id="3-三层CNN的Pytorch实现"><a href="#3-三层CNN的Pytorch实现" class="headerlink" title="3.三层CNN的Pytorch实现"></a>3.三层CNN的Pytorch实现</h2><ul>
 <li>这部分作业的最后也要求我们用Pytorch实现一个架构和上面相同的CNN，而Pytorch框架有自动求梯度的功能，相比之下搭建神经网络就简单了很多。</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThreeLayerConvNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, in_channel, channel_1, channel_2, num_classes</span>):</span></span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(in_channel, channel_1, <span class="number">5</span>, padding=<span class="number">2</span>, bias=<span class="literal">True</span>)</span><br><span class="line">        nn.init.kaiming_normal_(self.conv1.weight)</span><br><span class="line">        self.conv2 = nn.Conv2d(channel_1, channel_2, <span class="number">3</span>, padding=<span class="number">1</span>, bias=<span class="literal">True</span>)</span><br><span class="line">        nn.init.kaiming_normal_(self.conv2.weight)</span><br><span class="line">        self.fc = nn.Linear(channel_2 * <span class="number">32</span> * <span class="number">32</span>, num_classes)</span><br><span class="line">        nn.init.kaiming_normal_(self.fc.weight)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        scores = Nonex = self.conv1(x)</span><br><span class="line">        x = F.relu(x)</span><br><span class="line">        x = self.conv2(x)</span><br><span class="line">        x = F.relu(x)</span><br><span class="line">        x = flatten(x) <span class="comment"># 这是一个另外定义的将张量压缩成一维的函数</span></span><br><span class="line">        scores = self.fc(x)</span><br><span class="line">        <span class="keyword">return</span> scores</span><br></pre></td></tr></table></figure>
@@ -565,7 +559,7 @@ mjx-container[display="true"] + br {
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
         </script>
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">283.5k</span>&nbsp;字
+                class="white-color">299.6k</span>&nbsp;字
             <span>
                 |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -658,7 +652,7 @@ mjx-container[display="true"] + br {
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%8B%E5%86%99%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C9%E4%B8%89%E5%B1%82cnn"><span class="nav-number">1.</span> <span class="nav-text">手写神经网络9：三层CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%B1%82cnn%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">1.三层CNN的架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.</span> <span class="nav-text">2.代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD%E5%92%8C%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2前向传播和反向传播</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%B1%82cnn%E7%9A%84pytorch%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.</span> <span class="nav-text">3.三层CNN的Pytorch实现</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%8B%E5%86%99%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C9%EF%BC%9A%E4%B8%89%E5%B1%82CNN"><span class="nav-number">1.</span> <span class="nav-text">手写神经网络9：三层CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%89%E5%B1%82CNN%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">1.三层CNN的架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.</span> <span class="nav-text">2.代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD%E5%92%8C%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2前向传播和反向传播</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%B8%89%E5%B1%82CNN%E7%9A%84Pytorch%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.</span> <span class="nav-text">3.三层CNN的Pytorch实现</span></a></li></ol></li></ol>
     </div>
 </div>
         </aside>

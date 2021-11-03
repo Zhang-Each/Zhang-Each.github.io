@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="RandomStar">
+    
+    <title>
+        
+            CMU15-445数据库系统2：数据库索引 |
+        
+        在那不遥远的地方
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"zhang-each.github.io","root":"/","language":"zh-cn","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的背影。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                在那不遥远的地方
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                主页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                关于
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">主页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">关于</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">CMU15-445数据库系统2：数据库索引</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/skadi.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">RandomStar</span>
+                        
+                            <span class="author-label">Lv5</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;2021-11-03 23:07:59
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">数据库系统的设计与实现</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/">数据库系统</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">计算机系统</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">数据存储</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>5.5k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>19 分钟</span>
+        </span>
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <blockquote>
+<p>这是CMU数据库课程15-445的第二个大的部分，主要讲数据库中的索引相关的内容，在2021秋的课程里应该对应Lecture06-Lecture08</p>
+</blockquote>
+<span id="more"></span>
+<!-- excerpt -->
+<!-- toc -->
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>数据库中需要维护多种不同的数据结构用作系统内部的不同模块，包括：</p>
+<ul>
+<li>内部的元数据信息，这一部分数据用来追踪数据库中存储信息本身的变化，比如页表</li>
+<li>核心数据存储，用于存放元组的基本存储结构</li>
+<li>临时数据结构，用在一些查询的处理和加速中，比如用于join操作的Hash table</li>
+<li>表索引：用于加快元组查询的关键数据结构，通过查找索引快速得到元组本身包含的数据</li>
+</ul>
+<p>而在设计数据库系统的数据结构的同时，我们需要重点关注：</p>
+<ul>
+<li>数据的组织方式，如何对内存进行布局，数据结构中存储什么信息才能提高访问效率</li>
+<li>并发性能，如何让数据结构支持多线程的访问并且不出现一致性问题</li>
+</ul>
+<h2 id="Hash索引"><a href="#Hash索引" class="headerlink" title="Hash索引"></a>Hash索引</h2><h3 id="Hash表的结构"><a href="#Hash表的结构" class="headerlink" title="Hash表的结构"></a>Hash表的结构</h3><p>Hash表是一种将key映射到value的数组型数据结构，这种结构提供了常数级别的时间复杂度和线性级别的空间复杂度，一个hash表的有两个关键的组成要素：</p>
+<ul>
+<li>hash函数，即如何将key映射到value上的函数，但是需要把握好执行速度和冲突率的trade-off，二者往往不可兼得，如果冲突率低，那么hash函数的计算就复杂，执行速度就慢，而如果hash函数太简单会造成很高的冲突率</li>
+<li>hash机制，即解决可能发生的key冲突的方式，这里我们需要考虑的是在构建一个大hash表和执行额外操作二者之间找到一个平衡，因为hash表越大相对来说越难发生冲突，但是消耗的存储空间也越大</li>
+</ul>
+<h3 id="静态Hash"><a href="#静态Hash" class="headerlink" title="静态Hash"></a>静态Hash</h3><p>静态索引指的是哈希表的大小固定的索引方式，如果表中的位置被用完了就要从头开始重新构建一张表，这个时候往往会使用原本两倍大小的空间作为hash表，静态hash常见的解决冲突的方式有这样几种：</p>
+<h4 id="线性探测Hash"><a href="#线性探测Hash" class="headerlink" title="线性探测Hash"></a>线性探测Hash</h4><p>最基本也是最有效的方法，当冲突发生的时候会用线性的方式搜索相邻的可以使用的槽来存放当前的key，在查找想要的key的时候，我们可以一直搜索直到找到想要的key为止，但是这也意味着我们要在槽中存储对应的key，而不是只存value就可以</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20211015001117634.png" alt="image-20211015001117634"></p>
+<p>这种策略下，删除就需要注意，比如以上面的图为例子，如果我们要删除D，那么在查询E的时候因为冲突需要进行平方探测，这个时候因为D被删除了所以在D的位置探测就结束了，但是并没有找到对应的E，因为E应该还在下一个位置，但是因为D缺失导致线性探测停止了，常用的解决办法有：</p>
+<ul>
+<li>墓碑(TombStone)法：虽然删了，但是留一个记录表示这里以前有某个key-value放着，需要继续往下探测</li>
+<li>另一种办法是在有删除操作之后改变其他数据的位置，保证删除之后能正常线性探测</li>
+</ul>
+<p>如果使用的key并不是unique的，那么也有两种解决办法：</p>
+<ul>
+<li>分离链表：使用一个链表来存储所有的值，并且key对应的value变成链表的指针</li>
+<li>冗余key存储：直接在hash表中存储多个相同的key进行摆烂</li>
+</ul>
+<center><img lazyload="" src="/images/loading.svg" data-src="image-20211015001911822.png" alt="image-20211015001911822" style="zoom:50%;"></center>
+
+<h4 id="罗宾汉Hash"><a href="#罗宾汉Hash" class="headerlink" title="罗宾汉Hash"></a>罗宾汉Hash</h4><p>罗宾汉Hash(Robin Hood Hash)是对线性探测的一种优化，会对槽的分配采取劫富济贫的策略，在这种策略下，每一个条目还同时<strong>记录了自己距离最优位置(即Hash直接运算的结果)的距离</strong>，在每一次插入新的key的时候，如果一通线性探测之后，给待插入的key准备的槽到最佳位置的距离大于现在在这个槽上的key到最佳位置的距离，那么就会把这个位置让给新key，然后重新给老key找一个位置。</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20211016100926711.png" alt="image-20211016100926711"></p>
+<ul>
+<li>这张图就是PPT中一个例子，首先按顺序插入AB，插入C的时候发生了一次线性探测所以C在3号位，而D因为和C冲突所以在4号位，距离最佳位置的偏移量都是1，而插入E的和A，C都发生了冲突，探测到D这里的时候偏移量已经是2了，比D要大，所以根据罗宾汉的规则D让位给E，接下来再给D找一个新位置。</li>
+</ul>
+<h4 id="Cuckoo-Hash"><a href="#Cuckoo-Hash" class="headerlink" title="Cuckoo Hash"></a>Cuckoo Hash</h4><p>Cuckoo Hash采取的策略是使用多个Hash表和多个Hash函数，并且这些Hash函数使用相同的算法，但是使用不同的seed，使得同一个key可以产生不同的结果。</p>
+<p>当需要插入新元素的时候，会检查每个表并且选择有空槽的一个，如果没有空的表，那么就随机选择一个并且踢掉那个位置上旧的条目，并将旧的条目重新hash到一个新的表里，如果发生了循环，那么就需要使用心得hash函数重新构建所有的hash表，虽然看起来变麻烦了，但是我们使用的仍然是常数个hash表，因此时间复杂度仍然控制在常数级别。</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20211016111250614.png" alt="image-20211016111250614"></p>
+<ul>
+<li>比如上面这个例子，首先插入A，发现hash函数的运算结果是1和3，假设放在表1的1号位，然后插入B，B的两个hash函数运算结果分别是1和0，为了不和A冲突所以插入表2的0号位，然后插入C发现C的hash函数运算结果是1和0，因此先替换B，B被替换之后只能去1号表抢了A的1号位，然后A就被调整到了2号表的3号位，这样一来就完成了三个元素的hash</li>
+</ul>
+<h3 id="动态Hash"><a href="#动态Hash" class="headerlink" title="动态Hash"></a>动态Hash</h3><p>动态hash机制可以在不重建hash表的基础上对hash表进行扩容(resize)，但是需要数据库系统能够过知道需要插入的元素的个数，否则就需要重建hash表，这种方式可以最大化利用hash表进行读和写。</p>
+<h4 id="链式Hash"><a href="#链式Hash" class="headerlink" title="链式Hash"></a>链式Hash</h4><p>最常见的动态Hash机制，数据库系统会维护一系列桶(buckets)，hash表中的每个位置现在就对应到了一个桶中，具有相同hash结果的key就会被放入那个槽对应的桶中，同时一个槽可以有多个桶，桶和桶之间用链表的形式组织起来，一个桶的内部可以有多个key-value对。</p>
+<p>这样一来查询的时候就变成了先hash再从桶中找对应的key，在极端情况下时间复杂度变成线性的，但是大部分情况下还是常数级别的复杂度。</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20211016112729350.png" alt="image-20211016112729350"></p>
+<h4 id="可伸长Hash"><a href="#可伸长Hash" class="headerlink" title="可伸长Hash"></a>可伸长Hash</h4><p>链式Hash可能会导致桶的不断扩增，而可伸长的hash方法允许<strong>表中的多个槽指向同一个桶链中</strong></p>
+<ul>
+<li>数据库系统维护一个全局和局部的位置编码来表示在槽数组中找到对应的桶所需要的位数(称为深度Depth)</li>
+<li>当一个桶满了的时候，数据库系统会将这个桶重新划分并且如果局部的深度小于全局，那么就找空槽将分割了的槽重新安置，否则就对表进行扩容来收纳新的槽，同时增加全局的编码深度(多用一位进行表示)</li>
+</ul>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20211016113056358.png" alt="image-20211016113056358"></p>
+<h4 id="线性Hash"><a href="#线性Hash" class="headerlink" title="线性Hash"></a>线性Hash</h4><p>线性Hash不会在一个桶溢出的时候立马进行分割，而是维护一个<strong>分割指针用来追踪下一个需要分割的桶</strong>，无论这个指针是否指向溢出的桶，数据库系统都会对其进行分割：</p>
+<ul>
+<li>如果任何桶溢出了，那么久将指针指向的桶进行分割并且加入新的槽，然后指针指向下一个位置</li>
+<li>如果hash函数将key映射到了已经被指针指向的槽，那就使用心得hash函数</li>
+<li>如果指针到达了最后一个槽，那么就删除最早的hash函数并用新的替换</li>
+</ul>
+<p>其实就是不急着立马对满了的桶进行分割，而是按顺序一个个来，当有桶溢出的时候就对当前指向的槽对应的桶进行分割并扩展。</p>
+<h2 id="B-树索引"><a href="#B-树索引" class="headerlink" title="B+树索引"></a>B+树索引</h2><h3 id="表索引"><a href="#表索引" class="headerlink" title="表索引"></a>表索引</h3><p><strong>表索引(Table Index)</strong>是用来快速访问数据表中的一些特定列索引结构，只对数据表中特定列构成的元组建立索引，在查询数据的时候就不再需要按照顺序扫描，而是通过表索引更快的查询元组数据，同时数据库要保证表索引和表中的数据始终保持一致性。</p>
+<p>同时，每个数据库需要建立的索引数量需要合理规划，虽然更多的索引会让查询更加快速，但是索引也会消耗大量的存储空间，数据库系统需要找到最合适的索引数量。</p>
+<h3 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h3><p>B+树是一种自平衡的树形数据结构，可以保证数据处于排好序的状态并且允许进行数据的搜索，顺序访问的插入删除，这些操作的时间复杂度都是<script type="math/tex">\log(n)</script>级别的。几乎所有支持顺序保留的索引的数据库系统都使用了B+树的数据结构。</p>
+<p>而还有一种数据结构叫做B-树，这两者的主要区别是B树在所有的结点上都会存储key-value，而B+树将这些key和value<strong>都存放在了叶结点</strong>上，现代的B+树还会结合一些B-树中的特征，比如说同辈指针(Sibling Pointer)</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20211021142812604.png" alt="image-20211021142812604"></p>
+<p>B+树是一种M阶的搜索树(也可以叫M路)，并且具有如下特征：</p>
+<ul>
+<li>B+树是完美平衡的，所有叶结点的深度都相同</li>
+<li>B+树中，根以外的每个内部结点至少是半满的，即key的数量在<script type="math/tex">[\frac M2-1, M-1]</script></li>
+<li>每一个有k个key的内部结点有k+1个非空的子结点</li>
+</ul>
+<p>同时B+树中的每一个结点都有一个key-value对组成的数组，这里的key的选择是根据索引对应的属性来决定的，而value会根据是内部结点还是叶结点有所区别，对于内部结点来说，这里的value是指向下一层结点的指针，而对于叶结点来说，value是对应记录的ID和元组的数据，记录的ID对应的是一个指向元组位置的指针，也有的叶结点会直接把元组的数据信息直接存储在叶结点中。同时，这些key-value数组都是按照key的大小进行排序的。</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20211021161605521.png" alt="image-20211021161605521"></p>
+<h4 id="选择条件"><a href="#选择条件" class="headerlink" title="选择条件"></a>选择条件</h4><p>对于一个复杂的查询，B+树索引支持只使用其中一部分属性值进行查询，比如建立了一个关于(a, b, c)三个属性的索引，如果是B+树的索引，那么这个索引可以处理关于(a, b, c)的查询，也可以处理只查a或者查(a, b)的，但是对于hash索引来说，只能处理关于(a, b, c)的查询，这是B+树索引的一个巨大优势。</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20211021162017210.png" alt="image-20211021162017210"></p>
+<h4 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h4><p>对于插入操作，B+树的处理流程包括下面几个步骤：</p>
+<ol>
+<li>找到正确的叶结点L</li>
+<li>在L中将新的条目按照排好序的顺序插入<ol>
+<li>如果L中位置足够，那么插入操作就结束了</li>
+<li>否则L将被从中间分成两个结点L和L2，并且在L的父节点上把L2加进去，即父节点上多一个key-value对，其中value指向L2</li>
+</ol>
+</li>
+<li>如果内部结点也需要分裂，也需要重新将条目进行分配，往上push up中间的key</li>
+</ol>
+<h4 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h4><p>在插入的时候我们要考虑结点中空间满了将其分裂，而如果一次删除造成了叶结点少于半满，那么我们必须将这个叶结点进行归并来达到树的重新平衡，具体的步骤包括：</p>
+<ol>
+<li>找到正确的叶结点L</li>
+<li>删除对应的条目，然后：<ol>
+<li>如果L依然满足半满，那么操作就结束了</li>
+<li>否则需要尝试对条目进行重新分配，从旁边的叶结点中借若干个条目过来填充</li>
+<li>如果不能满足重新分配，比如两个叶结点加起来还不够，那么就需要将两个叶结点进行merge</li>
+</ol>
+</li>
+<li>merge完成之后需要调节父节点中的指针</li>
+</ol>
+<h4 id="非唯一索引"><a href="#非唯一索引" class="headerlink" title="非唯一索引"></a>非唯一索引</h4><p>有的时候索引的key不是unique的，这个时候的解决办法有两种，一个是存储重复的key，另一个是存储一个相同key的value构成的链表</p>
+<h4 id="重复的key"><a href="#重复的key" class="headerlink" title="重复的key"></a>重复的key</h4><p>B+树中处理重复的key有两种办法，一种是将数据的record ID也作为key的一部分，构造出unique的key，另一种方法是允许结点可以存储过量的数据而不进行分割，存储重复的key，但是这种方法很麻烦。</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20211021173757866.png" alt="image-20211021173757866"></p>
+<h3 id="数据库系统中的B-树的设计"><a href="#数据库系统中的B-树的设计" class="headerlink" title="数据库系统中的B+树的设计"></a>数据库系统中的B+树的设计</h3><h4 id="结点的大小"><a href="#结点的大小" class="headerlink" title="结点的大小"></a>结点的大小</h4><p>B+树索引中的结点大小的选取会受到存储介质的影响，<strong>但一般选择和页的大小相同，方便存取</strong>，比如存储在硬盘驱动器上面的结点的大小通常是几MB，为了减少磁盘访问和读取的次数，而内存数据库可能会使用512bytes的结点大小，为了将整个页都可以放入CPU的cache中，同时也减少内存中的碎片。</p>
+<p>总的来说结点的大小选择取决于工作模式，对于点查询来说可能更偏向于小的页，因为小的页可以减少无效信息的读取，而一个大的顺序扫描可能会更喜欢大的页来减少存取的次数。</p>
+<h4 id="归并阈值Merge-Threshold"><a href="#归并阈值Merge-Threshold" class="headerlink" title="归并阈值Merge Threshold"></a>归并阈值Merge Threshold</h4><p>虽然B+树有一个合并删除之后“Underflow”的结点的规则，但是有的时候暂时违反这个规则可能会减少删除的次数，比如一连串交替的删除和插入操作可能会引起“Thrash”(抖动)的问题，即反复出现叶结点的分割和合并，这会造成很多不必要的性能开销。同时也可以允许批量合并，即多个合并操作同时进行，来减少对写锁的占有导致的不必要的性能消耗。</p>
+<h4 id="变长的Key"><a href="#变长的Key" class="headerlink" title="变长的Key"></a>变长的Key</h4><p>目前为止讨论的都是用定长的key构建B+树，处理变长的Key的方法有以下几种：</p>
+<ul>
+<li>指针：直接存储key的指针，但是用指针的效率会比较低，这种方法一般只会在嵌入式系统中使用，因为嵌入式系统的寄存器和cache都比较小，可以节约存储空间</li>
+<li>变长结点：可以将B+树的结点也改成变长的，但是因为内存管理太麻烦，所以这种方法也不会被使用</li>
+<li>填充(Padding)：设定一个允许的最大长度，所有的key的长度不得超过这个值，然后将所有长度不到最大长度的key都进行填充，强行让所有的key都变成等长的，这种方法看起来简单粗暴但是会极度浪费大量的存储空间，因此不会被使用</li>
+<li>键值映射：最常用的方法还是用一个key-value对在一个单独字典中的索引来代替key，因为字典索引的规模比较小，因此有足够的空间在索引旁边放置key的前缀，并且可以允许索引的搜索和叶结点的扫描，避开指针的使用</li>
+</ul>
+<p><img lazyload="" src="/images/loading.svg" data-src="image-20211025002103001.png" alt="image-20211025002103001"></p>
+<h2 id="索引的并发控制"><a href="#索引的并发控制" class="headerlink" title="索引的并发控制"></a>索引的并发控制</h2><p>对并发操作的控制协议是数据库系统中很重要的一个部分，一个并发控制协议的正确性需要通过以下两个方面来判断：</p>
+<ul>
+<li>逻辑的正确性：要保证每个并发的线程可以读到它想读的数据，</li>
+<li>物理上的正确性：在物理存储上，对象的内部表示是健全的，比如不能有空指针</li>
+</ul>
+<p>而数据库的索引关注的是逻辑上的正确性，这一点和数据库的其他组成部分不同，因此我们可以单独考虑。</p>
+<h3 id="锁Lock和闩Latch"><a href="#锁Lock和闩Latch" class="headerlink" title="锁Lock和闩Latch"></a>锁Lock和闩Latch</h3><p>锁和闩都可以用于并发的控制，但是两者其实存在一定的区别，具体的区别如下图所示：</p>
+<ul>
+<li>锁是一种高阶的逻辑原语，用来保护数据库中的内容不被其他事务所改变，事物会在它自己的整个持续过程中都持有锁，数据库可以在查询处理的过程中，将锁暴露给用户，而锁需要能够回滚更改。</li>
+<li>闩是一种低级的保护原语，用在具体的内部数据结构中，闩只在对数据结构的操作进行的过程中才持有，并且不需要回滚更改，闩有两种不同的形式：<ul>
+<li>READ：多个线程允许同时对一块内容进行读操作，一个线程可以在其他线程持有某个item的读闩的时候再申请一个读闩。</li>
+<li>WRITE：只允许一个线程对某块内容进行写的操作，当一个线程持有某块内容的写闩时，其他任何线程不能获得对这块区域的读锁和写锁</li>
+</ul>
+</li>
+</ul>
+<h3 id="Latch的实现"><a href="#Latch的实现" class="headerlink" title="Latch的实现"></a>Latch的实现</h3><p>用于实现latch的底层原语往往都是CPU中的compare-and-swap (CAS)<strong>原子指令</strong>，在使用这个指令的时候，线程可以确认某块内存区域上是不是特定的值，如果是，就用新的值来替换旧的值，否则就不改变这块内存的内容。</p>
+<ul>
+<li>上面这一串操作被封装成了原子行为</li>
+</ul>
+<p>下面几种都是Latch的实现方式，区别在于对工程实现难度和运行时性能之间的考量和平衡：</p>
+<ul>
+<li>操作系统内置的锁，比如C++中的<code>std::mutex</code>，优点是使用很方便不需要获取，缺点是时间开销大(因为是操作系统提供的，所以需要通过操作系统来调度，比较消耗时间)</li>
+<li>Test-And-Set Spin Latch(TAS)，自旋锁(Spin Latch)是一种由数据库系统控制的锁，数据库系统可以<strong>自己决定获取锁失败的时候应该执行什么操作</strong>，比如C++中的<code>std::atomic&lt;T&gt;</code>，这种方式的优点是效率比OS内置的锁要更高，而缺点是不能scalable并且cache-friendly</li>
+<li>读者-写者(Reader-Writer)锁，上面两种锁在读写的不同操作下并没有什么区别，而读者-写者锁对于读和写两种操作提供了不同的管理方式(就是上面提到的)，优点是允许并发的读，但是缺点是容易出现starvation，需要数据库系统维护一个读队列和写队列</li>
+</ul>
+<h3 id="Hash表的锁"><a href="#Hash表的锁" class="headerlink" title="Hash表的锁"></a>Hash表的锁</h3><p>对于静态的Hash表来说进行并发控制还是比较容易的，因为不同的线程访问hash表只有有限的方式，每个线程在一个时刻只能访问其中的一个页或者槽，这样一来就不容易发生死锁，因为没有两个线程会同时竞争一个锁，当我们需要重构hash表的时候只要在全局上一个锁就可以。</p>
+<p>对于动态的Hash表来说锁的管理更加麻烦一点，目前常用的解决方式有以下两种，两种方法分别采用了不同粒度的锁来管理动态Hash上的并发访问：</p>
+<ul>
+<li>页锁：在每个页上设置一个读者写者锁，这种方法减小了并发量，但是可以让线程更快访问一个页中的多个槽</li>
+<li>槽锁：在每个槽中设置一个专门的锁(存储那一节我们讲过一个页有若干个槽)，这个时候使用的一般不是读者写者锁而是一个单状态的锁(为了减少对元数据的管理)，这种方法可以提高并发量，但是加大了对存储和算力的消耗。</li>
+</ul>
+<h3 id="B-树的锁"><a href="#B-树的锁" class="headerlink" title="B+树的锁"></a>B+树的锁</h3><p>B+树索引中的锁主要需要解决以下两个问题：</p>
+<ul>
+<li>多个线程尝试同时修改某个节点的内容</li>
+<li>一个线程在其他线程改变</li>
+</ul>
+<p>因此，B+树中锁的设计主要思路是进行锁的耦合(Coupling)，具体的原则是：</p>
+<ul>
+<li>先给父节点申请锁</li>
+<li>再给子节点申请锁</li>
+<li>如果父节点是<strong>安全的(不需要进行分割和合并)，那么就释放父节点的锁</strong></li>
+</ul>
+<p>对于不同的操作，最基本的锁协议的处理方式是：</p>
+<ul>
+<li>搜索：从根节点开始搜索，重复“给子节点申请锁，给父节点释放锁”这一过程</li>
+<li>插入和删除：从根节点开始搜索，直到找到要访问的叶结点位置一直申请锁，然后检验叶结点是不是安全的，如果是安全的，那么就释放所有它的祖先的锁</li>
+</ul>
+<p>升级版的锁协议会在插入和删除的过程中使用读者-写者锁，</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>本文标题：CMU15-445数据库系统2：数据库索引</li>
+        <li>本文作者：RandomStar</li>
+        <li>创建时间：2021-11-03 23:07:59</li>
+        <li>
+            本文链接：https://zhang-each.github.com/2021/11/03/cmudbs2/
+        </li>
+        <li>
+            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2021/10/27/nlp-lab4/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Stanford-CS224N-Assignment4札记：基于注意力的Seq2Seq机器翻译</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+            <div class="comment-container">
+                <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fas fa-comments">&nbsp;评论</i>
+    </div>
+    
+
+        
+            
+    <div class="valine-container">
+        <script 
+                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+            function loadValine() {
+                new Valine({
+                    el: '#vcomments',
+                    appId: 'b6BpXpwUq5wyUMcLtbnNMD8N-gzGzoHsz',
+                    appKey: 'Qtl7JkpdLDat2Niacks6SyT5',
+                    meta: ['nick', 'mail', 'link'],
+                    avatar: 'wavatar',
+                    enableQQ: true,
+                    placeholder: '快来发表你的看法吧！',
+                    lang: 'zh-cn'.toLowerCase()
+                });
+
+                function getAuthor(language) {
+                    switch (language) {
+                        case 'en':
+                            return 'Author';
+                        case 'zh-CN':
+                            return '博主';
+                        default:
+                            return 'Master';
+                    }
+                }
+
+                // Add "Author" identify
+                const getValineDomTimer = setInterval(() => {
+                    const vcards = document.querySelectorAll('#vcomments .vcards .vcard');
+                    if (vcards.length > 0) {
+                        let author = 'RandomStar';
+
+                        if (author) {
+                            for (let vcard of vcards) {
+                                const vnick_dom = vcard.querySelector('.vhead .vnick');
+                                const vnick = vnick_dom.innerHTML;
+                                if (vnick === author) {
+                                    vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                                }
+                            }
+                        }
+                        clearInterval(getValineDomTimer);
+                    } else {
+                        clearInterval(getValineDomTimer);
+                    }
+                }, 2000);
+            }
+
+            if ('false') {
+                const loadValineTimeout = setTimeout(() => {
+                    loadValine();
+                    clearTimeout(loadValineTimeout);
+                }, 1000);
+            } else {
+                window.addEventListener('DOMContentLoaded', loadValine);
+            }
+        </script>
+    </div>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2021&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">RandomStar</a>
+        </div>
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+        </script>
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">299.6k</span>&nbsp;字
+            <span>
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            <span>
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash%E7%B4%A2%E5%BC%95"><span class="nav-number">2.</span> <span class="nav-text">Hash索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash%E8%A1%A8%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">Hash表的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81Hash"><span class="nav-number">2.2.</span> <span class="nav-text">静态Hash</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E6%8E%A2%E6%B5%8BHash"><span class="nav-number">2.2.1.</span> <span class="nav-text">线性探测Hash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%97%E5%AE%BE%E6%B1%89Hash"><span class="nav-number">2.2.2.</span> <span class="nav-text">罗宾汉Hash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cuckoo-Hash"><span class="nav-number">2.2.3.</span> <span class="nav-text">Cuckoo Hash</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81Hash"><span class="nav-number">2.3.</span> <span class="nav-text">动态Hash</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%93%BE%E5%BC%8FHash"><span class="nav-number">2.3.1.</span> <span class="nav-text">链式Hash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E4%BC%B8%E9%95%BFHash"><span class="nav-number">2.3.2.</span> <span class="nav-text">可伸长Hash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7Hash"><span class="nav-number">2.3.3.</span> <span class="nav-text">线性Hash</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-%E6%A0%91%E7%B4%A2%E5%BC%95"><span class="nav-number">3.</span> <span class="nav-text">B+树索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E7%B4%A2%E5%BC%95"><span class="nav-number">3.1.</span> <span class="nav-text">表索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-%E6%A0%91"><span class="nav-number">3.2.</span> <span class="nav-text">B+树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E6%9D%A1%E4%BB%B6"><span class="nav-number">3.2.1.</span> <span class="nav-text">选择条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E6%93%8D%E4%BD%9C"><span class="nav-number">3.2.2.</span> <span class="nav-text">插入操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C"><span class="nav-number">3.2.3.</span> <span class="nav-text">删除操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%9E%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95"><span class="nav-number">3.2.4.</span> <span class="nav-text">非唯一索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E5%A4%8D%E7%9A%84key"><span class="nav-number">3.2.5.</span> <span class="nav-text">重复的key</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84B-%E6%A0%91%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.3.</span> <span class="nav-text">数据库系统中的B+树的设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E7%82%B9%E7%9A%84%E5%A4%A7%E5%B0%8F"><span class="nav-number">3.3.1.</span> <span class="nav-text">结点的大小</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BD%92%E5%B9%B6%E9%98%88%E5%80%BCMerge-Threshold"><span class="nav-number">3.3.2.</span> <span class="nav-text">归并阈值Merge Threshold</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%98%E9%95%BF%E7%9A%84Key"><span class="nav-number">3.3.3.</span> <span class="nav-text">变长的Key</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6"><span class="nav-number">4.</span> <span class="nav-text">索引的并发控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81Lock%E5%92%8C%E9%97%A9Latch"><span class="nav-number">4.1.</span> <span class="nav-text">锁Lock和闩Latch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Latch%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.2.</span> <span class="nav-text">Latch的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash%E8%A1%A8%E7%9A%84%E9%94%81"><span class="nav-number">4.3.</span> <span class="nav-text">Hash表的锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-%E6%A0%91%E7%9A%84%E9%94%81"><span class="nav-number">4.4.</span> <span class="nav-text">B+树的锁</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>

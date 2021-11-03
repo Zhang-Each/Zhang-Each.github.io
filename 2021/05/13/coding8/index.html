@@ -138,8 +138,8 @@ mjx-container[display="true"] {
 mjx-container[display="true"] + br {
   display: none;
 }
-</style><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+</style><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 
 <body>
@@ -351,25 +351,21 @@ mjx-container[display="true"] + br {
         
 
         <div class="article-content markdown-body">
-            <h1 id="手写神经网络8池化层">手写神经网络8：池化层</h1>
-<blockquote>
+            <h1 id="手写神经网络8：池化层"><a href="#手写神经网络8：池化层" class="headerlink" title="手写神经网络8：池化层"></a>手写神经网络8：池化层</h1><blockquote>
 <p>这个系列是我在完成斯坦福公开课CS231N的作业时候所做的一些记录，这门课程是公认的深度学习入门的神课，其作业也非常硬核，需要从底层实现各种神经网络模型，包括前馈神经网络、卷积神经网络和循环神经网络，LSTM等等。</p>
 <p>作业不仅要求掌握numpy等python库的api用法，更要对神经网络的数学理论和公式推导有非常深的理解，实现起来难度比较大，因此我也将在这个系列的博客中记录自己推导和coding的过程</p>
 <p>限于个人水平实在有限，我尽量减少参考网上代码的次数</p>
 </blockquote>
-<h2 id="什么是池化层">1.什么是池化层</h2>
-<ul>
+<h2 id="1-什么是池化层"><a href="#1-什么是池化层" class="headerlink" title="1.什么是池化层"></a>1.什么是池化层</h2><ul>
 <li>当我们发现了一个特征之后，这个特征相对于其他特征的位置相比于这个特征的值而言更为重要，很明显的一个例子就是计算机视觉中的目标检测任务，我们要检测的目标所处周围环境的特点更能帮助我们检测出真的目标，这就是池化层的idea的来源，池化层是CNN架构中提出的另一种特殊层，起到了<strong>降采样</strong>的作用。</li>
 <li>池化就是通过一种非线性的变换，对特征进行进一步的<strong>抽象和降维</strong>，常见的有最大池化，平均池化等等，就是按照池化窗口的大小将矩阵分成若干个区域，在每个区域中进行池化操作(求最大，均值等等)，生成一个维度更小的feature map，同时池化层也可以起到防止过拟合的作用。</li>
 <li>池化层同样也有长宽和步长等参数</li>
 </ul>
-<h2 id="池化层的前向传播">2.池化层的前向传播</h2>
-<ul>
-<li>池化层的前向传播也是通过一系列for循环进行对应的池化操作，这里我们以最大池化为例，实现了函数<code>max_pool_forward_naive</code></li>
+<h2 id="2-池化层的前向传播"><a href="#2-池化层的前向传播" class="headerlink" title="2.池化层的前向传播"></a>2.池化层的前向传播</h2><ul>
+<li>池化层的前向传播也是通过一系列for循环进行对应的池化操作，这里我们以最大池化为例，实现了函数<code>max_pool_forward_naive</code> </li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">max_pool_forward_naive</span>(<span class="params">x, pool_param</span>):</span></span><br><span class="line">    <span class="string">"""A naive implementation of the forward pass for a max-pooling layer.</span></span><br><span class="line"><span class="string">    Inputs:</span></span><br><span class="line"><span class="string">    - x: Input data, of shape (N, C, H, W)</span></span><br><span class="line"><span class="string">    - pool_param: dictionary with the following keys:</span></span><br><span class="line"><span class="string">      - 'pool_height': The height of each pooling region</span></span><br><span class="line"><span class="string">      - 'pool_width': The width of each pooling region</span></span><br><span class="line"><span class="string">      - 'stride': The distance between adjacent pooling regions</span></span><br><span class="line"><span class="string">    No padding is necessary here, eg you can assume:</span></span><br><span class="line"><span class="string">      - (H - pool_height) % stride == 0</span></span><br><span class="line"><span class="string">      - (W - pool_width) % stride == 0</span></span><br><span class="line"><span class="string">    Returns a tuple of:</span></span><br><span class="line"><span class="string">    - out: Output data, of shape (N, C, H', W') where H' and W' are given by</span></span><br><span class="line"><span class="string">      H' = 1 + (H - pool_height) / stride</span></span><br><span class="line"><span class="string">      W' = 1 + (W - pool_width) / stride</span></span><br><span class="line"><span class="string">    - cache: (x, pool_param)</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    out = <span class="literal">None</span></span><br><span class="line">    N, C, H, W = x.shape</span><br><span class="line">    h, w, stride = pool_param[<span class="string">"pool_height"</span>], pool_param[<span class="string">"pool_width"</span>], pool_param[<span class="string">'stride'</span>]</span><br><span class="line">    new_H, new_W = <span class="built_in">int</span>(<span class="number">1</span> + (H - h) / stride), <span class="built_in">int</span>(<span class="number">1</span> + (W - w) / stride)</span><br><span class="line">    out = np.zeros((N, C, new_H, new_W))</span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">range</span>(C):</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(new_H):</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(new_W):</span><br><span class="line">                    <span class="comment"># 按块取出最大值即可</span></span><br><span class="line">                    max_pix = np.<span class="built_in">max</span>(x[n, c, i * stride: i * stride + h, j * stride: j * stride + w])</span><br><span class="line">                    out[n, c, i, j] = max_pix</span><br><span class="line">    cache = (x, pool_param)</span><br><span class="line">    <span class="keyword">return</span> out, cache</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
-<h2 id="池化层的反向传播">3.池化层的反向传播</h2>
-<ul>
+<h2 id="3-池化层的反向传播"><a href="#3-池化层的反向传播" class="headerlink" title="3.池化层的反向传播"></a>3.池化层的反向传播</h2><ul>
 <li>反向传播涉及到池化层的求导问题，这里我们使用的是最大池化，因此也就是需要对max函数进行求导，而在ReLU层我们已经知道max函数的导数是分段的，小于0的部分是0，大于0的部分是1，而在池化层中也是一样的道理，对于进行池化操作的每个区域，最大的那个位置的梯度就是池化层向后传递的梯度，而其他地方都是0，我们可以在cache中记录原本矩阵的信息，并在池化层的反向传播过程中使用。</li>
 <li>当然如果一个区域内有多个点的都是最大值的时候，可以把梯度进行平均分，这一过程在<code>max_pool_backward_naive</code>中通过一个<code>mask</code>矩阵来实现：</li>
 </ul>
@@ -536,7 +532,7 @@ mjx-container[display="true"] + br {
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
         </script>
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">283.5k</span>&nbsp;字
+                class="white-color">299.6k</span>&nbsp;字
             <span>
                 |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -629,7 +625,7 @@ mjx-container[display="true"] + br {
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%8B%E5%86%99%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C8%E6%B1%A0%E5%8C%96%E5%B1%82"><span class="nav-number">1.</span> <span class="nav-text">手写神经网络8：池化层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%B1%A0%E5%8C%96%E5%B1%82"><span class="nav-number">1.1.</span> <span class="nav-text">1.什么是池化层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%A0%E5%8C%96%E5%B1%82%E7%9A%84%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">1.2.</span> <span class="nav-text">2.池化层的前向传播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%A0%E5%8C%96%E5%B1%82%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">1.3.</span> <span class="nav-text">3.池化层的反向传播</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%8B%E5%86%99%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C8%EF%BC%9A%E6%B1%A0%E5%8C%96%E5%B1%82"><span class="nav-number">1.</span> <span class="nav-text">手写神经网络8：池化层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E6%B1%A0%E5%8C%96%E5%B1%82"><span class="nav-number">1.1.</span> <span class="nav-text">1.什么是池化层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%B1%A0%E5%8C%96%E5%B1%82%E7%9A%84%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">1.2.</span> <span class="nav-text">2.池化层的前向传播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B1%A0%E5%8C%96%E5%B1%82%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">1.3.</span> <span class="nav-text">3.池化层的反向传播</span></a></li></ol></li></ol>
     </div>
 </div>
         </aside>
