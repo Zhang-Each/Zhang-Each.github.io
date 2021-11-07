@@ -138,8 +138,8 @@ mjx-container[display="true"] {
 mjx-container[display="true"] + br {
   display: none;
 }
-</style><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+</style><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 
 <body>
@@ -316,11 +316,11 @@ mjx-container[display="true"] + br {
             <ul>
                 
                     <li>
-                        <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">神经网络</a>&nbsp;
+                        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>&nbsp;
+                        | <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">神经网络</a>&nbsp;
                     </li>
                 
                     <li>
@@ -361,39 +361,59 @@ mjx-container[display="true"] + br {
 <span id="more"></span>
 <!-- excerpt -->
 <!-- toc -->
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>BERT(<strong>Bidirectional Encoder Representation from Transformer</strong>，Transformer双向编码表示)是Google发布的一个预训练语言模型，可以从双向的上下文信息中获得双向的token编码表示，同时可以通过添加新层并进行微调训练之后在各种NLP任务上达到SOTA的效果。</p>
+<h2 id="introduction">Introduction</h2>
+<p>BERT(<strong>Bidirectional Encoder Representation from Transformer</strong>，Transformer双向编码表示)是Google发布的一个预训练语言模型，可以从双向的上下文信息中获得双向的token编码表示，同时可以通过添加新层并进行微调训练之后在各种NLP任务上达到SOTA的效果。</p>
 <p>BERT的结构很简单但是效果很强大(<del>因为训练烧的钱也多</del>)，并且在十一种NLP子任务中都取得了非常好的表现。</p>
-<h3 id="语言模型和预训练"><a href="#语言模型和预训练" class="headerlink" title="语言模型和预训练"></a>语言模型和预训练</h3><p>语言模型的预训练已经被证明是非常有效的解决NLP任务的手段，预训练的语言模型在句子级的人物(自然语言推理，分段)和单词级的任务(命名实体识别，问答)中都表现的比较好。</p>
+<h3 id="语言模型和预训练">语言模型和预训练</h3>
+<p>语言模型的预训练已经被证明是非常有效的解决NLP任务的手段，预训练的语言模型在句子级的人物(自然语言推理，分段)和单词级的任务(命名实体识别，问答)中都表现的比较好。</p>
 <p>预训练模型的使用方式一般有两种，一种是基于特征的方法(<strong>feature-based</strong>)，另一种是微调(<strong>fine-tuning</strong>)，基于特征的方法是<strong>将从预训练好的模型中得到的特征</strong>作为额外的特征输入，比如ELMo，而微调则是在训练好的模型基础上加上若干层和参数并再针对下游任务进行训练，两种方式在预训练的时候采用的是同样的目标函数，主要的区别在于如何解决下游问题。</p>
 <p>作者认为现有的预训练方法对微调的限制过大，因为标准的语言模型都是单向的，这就限制了预训练的时候能够使用的网络架构，比如GPT模型在训练的时候使用的就是从左到右单方向的架构，并且每个token在计算注意力的时候只能和在它前面的token之间进行计算，这就给微调的方式带来了非常糟糕的影响，因为模型无法从两个方向来感知上下文了。而BERT解决了这个问题，提出了一种双向的预训练方式，使得模型更加适合通过微调的方式来解决下游任务。</p>
-<h3 id="本文的贡献"><a href="#本文的贡献" class="headerlink" title="本文的贡献"></a>本文的贡献</h3><ul>
+<h3 id="本文的贡献">本文的贡献</h3>
+<ul>
 <li>使用“Masked Language Model”训练方式进行预训练，使得模型可以学习到双向的上下文表示</li>
 <li>用实验证明了预训练得到的表示不需要再放到复杂的模型架构中来处理下游任务，而是直接通过微调就可以得到非常好的效果，BERT是<strong>第一个基于微调的，并且在句子级别和单词级别的任务上取得SOTA的预训练模型</strong></li>
 <li>BERT在十一项NLP子任务中取得了SOTA的效果</li>
 </ul>
-<h2 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h2><p>NLP预训练的工作由来已久，最早的是词向量的预训练，出现了各种从不同角度出发提取特征的词向量训练方式，有的模型对单词进行从左到右的建模表示，而有的模型会训练单词来根据上下文判别单词的正确性从而得到合适的词向量，这些方法也被扩展到了提取句子会段落的嵌入向量上面。ELMo就是扩展了这种词向量的训练方式，训练出了一个对上下文敏感的语言模型。</p>
+<h2 id="相关工作">相关工作</h2>
+<p>NLP预训练的工作由来已久，最早的是词向量的预训练，出现了各种从不同角度出发提取特征的词向量训练方式，有的模型对单词进行从左到右的建模表示，而有的模型会训练单词来根据上下文判别单词的正确性从而得到合适的词向量，这些方法也被扩展到了提取句子会段落的嵌入向量上面。ELMo就是扩展了这种词向量的训练方式，训练出了一个对上下文敏感的语言模型。</p>
 <p>词向量属于基于特征的预训练方式，训练完成之后的词向量会作为模型输入用在具体的下游任务中，而基于微调的预训练模型主要有GPT等，但是一般都使用从左到右的方式来训练出一系列自编码表示。</p>
 <p>下图是BERT和其他一些预训练语言模型的架构区别：</p>
-<p><img lazyload="" src="/images/loading.svg" data-src="image-20210910205632013.png" alt="image-20210910205632013"></p>
-<h2 id="BERT模型"><a href="#BERT模型" class="headerlink" title="BERT模型"></a>BERT模型</h2><h3 id="模型的基本架构"><a href="#模型的基本架构" class="headerlink" title="模型的基本架构"></a>模型的基本架构</h3><p>BERT模型的构建主要有预训练和微调两个步骤，预训练步骤中，BERT使用无标注的文本数据进行训练，而微调阶段的BERT模型首先要使用训练好的参数进行初始化，然后使用下游任务的有标注数据进行再训练，对参数进行一定的调整，每个不同的下游任务需要一个专门的微调模型，但是他们都是从BERT中统一初始化得到的。</p>
-<p><img lazyload="" src="/images/loading.svg" data-src="image-20210910110815168.png" alt="image-20210910110815168"></p>
+<figure>
+<img lazyload="" src="/images/loading.svg" data-src="image-20210910205632013.png" alt="image-20210910205632013"><figcaption aria-hidden="true">image-20210910205632013</figcaption>
+</figure>
+<h2 id="bert模型">BERT模型</h2>
+<h3 id="模型的基本架构">模型的基本架构</h3>
+<p>BERT模型的构建主要有预训练和微调两个步骤，预训练步骤中，BERT使用无标注的文本数据进行训练，而微调阶段的BERT模型首先要使用训练好的参数进行初始化，然后使用下游任务的有标注数据进行再训练，对参数进行一定的调整，每个不同的下游任务需要一个专门的微调模型，但是他们都是从BERT中统一初始化得到的。</p>
+<figure>
+<img lazyload="" src="/images/loading.svg" data-src="image-20210910110815168.png" alt="image-20210910110815168"><figcaption aria-hidden="true">image-20210910110815168</figcaption>
+</figure>
 <p>BERT的优势在于<strong>统一的模型架构</strong>，微调只需要在原有模型上面加入少量层和参数就可以使用。</p>
 <p>而BERT模型的基本架构实际上就是多层的双向Transformer编码器，也就是只使用了Transformer中的编码器部分构成深度网络，并且论文提供了两种预训练好的模型BERT-BASE和BERT-LARGE，BASE有12层总参数量在110M，而LARGE有24层总参数量在340M</p>
-<h3 id="预训练"><a href="#预训练" class="headerlink" title="预训练"></a>预训练</h3><h4 id="输入和输出的格式"><a href="#输入和输出的格式" class="headerlink" title="输入和输出的格式"></a>输入和输出的格式</h4><p>为了让BERT更好地适应下游任务，BERT的输入格式可以是一个句子也可以是一对句子(比如问题和答案)，如果输入一对句子，也要讲句子放在一个token序列中，并且BERT模型中的句子不一定是语言学意义上的句子，可以是任何跨度的连续文本，同时BERT使用了预训练好的WordPiece词向量。每个输入序列的第一个token都是CLS标签，而输入两个句子的时候使用SEP标签进行分割，同时会有一个学习到的嵌入向量表示每个位置的token属于前一句还是后一句。</p>
+<h3 id="预训练">预训练</h3>
+<h4 id="输入和输出的格式">输入和输出的格式</h4>
+<p>为了让BERT更好地适应下游任务，BERT的输入格式可以是一个句子也可以是一对句子(比如问题和答案)，如果输入一对句子，也要讲句子放在一个token序列中，并且BERT模型中的句子不一定是语言学意义上的句子，可以是任何跨度的连续文本，同时BERT使用了预训练好的WordPiece词向量。每个输入序列的第一个token都是CLS标签，而输入两个句子的时候使用SEP标签进行分割，同时会有一个学习到的嵌入向量表示每个位置的token属于前一句还是后一句。</p>
 <p>因此BERT的输入有三个部分组成，一个是单词token的嵌入，表示单词属于哪一句的分段嵌入(Segment Embedding)和位置编码嵌入，BERT的输入由这三个部分相加组成。</p>
-<p><img lazyload="" src="/images/loading.svg" data-src="image-20210910200159099.png" alt="image-20210910200159099"></p>
-<h4 id="预训练的任务"><a href="#预训练的任务" class="headerlink" title="预训练的任务"></a>预训练的任务</h4><p>BERT的训练过程中使用了两种无监督任务，分别是Masked LM和Next Sentence Prediction(NSP)，</p>
-<h5 id="Masked-LM"><a href="#Masked-LM" class="headerlink" title="Masked LM"></a>Masked LM</h5><p>传统的条件语言模型一般都是从左到右或者从右到左进行训练的，但是这种方式并不能使得模型学习到双向的嵌入表示，双向语言模型一般会让模型不直接知道中心的单词，而是尝试去预测它。因此BERT使用了一种Masked的方法，随机将一定百分比的输入token加上mask然后再放到模型中进行训练，最后将预测结果放入一个softmax函数中生成对应的概率分布来预测中心单词的结果(事实上这种方式很常见)</p>
+<figure>
+<img lazyload="" src="/images/loading.svg" data-src="image-20210910200159099.png" alt="image-20210910200159099"><figcaption aria-hidden="true">image-20210910200159099</figcaption>
+</figure>
+<h4 id="预训练的任务">预训练的任务</h4>
+<p>BERT的训练过程中使用了两种无监督任务，分别是Masked LM和Next Sentence Prediction(NSP)，</p>
+<h5 id="masked-lm">Masked LM</h5>
+<p>传统的条件语言模型一般都是从左到右或者从右到左进行训练的，但是这种方式并不能使得模型学习到双向的嵌入表示，双向语言模型一般会让模型不直接知道中心的单词，而是尝试去预测它。因此BERT使用了一种Masked的方法，随机将一定百分比的输入token加上mask然后再放到模型中进行训练，最后将预测结果放入一个softmax函数中生成对应的概率分布来预测中心单词的结果(事实上这种方式很常见)</p>
 <p>而这种训练方式造成了预训练了微调的失配，被打上mask的token不会在微调中出现，因此BERT并不会直接用MASK标签来替换被masked的单词，而是采用一定的概率，对被选中的第i个token进行操作：</p>
 <ul>
 <li>80%的概率用MASK标签来替代</li>
 <li>10%的概率用一个随机的token来替代</li>
 <li>10%不变保持原样</li>
 </ul>
-<h5 id="NSP"><a href="#NSP" class="headerlink" title="NSP"></a>NSP</h5><p>很多下游任务比如问答和推理都要理解句子之间的关系，因此BERT提出了使用预测下个句子的训练方式来预训练，我们需要从训练数据中选取上句A和下句B作为每一次的训练数据，在构造训练集的时候有50%的概率B是正确的句子(即A的下一句，用IsNext进行标注)，而另外50%的概率则B是一个随机选取的句子(用NotNext标注)，实验表明这样的训练方式对问答和推理任务大有裨益。</p>
-<h3 id="微调"><a href="#微调" class="headerlink" title="微调"></a>微调</h3><p>BERT的微调只需要将BERT插入到下游任务指定的输入输出格式上就可以了，然后再使用下游任务对应的数据集进行训练，然后将BERT的输出结果导入到一些输出层中，相比于基于特征的方法，微调需要的计算更少，也更加廉价。</p>
+<h5 id="nsp">NSP</h5>
+<p>很多下游任务比如问答和推理都要理解句子之间的关系，因此BERT提出了使用预测下个句子的训练方式来预训练，我们需要从训练数据中选取上句A和下句B作为每一次的训练数据，在构造训练集的时候有50%的概率B是正确的句子(即A的下一句，用IsNext进行标注)，而另外50%的概率则B是一个随机选取的句子(用NotNext标注)，实验表明这样的训练方式对问答和推理任务大有裨益。</p>
+<h3 id="微调">微调</h3>
+<p>BERT的微调只需要将BERT插入到下游任务指定的输入输出格式上就可以了，然后再使用下游任务对应的数据集进行训练，然后将BERT的输出结果导入到一些输出层中，相比于基于特征的方法，微调需要的计算更少，也更加廉价。</p>
 <p>对于不同的任务选用不同的架构：</p>
-<p><img lazyload="" src="/images/loading.svg" data-src="image-20210910205555916.png" alt="image-20210910205555916"></p>
+<figure>
+<img lazyload="" src="/images/loading.svg" data-src="image-20210910205555916.png" alt="image-20210910205555916"><figcaption aria-hidden="true">image-20210910205555916</figcaption>
+</figure>
 
         </div>
 
@@ -556,7 +576,7 @@ mjx-container[display="true"] + br {
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
         </script>
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">309k</span>&nbsp;字
+                class="white-color">293.5k</span>&nbsp;字
             <span>
                 |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -649,7 +669,7 @@ mjx-container[display="true"] + br {
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E5%92%8C%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">1.1.</span> <span class="nav-text">语言模型和预训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%96%87%E7%9A%84%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.2.</span> <span class="nav-text">本文的贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BERT%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">BERT模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%9E%84"><span class="nav-number">3.1.</span> <span class="nav-text">模型的基本架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">3.2.</span> <span class="nav-text">预训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA%E7%9A%84%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.2.1.</span> <span class="nav-text">输入和输出的格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.2.2.</span> <span class="nav-text">预训练的任务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Masked-LM"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">Masked LM</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#NSP"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">NSP</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83"><span class="nav-number">3.3.</span> <span class="nav-text">微调</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E5%92%8C%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">1.1.</span> <span class="nav-text">语言模型和预训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%96%87%E7%9A%84%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.2.</span> <span class="nav-text">本文的贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bert%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">BERT模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%9E%84"><span class="nav-number">3.1.</span> <span class="nav-text">模型的基本架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">3.2.</span> <span class="nav-text">预训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA%E7%9A%84%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.2.1.</span> <span class="nav-text">输入和输出的格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E7%9A%84%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.2.2.</span> <span class="nav-text">预训练的任务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#masked-lm"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">Masked LM</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nsp"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">NSP</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83"><span class="nav-number">3.3.</span> <span class="nav-text">微调</span></a></li></ol></li></ol>
     </div>
 </div>
         </aside>
