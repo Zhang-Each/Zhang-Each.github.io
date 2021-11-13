@@ -296,7 +296,7 @@ mjx-container[display="true"] + br {
                     <div class="meta-info">
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;2021-10-10 22:58:22
+        <i class="fas fa-edit"></i>&nbsp;2021-11-10 22:58:22
     </span>
     
         <span class="article-categories article-meta-item">
@@ -338,12 +338,12 @@ mjx-container[display="true"] + br {
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>2.7k 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>3.4k 字數</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>11 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>14 分鐘</span>
         </span>
     
     
@@ -441,6 +441,19 @@ mjx-container[display="true"] + br {
 <li><code>DeletePgImp(page_id)</code></li>
 <li><code>FlushAllPagesImpl()</code></li>
 </ul>
+<p>实际上这部分作业就是在原本的Buffer Pool Manager上包装一层API，我们应该要注意到初始代码中每个Buffer Pool Manager中就有这样两个变量：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** How many instances are in the parallel BPM (if present, otherwise just 1 BPI) */</span></span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">uint32_t</span> num_instances_ = <span class="number">1</span>;</span><br><span class="line">  <span class="comment">/** Index of this BPI in the parallel BPM (if present, otherwise just 0) */</span></span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">uint32_t</span> instance_index_ = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Each BPI maintains its own counter for page_ids to hand out,</span></span><br><span class="line"><span class="comment">   * must ensure they mod back to its instance_index_</span></span><br><span class="line"><span class="comment">   * */</span></span><br><span class="line">  std::atomic&lt;<span class="keyword">page_id_t</span>&gt; next_page_id_ = instance_index_;</span><br></pre></td></tr></table></figure>
+<p>实际上这几个变量已经告诉我们怎么样写出一个并行缓冲区管理器了，<code>num_instances_</code>代表了并行缓冲区中Buffer的个数，而<code>instance_index_</code>表示了当前缓冲区的id编号，<code>next_page_id</code>是一个页号管理器，在实现的时候我们每次新增页之后都会有<code>next_page_id += num_instances</code>的操作，这是因为在并行缓冲区的设计中，页号和缓冲区id的映射关系是<code>buffer_id = page_id % num_instances_</code></p>
+<p>所以我们在实现的时候也应该遵循这种设计模式，我们可以使用一个<code>vector</code>来存储所有的缓冲区实例，并将他们的id和下标相对应，而上面要实现的这些操作中，除了<code>NewPageImp()</code>以外，剩下的操作其实都是先增加一步查询到<code>buffer_id</code>的操作之后到对应的缓冲区执行相应的操作，如下面的代码所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Page *<span class="title">ParallelBufferPoolManager::FetchPgImp</span><span class="params">(<span class="keyword">page_id_t</span> page_id)</span> </span>{</span><br><span class="line">  <span class="comment">// Fetch page for page_id from responsible BufferPoolManagerInstance</span></span><br><span class="line">  <span class="keyword">page_id_t</span> buffer_id = page_id % num_ins_;</span><br><span class="line">  Page *result = buffers_[buffer_id]-&gt;<span class="built_in">FetchPage</span>(page_id);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>这一部分task唯一有难度的地方就在于<code>NewPageImp()</code>这个函数的实现上，我们要实现的逻辑是：</p>
+<ol type="1">
+<li>每次新建Page的时候，要从一个<code>starter_index</code>开始一个个缓冲区申请过去，直到在某个缓冲区中创建成功，或者遍历所有的缓冲区之后发现都满了无法创建为止，之后一次创建结束</li>
+<li>创建结束之后<code>starter_index += 1</code>，下一次从后一个位置开始申请新建Page，起到一个时间片轮转的作用。</li>
+</ol>
+<p>因此最后我实现的代码是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Page *<span class="title">ParallelBufferPoolManager::NewPgImp</span><span class="params">(<span class="keyword">page_id_t</span> *page_id)</span> </span>{</span><br><span class="line">  <span class="comment">// create new page. We will request page allocation in a round robin manner from the underlying</span></span><br><span class="line">  <span class="comment">// BufferPoolManagerInstances</span></span><br><span class="line">  <span class="comment">// 1.   From a starting index of the BPMIs, call NewPageImpl until either</span></span><br><span class="line">  <span class="comment">// 1) success and return 2) looped around to starting index and return nullptr</span></span><br><span class="line">  <span class="comment">// 2.   Bump the starting index (mod number of instances) to start search at a different BPMI each time this function</span></span><br><span class="line">  <span class="comment">// is called</span></span><br><span class="line">  <span class="comment">//size_t i = start_index_;</span></span><br><span class="line">  Page* result = <span class="literal">nullptr</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; num_ins_; i ++) {</span><br><span class="line">    <span class="keyword">size_t</span> index = (i + start_index_) % num_ins_;</span><br><span class="line">    result = buffers_[index]-&gt;<span class="built_in">NewPage</span>(page_id);</span><br><span class="line">    <span class="keyword">if</span> (result != <span class="literal">nullptr</span>) {</span><br><span class="line">      <span class="built_in">LOG_DEBUG</span>(<span class="string">"Buffer ID = %zu, page id = %d"</span>, index, *page_id);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">if</span> (result == <span class="literal">nullptr</span>) {</span><br><span class="line">    <span class="built_in">LOG_DEBUG</span>(<span class="string">"No new page created!"</span>);</span><br><span class="line">  }</span><br><span class="line">  start_index_ = (start_index_ + <span class="number">1</span>) % num_ins_;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>要注意的是下标不能越界，及时取余数保证下标在可访问的范围内，代码主体其实就是一个for循环。</p>
 
         </div>
 
@@ -448,14 +461,14 @@ mjx-container[display="true"] + br {
             <div class="post-copyright-info">
                 <div class="article-copyright-info-container">
     <ul>
-        <li>本文标题：CMU15-445数据库系统Project0&amp;1：Storage&amp;Buffer</li>
-        <li>本文作者：RandomStar</li>
-        <li>创建时间：2021-10-10 22:58:22</li>
+        <li>文章標題：CMU15-445数据库系统Project0&amp;1：Storage&amp;Buffer</li>
+        <li>文章作者：RandomStar</li>
+        <li>撰寫時間：2021-11-10 22:58:22</li>
         <li>
-            本文链接：https://zhang-each.github.com/2021/10/10/cmudbs-lab1/
+            永久連結：https://zhang-each.github.com/2021/11/10/cmudbs-lab1/
         </li>
         <li>
-            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
+            版權宣告：這個網站所有文章均使用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 授權。
         </li>
     </ul>
 </div>
@@ -469,13 +482,13 @@ mjx-container[display="true"] + br {
                     <div class="article-prev">
                         <a class="prev"
                            rel="prev"
-                           href="/2021/10/15/reading17/"
+                           href="/2021/11/13/dlnn6/"
                         >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">论文阅读笔记17：Rule-Based-KGE</span>
+                                <span class="post-nav-title-item">Stanford-CS231N-Assignment札记6：模型可视化和GAN</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                         </a>
@@ -485,10 +498,10 @@ mjx-container[display="true"] + br {
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2021/10/10/cmudbs1/"
+                           href="/2021/11/09/dlnn5/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">CMU15-445数据库系统1：数据存储</span>
+                                <span class="post-nav-title-item">Stanford-CS231N-Assignment5：RNN/LSTM与图片描述</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                             <span class="right arrow-icon flex-center">
@@ -505,7 +518,7 @@ mjx-container[display="true"] + br {
                 <div class="comments-container">
     <div id="comment-anchor"></div>
     <div class="comment-area-title">
-        <i class="fas fa-comments">&nbsp;评论</i>
+        <i class="fas fa-comments">&nbsp;留言</i>
     </div>
     
 
@@ -603,7 +616,7 @@ mjx-container[display="true"] + br {
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
         </script>
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">303.2k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
             <span>
                 |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -615,7 +628,7 @@ mjx-container[display="true"] + br {
             <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
         
         <div class="theme-info info-item">
-            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
+            <a target="_blank" href="https://hexo.io">Hexo</a> 框架&nbsp;|&nbsp;主題&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
         </div>
         
         
@@ -718,7 +731,7 @@ mjx-container[display="true"] + br {
                 <input autocomplete="off"
                        autocorrect="off"
                        autocapitalize="off"
-                       placeholder="搜索..."
+                       placeholder="搜尋..."
                        spellcheck="false"
                        type="search"
                        class="search-input"
@@ -782,9 +795,9 @@ mjx-container[display="true"] + br {
 <script src="/js/toc.js"></script>
 
     
-</div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</div>
 
 
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>
