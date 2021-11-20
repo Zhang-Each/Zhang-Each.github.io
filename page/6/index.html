@@ -21,7 +21,7 @@
     <script id="hexo-configurations">
     let KEEP = window.KEEP || {};
     KEEP.hexo_config = {"hostname":"zhang-each.github.io","root":"/","language":"zh-cn","path":"search.xml"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的背影。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的背影。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
     KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
   </script>
 <meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
@@ -280,6 +280,201 @@ mjx-container[display="true"] + br {
                 
 
                 <h3 class="home-article-title">
+                    <a href="/2021/05/14/coding-ml3/">
+                        机器学习代码实现3：KNN算法
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        机器学习代码实现3：KNN算法
+
+这一专题的内容主要是我在进行统计机器学习的算法的代码实践的过程中的一些记录，包括公式的推导，算法的实现与数据集的实验结果。
+这部分工作我比较早之前就已经开始做了，现在刚好趁此机会整理一下之前写过的所有小demo...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Fri May 14 2021 10:45:38 GMT+0800">2021-05-14</span></span>
+        
+            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%9E%E8%B7%B5/">代码实践</a>&nbsp;
+                        </li>
+                    
+                    
+                </ul>
+            </span>
+        
+        
+            <span class="home-article-tag">
+                <i class="fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/">数据挖掘</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/Python/">Python</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            </span>
+        
+    </div>
+
+    <a href="/2021/05/14/coding-ml3/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2021/05/10/coding-ml2/">
+                        机器学习代码实现2：贝叶斯定理与参数估计
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        机器学习代码实现2：贝叶斯模型
+
+这一专题的内容主要是我在进行统计机器学习的算法的代码实践的过程中的一些记录，包括公式的推导，算法的实现与数据集的实验结果。
+这部分工作我比较早之前就已经开始做了，现在刚好趁此机会整理一下之前写过的所有小demo...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon May 10 2021 22:58:13 GMT+0800">2021-05-10</span></span>
+        
+            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%9E%E8%B7%B5/">代码实践</a>&nbsp;
+                        </li>
+                    
+                    
+                </ul>
+            </span>
+        
+        
+            <span class="home-article-tag">
+                <i class="fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/">数据挖掘</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/Python/">Python</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            </span>
+        
+    </div>
+
+    <a href="/2021/05/10/coding-ml2/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2021/05/10/coding-ml1/">
+                        机器学习代码实现1:线性回归与岭回归
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        机器学习代码实现1：线性回归和岭回归
+
+这一专题的内容主要是我在进行统计机器学习的算法的代码实践的过程中的一些记录，包括公式的推导，算法的实现与数据集的实验结果。
+这部分工作我比较早之前就已经开始做了，现在刚好趁此机会整理一下之前写过的所有小d...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon May 10 2021 09:10:01 GMT+0800">2021-05-10</span></span>
+        
+            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%9E%E8%B7%B5/">代码实践</a>&nbsp;
+                        </li>
+                    
+                    
+                </ul>
+            </span>
+        
+        
+            <span class="home-article-tag">
+                <i class="fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/">数据挖掘</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
+                            <a href="/tags/Python/">Python</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            </span>
+        
+    </div>
+
+    <a href="/2021/05/10/coding-ml1/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
                     <a href="/2021/05/05/gml1/">
                         图机器学习1:导论&amp;传统的图学习方法
                     </a>
@@ -333,7 +528,7 @@ mjx-container[display="true"] + br {
         
     </div>
 
-    <a href="/2021/05/05/gml1/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/05/gml1/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -384,11 +579,6 @@ mjx-container[display="true"] + br {
                     
                         <li>
                             
-                            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
                             <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>&nbsp;
                         </li>
                     
@@ -404,6 +594,11 @@ mjx-container[display="true"] + br {
                     
                         <li>
                             | 
+                            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
+                        </li>
+                    
+                        <li>
+                            | 
                             <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>&nbsp;
                         </li>
                     
@@ -412,7 +607,7 @@ mjx-container[display="true"] + br {
         
     </div>
 
-    <a href="/2021/05/04/intern/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/04/intern/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -485,7 +680,7 @@ Unchecked Ex...
         
     </div>
 
-    <a href="/2021/05/04/java3/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/04/java3/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -553,7 +748,7 @@ Chapter 3. Java OOP
         
     </div>
 
-    <a href="/2021/05/04/java2/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/04/java2/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -626,7 +821,7 @@ Chapter 1：Introduction
         
     </div>
 
-    <a href="/2021/05/04/java1/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/04/java1/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -688,7 +883,7 @@ DNS是一个分布式的域名系统，是一个联机的分布式数据库系�
         
     </div>
 
-    <a href="/2021/05/04/cn4/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/04/cn4/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -752,7 +947,7 @@ DNS是一个分布式的域名系统，是一个联机的分布式数据库系�
         
     </div>
 
-    <a href="/2021/05/04/cn3/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/04/cn3/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -814,7 +1009,7 @@ DNS是一个分布式的域名系统，是一个联机的分布式数据库系�
         
     </div>
 
-    <a href="/2021/05/04/cn2/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/04/cn2/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -886,7 +1081,7 @@ Chapter1. Introduction
         
     </div>
 
-    <a href="/2021/05/04/cn1/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/04/cn1/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -958,7 +1153,7 @@ Chapter1. Introduction
         
     </div>
 
-    <a href="/2021/05/03/os4/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/03/os4/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -1035,7 +1230,7 @@ cache位于内存和CPU寄存器之间
         
     </div>
 
-    <a href="/2021/05/03/os3/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/03/os3/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -1108,7 +1303,7 @@ CPU调度=处理机调度=进程调度
         
     </div>
 
-    <a href="/2021/05/03/os2/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/03/os2/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -1185,7 +1380,7 @@ Chapter 1. Introduction
         
     </div>
 
-    <a href="/2021/05/03/os1/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/03/os1/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -1251,7 +1446,7 @@ Chapter 1 Introduction and Algorithm Analysis
         
     </div>
 
-    <a href="/2021/05/03/ds/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/03/ds/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -1323,225 +1518,7 @@ C++可以使用输入输出流(cin, cout)进行输出，比如cout&lt;&lt;"Hello
         
     </div>
 
-    <a href="/2021/05/03/oop/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/05/03/pcs/">
-                        浙江大学《计算机系统原理》课程笔记
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        计算机系统原理Review
-源自 非 常 天 空
-0.计算机基本知识
-
-计算机系统原理(feat Mr.Lou)荣获感动软工十大垃圾课前三名
-软件的分类
-
-System software系统软件
-
-OS 操作系统
-Database...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon May 03 2021 21:29:23 GMT+0800">2021-05-03</span></span>
-        
-            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/CS%E6%A0%B8%E5%BF%83%E8%AF%BE%E7%A8%8B/">CS核心课程</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fas fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">计算机系统</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/">浙江大学</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2021/05/03/pcs/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/05/03/ads/">
-                        浙江大学《高级数据结构与算法分析》课程笔记
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        ADS-Review
-1. Advanced Data Structure
-1.1 Tree
-1.1.1 AVL Tree
-
-根本目标：用二叉搜索树来提高搜索的速度
-AVL树的定义
-
-空树是height balanced的
-对于任何...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon May 03 2021 21:20:33 GMT+0800">2021-05-03</span></span>
-        
-            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/CS%E6%A0%B8%E5%BF%83%E8%AF%BE%E7%A8%8B/">CS核心课程</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fas fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/">浙江大学</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2021/05/03/ads/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2021/05/03/dbs/">
-                        浙江大学《数据库系统》课程笔记
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        数据库系统复习整理
-RandomStar
-第一部分：基本概念和关系代数
-1.0 课程绪论
-
-Nothing important，主要是介绍课程的评分标准和瞎吹一通
-
-1.1 关系型数据库 Relational Database
-关系型...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon May 03 2021 18:47:14 GMT+0800">2021-05-03</span></span>
-        
-            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">数据库系统的设计与实现</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fas fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/">数据库系统</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">计算机系统</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">数据存储</a>&nbsp;
-                        </li>
-                    
-                        <li>
-                            | 
-                            <a href="/tags/%E6%B5%99%E6%B1%9F%E5%A4%A7%E5%AD%A6/">浙江大学</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2021/05/03/dbs/">繼續閱讀...&nbsp;<i class="fas fa-angle-right"></i></a>
+    <a href="/2021/05/03/oop/">阅读全文&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
@@ -1553,9 +1530,13 @@ Nothing important，主要是介绍课程的评分标准和瞎吹一通
     
         <a class="prev btn"
            href="/page/5/"
-        >上一頁</a>
+        >上一页</a>
     
 
+    
+        <a class="next btn"
+           href="/page/7/"
+        >下一页</a>
     
 </div>
 
@@ -1582,7 +1563,7 @@ Nothing important，主要是介绍课程的评分标准和瞎吹一通
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
         </script>
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.1k</span>&nbsp;字
+                class="white-color">315.7k</span>&nbsp;字
             <span>
                 |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1594,7 +1575,7 @@ Nothing important，主要是介绍课程的评分标准和瞎吹一通
             <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
         
         <div class="theme-info info-item">
-            <a target="_blank" href="https://hexo.io">Hexo</a> 框架&nbsp;|&nbsp;主題&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
         </div>
         
         
@@ -1668,7 +1649,7 @@ Nothing important，主要是介绍课程的评分标准和瞎吹一通
                 <input autocomplete="off"
                        autocorrect="off"
                        autocapitalize="off"
-                       placeholder="搜尋..."
+                       placeholder="搜索..."
                        spellcheck="false"
                        type="search"
                        class="search-input"
@@ -1725,9 +1706,9 @@ Nothing important，主要是介绍课程的评分标准和瞎吹一通
 
 <div class="post-scripts">
     
-</div>
+</div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script></body>
 </html>
