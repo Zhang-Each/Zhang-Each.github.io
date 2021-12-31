@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="RandomStar">
+    
+    <title>
+        
+            Stanford-CS144-计算机网络-Lab1 |
+        
+        在那不遥远的地方
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"zhang-each.github.io","root":"/","language":"zh-cn","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的背影。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                在那不遥远的地方
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                主页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                关于
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">主页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">关于</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">Stanford-CS144-计算机网络-Lab1</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/skadi.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">RandomStar</span>
+                        
+                            <span class="author-label">Lv5</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;2021-12-31 19:01:45
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">计算机系统</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/C/">C++</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/TCP-IP/">TCP/IP</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>1.5k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>5 分钟</span>
+        </span>
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <blockquote>
+<p>Stanford CS144 Introduction to Computer Network课程Project的lab1，这个lab需要我们实现一个流重组器(Stream Assembler)对分段的字符串进行重组，这个结构在后续的lab中非常重要</p>
+</blockquote>
+<span id="more"></span>
+<!-- excerpt -->
+<!-- toc -->
+<h2 id="overview">Overview</h2>
+<p>在lab0中，我们实现了一个可信的顺序字节流数据结构，然而，网络通信可能是best-effort的，发送的数据段也会出现丢失，重复，被改写，被打乱等情况，这个时候，我们就需要在收发两端对收到的数据段进行整理和重组，从一系列杂乱的数据段中恢复出完整的数据报，并存储在lab0实现的<code>ByteStream</code>中，实现这个功能的数据结构被称为流重组器，因此lab1就需要我们实现这个<strong>流重组器</strong><code>StreamReassembler</code></p>
+<h2 id="sponge的架构">Sponge的架构</h2>
+<figure>
+<img lazyload="" src="/images/loading.svg" data-src="image-20211228233450236.png" alt="image-20211228233450236"><figcaption aria-hidden="true">image-20211228233450236</figcaption>
+</figure>
+<p>实验里提供了一个Sponge的架构图帮助我们更清晰的认识我们要实现的TCP/IP协议栈的基本架构，实验里IP相关的协议都是建立在TCP的基础上的，通过IPv4的格式从应用层传递到TCP对应的传输层，并以Segment作为单位进行收和发。</p>
+<p>而TCP协议的实现被分成了Sender/Receiver/Connection三个重要的部分，其中Sender和Receiver是对TCP连接的发送方和接收方的抽象，Sender和Receiver中都维护了一个ByteStream用来存储TCP连接中产生的可信的信息，而TCP的Receiver中还有一个StreamReassembler接收发送过来的数据段，并将完整的部分写到ByteStream中去。而Connection是对TCP连接的一个总体抽象，它需要通过三次握手建立TCP连接，并且通过四次挥手关闭TCP连接，然后在Sender和Receiver之间建立起可信的传输通道并进行消息的收发。这几个部分需要在接下来的lab中逐一实现。</p>
+<h2 id="流重组器">流重组器</h2>
+<h3 id="功能描述">功能描述</h3>
+<p>前面已经说过，TCPSender会把一个报文拆分成若干个数据段发送出来，但是发送的过程中，数据段(segment)可能会出现丢失、重复、覆盖、打乱顺序等多种异常情况，而Receiver需要做的就是在接收到这些零散的segment之后，将它们拼回原本的数据，并且将拼好的段存储在一个ByteStream中，同时，流重组器接收到的segment中的每一个字节都有其对应的index，而具体的实现中只给出当前segment的第一个字节的index，并根据偏移量计算整个segment中各个字节的index，同时，index是从0开始。</p>
+<p>同时，流重组器在初始化的时候会使用一个capacity同时用作：</p>
+<ul>
+<li>ByteStream的容量，这个在lab0里重点提过，超过容量的字节不会被保存下来，这是为了保证TCP协议使用有限的内存，不会因为超规格输入而无限制地占用内存</li>
+<li>未整流的字节的容量上限，我们需要暂时保存一些未整流到ByteStream对象中的segment，但是这些未完成整流的segment的总长度不能超过capability，多余的一样要舍弃</li>
+</ul>
+<p>总的来说，ByteStream存储的内容和未整流的segment的关系如下图所示：</p>
+<figure>
+<img lazyload="" src="/images/loading.svg" data-src="image-20211231000601186.png" alt="image-20211231000601186"><figcaption aria-hidden="true">image-20211231000601186</figcaption>
+</figure>
+<h3 id="代码实现">代码实现</h3>
+<p>首先我们需要在类中定义一些变量来实现StreamReassembler的功能，最关键的其实就是如何保存没有整流的数据，而网上很多公开的实现自己定义了一个类Segment并定义了每个Segment的开始index和结束index，然后用一个set来存储这些segment，虽然很合理但是也有点麻烦，我们这里采用了一个string直接来存储没有整流的字节，然后用一个bool类型的数组filled来标注这个临时string每个位置上的使用情况，用一个ByteStream来存储最终输出的结果。然后再定义一些其他变量，比如剩余的字节数量<code>_left_bytes</code>，还有流重组器每次整理的开始位置的标志<code>_start</code> 和EOF的标志等等。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StreamReassembler</span> {</span></span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">// Your code here -- add private members as necessary.</span></span><br><span class="line">    ByteStream _output;  <span class="comment">//!&lt; The reassembled in-order byte stream</span></span><br><span class="line">    <span class="keyword">size_t</span> _capacity;    <span class="comment">//!&lt; The maximum number of bytes</span></span><br><span class="line">    std::string _buffer;</span><br><span class="line">    <span class="keyword">uint64_t</span> _start, _start_index;</span><br><span class="line">    <span class="keyword">uint64_t</span> _left_bytes;</span><br><span class="line">    <span class="keyword">bool</span> _eof;</span><br><span class="line">    std::unique_ptr&lt;<span class="keyword">bool</span>[]&gt; _filled{};</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>我们要实现的方法有以下几个:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StreamReassembler</span> {</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">StreamReassembler</span>(<span class="keyword">const</span> <span class="keyword">size_t</span> capacity);</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push_substring</span><span class="params">(<span class="keyword">const</span> std::string &amp;data, <span class="keyword">const</span> <span class="keyword">uint64_t</span> index, <span class="keyword">const</span> <span class="keyword">bool</span> eof)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">const</span> ByteStream &amp;<span class="title">stream_out</span><span class="params">()</span> <span class="keyword">const</span> </span>{ <span class="keyword">return</span> _output; }</span><br><span class="line">    <span class="function">ByteStream &amp;<span class="title">stream_out</span><span class="params">()</span> </span>{ <span class="keyword">return</span> _output; }</span><br><span class="line">    <span class="function"><span class="keyword">size_t</span> <span class="title">unassembled_bytes</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<p>其中最麻烦的就是<code>push_substring</code>，其他的都是构造函数和Get类型的函数，没有什么难度，我们的主要工作量就是处理<code>push_substring</code>这个函数的逻辑，具体的代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">StreamReassembler::push_substring</span><span class="params">(<span class="keyword">const</span> string &amp;data, <span class="keyword">const</span> <span class="keyword">size_t</span> index, <span class="keyword">const</span> <span class="keyword">bool</span> eof)</span> </span>{</span><br><span class="line">    <span class="keyword">uint64_t</span> from = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (index &lt; _start_index) {</span><br><span class="line">        from = _start_index - index;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">uint64_t</span> size = std::<span class="built_in">min</span>(data.<span class="built_in">size</span>(), _capacity - _output.<span class="built_in">buffer_size</span>() - index + _start_index);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">uint64_t</span> i = from; i &lt; size; i ++) {</span><br><span class="line">        <span class="keyword">uint64_t</span> j = (i + _start + index - _start_index) % _capacity;</span><br><span class="line">        _buffer[j] = data[i];</span><br><span class="line">        _left_bytes += !_filled[j];</span><br><span class="line">        _filled[j] = <span class="literal">true</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">uint64_t</span> i = <span class="number">0</span>;</span><br><span class="line">    std::stringstream segment;</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) {</span><br><span class="line">        <span class="keyword">uint64_t</span> j = (_start + i) % _capacity;</span><br><span class="line">        <span class="keyword">if</span> (!_filled[j]) {</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">        _filled[j] = <span class="literal">false</span>;</span><br><span class="line">        _left_bytes --;</span><br><span class="line">        segment &lt;&lt; _buffer[j];</span><br><span class="line">        i ++;</span><br><span class="line">    }</span><br><span class="line">    _start = (_start + i) % _capacity;</span><br><span class="line">    _start_index = _start_index + i;</span><br><span class="line">    _output.<span class="built_in">write</span>(segment.<span class="built_in">str</span>());</span><br><span class="line">    <span class="comment">// 判断是否达到了eof状态</span></span><br><span class="line">    _eof |= (eof &amp;&amp; size == data.<span class="built_in">size</span>());</span><br><span class="line">    <span class="keyword">if</span> (_eof &amp;&amp; _left_bytes == <span class="number">0</span>) {</span><br><span class="line">        _output.<span class="built_in">end_input</span>();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<ul>
+<li>总体的思路是先把传入的一个segment存放在临时buffer中，然后从ByteStream末尾的索引(就是start)开始找一个连续的字符串并存放到ByteStream对象中去</li>
+<li>值得注意的是，判断EOF的时候不是简单的只判断输入的eof参数是不是true，还要注意写入临时buffer中的数据量是不是刚好能到输入data的末尾，因为data的末尾才代表了EOF，而buffer的容量有限，如果最后一个byte没有写入，那么实际上这个输入流就还没有到EOF的状态，所以这个时候还不能EOF，然后判断ByteStream也不仅要满足EOF，还要剩余的未处理的字节数量为0</li>
+</ul>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>本文标题：Stanford-CS144-计算机网络-Lab1</li>
+        <li>本文作者：RandomStar</li>
+        <li>创建时间：2021-12-31 19:01:45</li>
+        <li>
+            本文链接：https://zhang-each.github.com/2021/12/31/sponge1/
+        </li>
+        <li>
+            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2021/12/31/my2021/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">我的2021年终总结</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2021/12/28/reading31/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">论文阅读笔记31：大规模知识图谱对齐LargeEA</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+            <div class="comment-container">
+                <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fas fa-comments">&nbsp;评论</i>
+    </div>
+    
+
+        
+            
+    <div class="valine-container">
+        <script 
+                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+            function loadValine() {
+                new Valine({
+                    el: '#vcomments',
+                    appId: 'b6BpXpwUq5wyUMcLtbnNMD8N-gzGzoHsz',
+                    appKey: 'Qtl7JkpdLDat2Niacks6SyT5',
+                    meta: ['nick', 'mail', 'link'],
+                    avatar: 'wavatar',
+                    enableQQ: true,
+                    placeholder: '快来发表你的看法吧！',
+                    lang: 'zh-cn'.toLowerCase()
+                });
+
+                function getAuthor(language) {
+                    switch (language) {
+                        case 'en':
+                            return 'Author';
+                        case 'zh-CN':
+                            return '博主';
+                        default:
+                            return 'Master';
+                    }
+                }
+
+                // Add "Author" identify
+                const getValineDomTimer = setInterval(() => {
+                    const vcards = document.querySelectorAll('#vcomments .vcards .vcard');
+                    if (vcards.length > 0) {
+                        let author = 'RandomStar';
+
+                        if (author) {
+                            for (let vcard of vcards) {
+                                const vnick_dom = vcard.querySelector('.vhead .vnick');
+                                const vnick = vnick_dom.innerHTML;
+                                if (vnick === author) {
+                                    vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                                }
+                            }
+                        }
+                        clearInterval(getValineDomTimer);
+                    } else {
+                        clearInterval(getValineDomTimer);
+                    }
+                }, 2000);
+            }
+
+            if ('false') {
+                const loadValineTimeout = setTimeout(() => {
+                    loadValine();
+                    clearTimeout(loadValineTimeout);
+                }, 1000);
+            } else {
+                window.addEventListener('DOMContentLoaded', loadValine);
+            }
+        </script>
+    </div>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2021&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">RandomStar</a>
+        </div>
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+        </script>
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">356.1k</span>&nbsp;字
+            <span>
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            <span>
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sponge%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">Sponge的架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E9%87%8D%E7%BB%84%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">流重组器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.1.</span> <span class="nav-text">功能描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.2.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>
