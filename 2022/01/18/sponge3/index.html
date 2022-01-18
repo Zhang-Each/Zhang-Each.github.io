@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="RandomStar">
+    
+    <title>
+        
+            Stanford-CS144-计算机网络Lab3：TCP发送端 |
+        
+        在那不遥远的地方
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"zhang-each.github.io","root":"/","language":"zh-cn","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的回音。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                在那不遥远的地方
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                主页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                关于
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">主页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">关于</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">Stanford-CS144-计算机网络Lab3：TCP发送端</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/skadi.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">RandomStar</span>
+                        
+                            <span class="author-label">Lv5</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;2022-01-18 16:41:31
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">计算机系统</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/C/">C++</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/TCP-IP/">TCP/IP</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>2.1k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>8 分钟</span>
+        </span>
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <blockquote>
+<p>Stanford CS144 Introduction to Computer Network课程Project的lab3，这个lab主要任务是实现一个TCP的接收端TCPSender</p>
+</blockquote>
+<span id="more"></span>
+<!-- excerpt -->
+<!-- toc -->
+<h2 id="overview">Overview</h2>
+<p>书接上回，上一个lab中我们实现了TCP接收端的基本功能，而这一次我们需要实现的是TCP的发送端，发送端的核心类TCPsender的主要作用是将发送端存储的字节流分割成若干个TCPSegment并将其发送出去，同时在发送的过程中还要做到流量控制和丢失重传等功能，它的功能可以概括成以下几个点：</p>
+<ul>
+<li>关注Receiver端的窗口大小，即处理接收端发送过来的ackno和window size</li>
+<li>在发送数据的时候，根据窗口的大小尽可能的从存储数据流的ByteStream中读取对应数量的字节并生成对应的TCP Segment然后将它们发送出去</li>
+<li>关注哪些segment发送出去之后没有收到回复，这些segment被称为outstanding的，并且如果一个segment发送出去之后超过一定的时间还没有收到回复，那么它就会被重新发送</li>
+</ul>
+<blockquote>
+<p>这个操作被称为Automatic Repeat Request，发送方会根据接收方的窗口大小尽可能多的发送segment，并且要保证接收端接收到字节流中的每个字节至少一次，所以对于超过一定时间的segment，如果还不能确认它已经被接收，那么就会重新发送。</p>
+</blockquote>
+<h2 id="sender怎么判断segment丢失">Sender怎么判断segment丢失</h2>
+<p>TCPSender发送的segment的数据部分来自ByteStream中存储的可信字节流，并且每个字节都有专属的index，同时TCP的头部还会有SYN和FIN标记来表明这个segment的一些信息。</p>
+<p>同时，Sender必须在发送之后继续追踪每一个发出的segment直到收到来自Receiver的回复，因为收到了Receiver回复的ackno和window size才能判断某段数据是否已经被接收。Sender会阶段性的调用tick函数来了解距离上次调用tick过去的时间，并且Sender中会维护一个记录已经发送出去的segment的结构，并且每次将其中最老的且没有收到回复的数据包重新发送一次。</p>
+<ul>
+<li>这里的没有被接收指的是这个segment没有任何一个字节被接收端所接收。</li>
+</ul>
+<p>TCPSender这个类对于超时重传的具体规定和实现要求如下：</p>
+<ul>
+<li>每过若干毫秒，tick函数都会被调用，并且会传入一个参数，表示距离上次调用tick已经有多少秒过去。通过这种方式，TCPSender可以维护一个自己已经存在的时长的信息，并且我们不能在sponge的代码中调用clock和time相关的函数，tick是TCPSender获知时间信息的唯一途径</li>
+<li>当一个TCPSender对象被构造的时候，会有一个重传时间(Retransmission timeout, RTO)的初始值作为构造函数的参数，RTO代表了对于一个outstanding segment的等待时间，也就是超过RTO还没有收到ackno的segment会被认为是丢失了</li>
+<li>我们需要实现一个重传计时器timer，这个计时器可以在任何时候开启，并且记录经过的时间，并且计时器通过tick函数来获知时间的流逝</li>
+<li>每一次有非空segment被发送，如果计时器没有启动就需要开启计时器，这样一来计时器就会记录segment发送出去所经过的时间，当所有outstanding segment都发送成功之后，计时器才会停止</li>
+<li>当tick函数被调用，并且计时器发现超时的时候，就会进行如下操作：
+<ul>
+<li>将最早发送出去并且还没有收到ackno的segment的segment进行重传</li>
+<li>如果接收端的窗口大小是非零的，那么就要：
+<ul>
+<li>记录<strong>连续重传</strong>(consecutive retransmission)的次数，后面的lab中将会用到这个重要的信息，将被用来判断当前的TCP连接还是否有效</li>
+<li>将RTO的值翻倍，这个操作被称为<strong>指数退避</strong>(exponential backoff)，这么做可以降低重传的频率，减小网络的负载量</li>
+</ul></li>
+<li><strong>重新设置</strong>重传计时器记录的时间，等待下一次超过RTO</li>
+</ul></li>
+<li>当Receiver给Sender一个ackno的时候，Sender需要
+<ul>
+<li>将RTO设置回原本的初始值</li>
+<li>如果Sender还有outstanding segment就重开重传计时器</li>
+<li>将连续重传数重置为0</li>
+</ul></li>
+</ul>
+<p>我们可以发现，这样一套运行逻辑中，RTO的值会根据ackno收到的情况不断变化，如果长时间收不到ackno，那么Sender会不断进行重传，并且增大RTO的时间，而如果收到了新的ackno就会把扩大的RTO重置回初始值。</p>
+<h2 id="代码实现">代码实现</h2>
+<h3 id="类的定义">类的定义</h3>
+<p>首先我们需要定义一些类实现过程中要用到的类变量</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TCPSender</span> {</span></span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">//! our initial sequence number, the number for our SYN.</span></span><br><span class="line">    WrappingInt32 _isn;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! outbound queue of segments that the TCPSender wants sent</span></span><br><span class="line">    std::queue&lt;TCPSegment&gt; _segments_out{};</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! retransmission timer for the connection</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> _initial_retransmission_timeout;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! outgoing stream of bytes that have not yet been sent</span></span><br><span class="line">    ByteStream _stream;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! the (absolute) sequence number for the next byte to be sent</span></span><br><span class="line">    <span class="keyword">uint64_t</span> _next_seqno{<span class="number">0</span>};</span><br><span class="line"></span><br><span class="line">    std::map&lt;<span class="keyword">uint64_t</span>, TCPSegment&gt; _outstanding_segs{};</span><br><span class="line">    std::optional&lt;<span class="keyword">uint64_t</span>&gt; _timer_ms = std::nullopt;</span><br><span class="line">    <span class="keyword">uint64_t</span> _ms = <span class="number">0</span>, _rto, _bytes_in_flight = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">uint32_t</span> _consecutive_retransmissions = <span class="number">0</span>;</span><br><span class="line">    std::optional&lt;<span class="keyword">uint64_t</span>&gt; _last_ackno = std::nullopt;</span><br><span class="line">    std::optional&lt;<span class="keyword">uint16_t</span>&gt; _last_window_size = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">bool</span> _fin_sent = <span class="literal">false</span>, _zero_window_size = <span class="literal">false</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>这里发送出去的segment用一个队列来存储，要发送的时候就push到队列里面去，而对outstanding segment的情况追踪则使用一个map来存储，方便进行查询，另外还要设置像是timer之类的上面提到过的变量。</p>
+<h3 id="send_empty_segment">send_empty_segment</h3>
+<p>这个函数主要用来发送一个空的segment，虽然这个lab里面用不上这个东西，但是据说后面的lab4要用，所以lab3也要求实现一下，其实就是新建一个TCPSegment对象，然后改变一下对应的属性值比如seqno就行：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TCPSender::send_empty_segment</span><span class="params">()</span> </span>{</span><br><span class="line">    TCPSegment seg;</span><br><span class="line">    seg.<span class="built_in">header</span>().seqno = <span class="built_in">wrap</span>(_next_seqno, _isn);</span><br><span class="line">    seg.<span class="built_in">header</span>().syn = seg.<span class="built_in">header</span>().fin = <span class="literal">false</span>;</span><br><span class="line">    seg.<span class="built_in">payload</span>() = <span class="built_in">Buffer</span>(<span class="string">""</span>);</span><br><span class="line">    _segments_out.<span class="built_in">push</span>(seg);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="tick">tick</h3>
+<p>tick的作用是进行时间的计数，并且观察时间是否相比于timer超过了RTO，如果超过了就需要进行重传的操作，重传就是要将第一个outstanding segment取出(这里的outstanding segment是个map，并且key是seqno，所以map的第一个就是seqno最小的那个，也就是最早发出去的那个)，然后还要记录连续重传的次数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TCPSender::tick</span><span class="params">(<span class="keyword">const</span> <span class="keyword">size_t</span> ms_since_last_tick)</span> </span>{</span><br><span class="line">    _ms += ms_since_last_tick;</span><br><span class="line">    <span class="keyword">if</span> (!_timer_ms.<span class="built_in">has_value</span>()) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// retransmission</span></span><br><span class="line">    <span class="keyword">if</span> (_ms - *_timer_ms &gt;= _rto) {</span><br><span class="line">        _timer_ms = _ms;</span><br><span class="line">        <span class="keyword">auto</span> seg = _outstanding_segs.<span class="built_in">begin</span>()-&gt;second;</span><br><span class="line">        _segments_out.<span class="built_in">push</span>(seg);</span><br><span class="line">        <span class="keyword">if</span> (!_zero_window_size) {</span><br><span class="line">            _consecutive_retransmissions += <span class="number">1</span>;</span><br><span class="line">            _rto *= <span class="number">2</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="fill_window">fill_window</h3>
+<p>fill_window这个函数的主要作用是创建一个大小跟当前的窗口大小刚好一样大的segment并发送出去，我们首先要判断这个segment的SYN和FIN两个标记的情况，然后从ByteStream取出数量合适的字节填充进payload里面，再将这个新的segment加入发送队列中，同时在outstanding segment中也记录它的信息。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TCPSender::fill_window</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) {</span><br><span class="line">        <span class="keyword">bool</span> syn =(_next_seqno == <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">bool</span> fin = _stream.<span class="built_in">input_ended</span>() &amp;&amp; _stream.<span class="built_in">buffer_size</span>() &lt;= TCPConfig::MAX_PAYLOAD_SIZE &amp;&amp;</span><br><span class="line">                   (<span class="keyword">static_cast</span>&lt;<span class="keyword">int64_t</span>&gt;(_stream.<span class="built_in">buffer_size</span>()) &lt;= <span class="keyword">static_cast</span>&lt;<span class="keyword">int64_t</span>&gt;(*_last_window_size) - syn - <span class="number">1</span>);</span><br><span class="line">        <span class="comment">// size of the payload to fill the window.</span></span><br><span class="line">        <span class="keyword">uint64_t</span> payload_size = std::<span class="built_in">min</span>({TCPConfig::MAX_PAYLOAD_SIZE,</span><br><span class="line">                                      _stream.<span class="built_in">buffer_size</span>(),</span><br><span class="line">                                      <span class="keyword">static_cast</span>&lt;<span class="keyword">uint64_t</span>&gt;(*_last_window_size - syn - fin)});</span><br><span class="line">        TCPSegment seg;</span><br><span class="line">        seg.<span class="built_in">header</span>().seqno = <span class="built_in">wrap</span>(_next_seqno, _isn);</span><br><span class="line">        seg.<span class="built_in">header</span>().syn = syn;</span><br><span class="line">        seg.<span class="built_in">header</span>().fin = fin;</span><br><span class="line">        seg.<span class="built_in">payload</span>() = <span class="built_in">Buffer</span>( _stream.<span class="built_in">read</span>(payload_size));</span><br><span class="line">        <span class="keyword">if</span> (_fin_sent || (syn == <span class="literal">false</span> &amp;&amp; fin == <span class="literal">false</span> &amp;&amp; payload_size == <span class="number">0</span>)) {</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (fin) {</span><br><span class="line">            _fin_sent = <span class="literal">true</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">// send out the TCP segment.</span></span><br><span class="line">        _segments_out.<span class="built_in">push</span>(seg);</span><br><span class="line">        _outstanding_segs.<span class="built_in">emplace</span>(_next_seqno, seg);</span><br><span class="line">        <span class="keyword">size_t</span> seg_length = seg.<span class="built_in">length_in_sequence_space</span>();</span><br><span class="line">        _bytes_in_flight += seg_length;</span><br><span class="line">        _next_seqno += seg_length;</span><br><span class="line">        *_last_window_size -= seg_length;</span><br><span class="line">        <span class="keyword">if</span> (!_timer_ms.<span class="built_in">has_value</span>()) {</span><br><span class="line">            _timer_ms = _ms;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="ack_received">ack_received</h3>
+<p>ack_received这个函数的主要功能是接收来自Receiver的回复，这个回复包括了ackno和window size两个信息，然后我们需要将outstanding segment中被ackno确认的segment都移除，并记录正确的window size，然后还需要将RTO和重传次数设置成初始值。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TCPSender::ack_received</span><span class="params">(<span class="keyword">const</span> WrappingInt32 ackno, <span class="keyword">const</span> <span class="keyword">uint16_t</span> window_size)</span> </span>{</span><br><span class="line">    <span class="keyword">uint64_t</span> ack = <span class="built_in">unwrap</span>(ackno, _isn, _last_ackno.<span class="built_in">has_value</span>() ? *_last_ackno : <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">bool</span> new_data = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (_last_ackno.<span class="built_in">has_value</span>()) {</span><br><span class="line">        <span class="keyword">if</span> (_last_ackno &lt;= ack &amp;&amp; ack &lt;= _next_seqno) {</span><br><span class="line">            new_data = ack &gt; _last_ackno;</span><br><span class="line">            _last_ackno = ack;</span><br><span class="line">            <span class="keyword">this</span>-&gt;_zero_window_size = window_size == <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">uint16_t</span> new_window_size = <span class="keyword">this</span>-&gt;_zero_window_size ? <span class="number">1</span> : window_size;</span><br><span class="line">            _last_window_size = <span class="keyword">static_cast</span>&lt;<span class="keyword">uint64_t</span>&gt;(</span><br><span class="line">            std::<span class="built_in">max</span>(<span class="number">0l</span>, <span class="keyword">static_cast</span>&lt;<span class="keyword">int64_t</span>&gt;(ack) + new_window_size - <span class="keyword">static_cast</span>&lt;<span class="keyword">int64_t</span>&gt;(_next_seqno)));</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">else</span> <span class="keyword">if</span> (ack &lt;= _next_seqno) {</span><br><span class="line">        new_data = <span class="literal">true</span>;</span><br><span class="line">        _last_ackno = ack;</span><br><span class="line">        <span class="keyword">this</span>-&gt;_zero_window_size = window_size == <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">uint16_t</span> new_window_size = <span class="keyword">this</span>-&gt;_zero_window_size ? <span class="number">1</span> : window_size;</span><br><span class="line">        _last_window_size = <span class="keyword">static_cast</span>&lt;<span class="keyword">uint64_t</span>&gt;(</span><br><span class="line">            std::<span class="built_in">max</span>(<span class="number">0l</span>, <span class="keyword">static_cast</span>&lt;<span class="keyword">int64_t</span>&gt;(ack) + new_window_size - <span class="keyword">static_cast</span>&lt;<span class="keyword">int64_t</span>&gt;(_next_seqno)));</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (!new_data) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    std::vector&lt;std::pair&lt;<span class="keyword">uint64_t</span>, TCPSegment&gt;&gt; segments;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> kv : _outstanding_segs) {</span><br><span class="line">        TCPSegment segment = kv.second;</span><br><span class="line">        <span class="keyword">uint64_t</span> seqno = kv.first;</span><br><span class="line">        <span class="keyword">if</span> (seqno + segment.<span class="built_in">length_in_sequence_space</span>() &gt; _last_ackno) {</span><br><span class="line">            segments.<span class="built_in">emplace_back</span>(seqno, segment);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    _outstanding_segs.<span class="built_in">clear</span>();</span><br><span class="line">    _bytes_in_flight = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> &amp;kv : segments) {</span><br><span class="line">        _outstanding_segs.<span class="built_in">insert</span>(kv);</span><br><span class="line">        _bytes_in_flight += kv.second.<span class="built_in">length_in_sequence_space</span>();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    _rto = _initial_retransmission_timeout;</span><br><span class="line">    _consecutive_retransmissions = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (_outstanding_segs.<span class="built_in">empty</span>()) {</span><br><span class="line">        _timer_ms = std::nullopt;</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        _timer_ms = _ms;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>本文标题：Stanford-CS144-计算机网络Lab3：TCP发送端</li>
+        <li>本文作者：RandomStar</li>
+        <li>创建时间：2022-01-18 16:41:31</li>
+        <li>
+            本文链接：https://zhang-each.github.com/2022/01/18/sponge3/
+        </li>
+        <li>
+            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/01/18/pgm1/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">CMU10-708概率图模型1：Introduction</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+            <div class="comment-container">
+                <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fas fa-comments">&nbsp;评论</i>
+    </div>
+    
+
+        
+            
+    <div class="valine-container">
+        <script 
+                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+            function loadValine() {
+                new Valine({
+                    el: '#vcomments',
+                    appId: 'b6BpXpwUq5wyUMcLtbnNMD8N-gzGzoHsz',
+                    appKey: 'Qtl7JkpdLDat2Niacks6SyT5',
+                    meta: ['nick', 'mail', 'link'],
+                    avatar: 'wavatar',
+                    enableQQ: true,
+                    placeholder: '快来发表你的看法吧！',
+                    lang: 'zh-cn'.toLowerCase()
+                });
+
+                function getAuthor(language) {
+                    switch (language) {
+                        case 'en':
+                            return 'Author';
+                        case 'zh-CN':
+                            return '博主';
+                        default:
+                            return 'Master';
+                    }
+                }
+
+                // Add "Author" identify
+                const getValineDomTimer = setInterval(() => {
+                    const vcards = document.querySelectorAll('#vcomments .vcards .vcard');
+                    if (vcards.length > 0) {
+                        let author = 'RandomStar';
+
+                        if (author) {
+                            for (let vcard of vcards) {
+                                const vnick_dom = vcard.querySelector('.vhead .vnick');
+                                const vnick = vnick_dom.innerHTML;
+                                if (vnick === author) {
+                                    vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                                }
+                            }
+                        }
+                        clearInterval(getValineDomTimer);
+                    } else {
+                        clearInterval(getValineDomTimer);
+                    }
+                }, 2000);
+            }
+
+            if ('false') {
+                const loadValineTimeout = setTimeout(() => {
+                    loadValine();
+                    clearTimeout(loadValineTimeout);
+                }, 1000);
+            } else {
+                window.addEventListener('DOMContentLoaded', loadValine);
+            }
+        </script>
+    </div>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">RandomStar</a>
+        </div>
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+        </script>
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">366.1k</span>&nbsp;字
+            <span>
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            <span>
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sender%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%ADsegment%E4%B8%A2%E5%A4%B1"><span class="nav-number">2.</span> <span class="nav-text">Sender怎么判断segment丢失</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">3.1.</span> <span class="nav-text">类的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#send_empty_segment"><span class="nav-number">3.2.</span> <span class="nav-text">send_empty_segment</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tick"><span class="nav-number">3.3.</span> <span class="nav-text">tick</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fill_window"><span class="nav-number">3.4.</span> <span class="nav-text">fill_window</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ack_received"><span class="nav-number">3.5.</span> <span class="nav-text">ack_received</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>
