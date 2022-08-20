@@ -1,31 +1,109 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
 <head>
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="RandomStar">
-    
-    <title>
-        
-            MIT6.830数据库系统-lab1：SimpleDB Overview |
-        
-        在那不遥远的地方
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Zhang-Each">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这是MIT6.830Database Systems课程的Project实现记录，这门课的内容和常见的数据系统课程基本一致，而课程Project是用Java实现一个名为SimpleDB的简单数据库系统，一共有6个lab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MIT6.830数据库系统-lab1：SimpleDB Overview">
+<meta property="og:url" content="http://zhang-each.github.io/2022/02/17/simpledb1/index.html">
+<meta property="og:site_name" content="在那不遥远的地方">
+<meta property="og:description" content="这是MIT6.830Database Systems课程的Project实现记录，这门课的内容和常见的数据系统课程基本一致，而课程Project是用Java实现一个名为SimpleDB的简单数据库系统，一共有6个lab">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zhang-each.github.io/2022/02/17/simpledb1/1.drawio.png">
+<meta property="article:published_time" content="2022-02-17T04:44:57.000Z">
+<meta property="article:modified_time" content="2022-02-17T04:46:17.928Z">
+<meta property="article:author" content="Zhang-Each">
+<meta property="article:tag" content="数据库系统">
+<meta property="article:tag" content="计算机系统">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="数据存储">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://zhang-each.github.io/2022/02/17/simpledb1/1.drawio.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>MIT6.830数据库系统-lab1：SimpleDB Overview - 在那不遥远的地方</title>
 
-    <link rel="shortcut icon" href="/images/logo.svg">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"zhang-each.github.io","root":"/","language":"zh-cn","path":"search.xml"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的回音。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
-    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhang-each.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
 <meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
@@ -143,219 +221,207 @@ mjx-container[display="true"] + br {
 
 
 <body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress-bar-container">
-    
-        <span class="scroll-progress-bar"></span>
-    
+  
 
-    
-</div>
-
-
-<main class="page-container">
-
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
     
 
-    <div class="page-main-content">
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>在那不遥远的地方</strong>
+    </a>
 
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                在那不遥远的地方
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/"
-                            >
-                                主页
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                归档
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/categories"
-                            >
-                                分类
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/tags"
-                            >
-                                标签
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/about"
-                            >
-                                关于
-                            </a>
-                        </li>
-                    
-                    
-                        <li class="menu-item search search-popup-trigger">
-                            <i class="fas fa-search"></i>
-                        </li>
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
+  </div>
+</nav>
 
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/">主页</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">归档</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/categories">分类</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/tags">标签</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/about">关于</a>
-                </li>
-            
-        </ul>
-    </div>
+  
 
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="fade-in-down-animation">
-    <div class="article-content-container">
-
-        <div class="article-title">
-            <span class="title-hover-animation">MIT6.830数据库系统-lab1：SimpleDB Overview</span>
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="MIT6.830数据库系统-lab1：SimpleDB Overview"></span>
+          
         </div>
 
         
-            <div class="article-header">
-                <div class="avatar">
-                    <img src="/images/skadi.png">
-                </div>
-                <div class="info">
-                    <div class="author">
-                        <span class="name">RandomStar</span>
-                        
-                            <span class="author-label">Lv6</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;2022-02-17 12:44:57
-    </span>
+          
+  <div class="mt-3">
     
-        <span class="article-categories article-meta-item">
-            <i class="fas fa-folder"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">数据库系统的设计与实现</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Zhang-Each
+      </span>
     
     
-        <span class="article-tags article-meta-item">
-            <i class="fas fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">计算机系统</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/">数据库系统</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">数据存储</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-17 12:44" pubdate>
+          2022年2月17日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
     
 
     
     
-        <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>1.9k 字</span>
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
         </span>
+        
+      
     
-    
-        <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>7 分钟</span>
-        </span>
-    
-    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
 </div>
 
-                    </div>
-                </div>
-            </div>
-        
+</div>
 
-        <div class="article-content markdown-body">
-            <blockquote>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MIT6.830数据库系统-lab1：SimpleDB Overview</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
 <p>这是MIT6.830Database Systems课程的Project实现记录，这门课的内容和常见的数据系统课程基本一致，而课程Project是用Java实现一个名为SimpleDB的简单数据库系统，一共有6个lab</p>
 </blockquote>
 <span id="more"></span>
@@ -380,7 +446,7 @@ mjx-container[display="true"] + br {
 </ul>
 <p>下面我们就要正式开始lab1的内容</p>
 <h2 id="SimpleDB存储模块的架构"><a href="#SimpleDB存储模块的架构" class="headerlink" title="SimpleDB存储模块的架构"></a>SimpleDB存储模块的架构</h2><p>lab1的前几个任务需要我们实现SimpleDB中存储模块的关键内容，我们可以先根据实验指导和源代码来分析一下SimpleDB存储模块的结构。我们知道数据库中的数据表是用页(Page)为单位进行存储的，每个页中包含了若干个元组(Tuple)，同一个数据表中的元组具有相同的定义(即一条数据包括哪些属性)，我们先来分析一下SimpleDB里的元组是什么设计的。</p>
-<h3 id="Tuple元组"><a href="#Tuple元组" class="headerlink" title="Tuple元组"></a>Tuple元组</h3><p><img lazyload="" src="/images/loading.svg" data-src="1.drawio.png" alt="元组的设计"></p>
+<h3 id="Tuple元组"><a href="#Tuple元组" class="headerlink" title="Tuple元组"></a>Tuple元组</h3><p><img src="1.drawio.png" srcset="/img/loading.gif" lazyload alt="元组的设计"></p>
 <p>SimpleDB中的一个元组主要有三个部分组成，TupleDesc负责描述元组每一栏数据的名称和类型，RecordId是元组的ID，通过页号PageId和元组在页内的偏移量TupleNum生成，Field数组负责存储具体的数据，顺着这个思路，我们可以实现下面几个文件中的内容</p>
 <ul>
 <li>src/java/simpledb/storage/TupleDesc.java</li>
@@ -389,9 +455,9 @@ mjx-container[display="true"] + br {
 </ul>
 <p>比较简单就不贴代码了。</p>
 <h3 id="Catalog-Buffer目录和缓冲区"><a href="#Catalog-Buffer目录和缓冲区" class="headerlink" title="Catalog/Buffer目录和缓冲区"></a>Catalog/Buffer目录和缓冲区</h3><p>Catalog类起到的作用相当于数据库的目录，记录了数据库中有哪些数据表，每个数据表对应的ID、数据文件、主键是什么东西，并定义了一系列增删查的方法，同时Database类中会有一个<code>Database.getCatalog()</code>的静态方法来访问整个数据库的Catalog，一个数据表要加入Catalog的时候，参数包括数据表的文件(可以获得数据表的id)，表名以及主键的名字，因此可以设置下面这样4个HashMap方便进行数据表元信息的查询：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Catalog</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> ConcurrentHashMap&lt;Integer, DbFile&gt; tableMap;</span><br><span class="line">    <span class="keyword">private</span> ConcurrentHashMap&lt;Integer, String&gt; idMap;</span><br><span class="line">    <span class="keyword">private</span> ConcurrentHashMap&lt;String, Integer&gt; nameMap;</span><br><span class="line">    <span class="keyword">private</span> ConcurrentHashMap&lt;Integer, String&gt; keyMap;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Catalog</span> </span>{<br>    <span class="hljs-keyword">private</span> ConcurrentHashMap&lt;Integer, DbFile&gt; tableMap;<br>    <span class="hljs-keyword">private</span> ConcurrentHashMap&lt;Integer, String&gt; idMap;<br>    <span class="hljs-keyword">private</span> ConcurrentHashMap&lt;String, Integer&gt; nameMap;<br>    <span class="hljs-keyword"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Catalog</span> </span>{<br>    <span class="hljs-keyword">private</span> ConcurrentHashMap&lt;Integer, DbFile&gt; tableMap;<br>    <span class="hljs-keyword">private</span> ConcurrentHashMap&lt;Integer, String&gt; idMap;<br>    <span class="hljs-keyword">private</span> ConcurrentHashMap&lt;String, Integer&gt; nameMap;<br>    <span class="hljs-keyword">private</span> ConcurrentHashMap<Integer, String> keyMap;<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <p>另一个很重要的类是BufferPool，它负责管理SimpleDB保存在内存中的页的信息，因为内存不可能无限大，所以我们需要在一个指定大小的Buffer中保存一定数量的数据页，并在Buffer容量达到上限的时候进行页的置换，不过lab1不需要我们管这些，我们要做的就是实现一个方法<code>getPage()</code>，它的实现逻辑也非常简单，就是根据输入的页号在buffer存储页的HashMap中进行查询，如果这个页不存在就调用<code>Database.getCatalog().getDatabaseFile</code>这个方法把对应的页去读出来，这一段的代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Page <span class="title">getPage</span><span class="params">(TransactionId tid, PageId pid, Permissions perm)</span></span></span><br><span class="line"><span class="function">       <span class="keyword">throws</span> TransactionAbortedException, DbException </span>{</span><br><span class="line">       <span class="comment">// some code goes here</span></span><br><span class="line">       <span class="keyword">if</span> (!<span class="keyword">this</span>.buffer.containsKey(pid.hashCode())) {</span><br><span class="line">           <span class="comment">// find the right page in DBFiles</span></span><br><span class="line">           DbFile dbFile = Database.getCatalog().getDatabaseFile(pid.getTableId());</span><br><span class="line">           Page page = dbFile.readPage(pid);</span><br><span class="line">           <span class="keyword">if</span> (buffer.size() &gt; numPages) {</span><br><span class="line">               evictPage();</span><br><span class="line">           }</span><br><span class="line">           buffer.put(pid.hashCode(), page);</span><br><span class="line">       }</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">this</span>.buffer.get(pid.hashCode());</span><br><span class="line">   }</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs Java"><span class="hljs-function"><span class="hljs-keyword">public</span> Page <span class="hljs-title">getPage</span><span class="hljs-params">(TransactionId tid, PageId pid, Permissions perm)</span></span><br><span class="hljs-function">       <span class="hljs-keyword">throws</span> TransactionAbortedException, DbException </span>{<br>       <span class="hljs-comment">// some code goes here</span><br>       <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.buffer.containsKey(pid.hashCode())) {<br>           <span class="hljs-comment">// find the right page in DBFiles</span><br>           DbFile dbFile = Database.getCatalog().getDatabaseFile(pid.getTableId());<br>           Page page = dbFile.readPage(pid);<br>           <span class="hljs-keyword">if</span> (buffer.size() &gt; numPages) {<br>               evictPage();<br>           }<br>           buffer.put(pid.hashCode(), page);<br>       }<br>       <span class="hljs-keyword">return</span> <span class="hljs-keyword"><code class="language-hljs Java"><span class="hljs-function"><span class="hljs-keyword">public</span> Page <span class="hljs-title">getPage</span><span class="hljs-params">(TransactionId tid, PageId pid, Permissions perm)</span></span><br><span class="hljs-function">       <span class="hljs-keyword">throws</span> TransactionAbortedException, DbException </span>{<br>       <span class="hljs-comment">// some code goes here</span><br>       <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.buffer.containsKey(pid.hashCode())) {<br>           <span class="hljs-comment">// find the right page in DBFiles</span><br>           DbFile dbFile = Database.getCatalog().getDatabaseFile(pid.getTableId());<br>           Page page = dbFile.readPage(pid);<br>           <span class="hljs-keyword">if</span> (buffer.size() &gt; numPages) {<br>               evictPage();<br>           }<br>           buffer.put(pid.hashCode(), page);<br>       }<br>       <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.buffer.get(pid.hashCode());<br>   }<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <h3 id="HeapFile堆文件"><a href="#HeapFile堆文件" class="headerlink" title="HeapFile堆文件"></a>HeapFile堆文件</h3><p>SimpleDB中的数据有两种组织方式，一种是堆文件Heap File，即无序存放，另一种是B+树，是有序的索引，我们首先要来实现Heap File的存放方式，在SimpleDB中，一个Heap File包括了一系列页，称为Heap Page，而每个页能存储的数据量是<strong>固定的</strong>(默认设定为4096KB)，在磁盘中这些Heap File就以无顺序的方式存放，需要用的时候以页为单位读入内存中就行。</p>
 <p>同时Heap Page中除了要正常存放元组的数据，还要用一些位置来标注每一条记录是不是有效的，这种方式称为Bit Map，每个元组对应1bit的位置，因此1B的位置可以标注8个元组，因此每个Heap Page中能存放的页的数量需要通过下面的方式计算：</p>
 <ul>
@@ -409,7 +475,7 @@ mjx-container[display="true"] + br {
 <li>补充一点操作系统的知识，文件的两种访问方式是<strong>随机访问和顺序访问</strong>，随机访问就是可以从文件的任何一个字节开始向下读取，而顺序访问就是必须从文件头开始读</li>
 <li>这里的readPage方法的实现代码如下：</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Page <span class="title">readPage</span><span class="params">(PageId pid)</span> </span>{</span><br><span class="line">       <span class="comment">// some code goes here</span></span><br><span class="line">       <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[BufferPool.getPageSize()];</span><br><span class="line">       <span class="keyword">int</span> startPosition = pid.getPageNumber() * BufferPool.getPageSize();</span><br><span class="line">       <span class="keyword">try</span> {</span><br><span class="line">           RandomAccessFile randomAccessFile = <span class="keyword">new</span> RandomAccessFile(<span class="keyword">this</span>.file, <span class="string">"r"</span>);</span><br><span class="line">           randomAccessFile.seek(startPosition);</span><br><span class="line">           randomAccessFile.read(data, <span class="number">0</span>, data.length);</span><br><span class="line">           <span class="keyword">return</span> <span class="keyword">new</span> HeapPage((HeapPageId) pid, data                                               );</span><br><span class="line">       } <span class="keyword">catch</span> (FileNotFoundException e) {</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       } <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       }</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">   }</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs Java"><span class="hljs-function"><span class="hljs-keyword">public</span> Page <span class="hljs-title">readPage</span><span class="hljs-params">(PageId pid)</span> </span>{<br>       <span class="hljs-comment">// some code goes here</span><br>       <span class="hljs-keyword">byte</span>[] data = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[BufferPool.getPageSize()];<br>       <span class="hljs-keyword">int</span> startPosition = pid.getPageNumber() * BufferPool.getPageSize();<br>       <span class="hljs-keyword">try</span> {<br>           RandomAccessFile randomAccessFile = <span class="hljs-keyword">new</span> RandomAccessFile(<span class="hljs-keyword">this</span>.file, <span class="hljs-string">"r"</span>);<br>           randomAccessFile.seek(startPosition);<br>           randomAccessFile.read(data, <span class="hljs-number">0</span>, data.length);<br>           <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> HeapPage((HeapPageId) pid, data                                               );<br>       } <span class="hljs-keyword">catch</span> (FileNotFoundException e) {<br>           e.printStackTrace();<br>       } <span class="hljs-keyword">catch</span> (IOException e) {<br>           e.printStackTrace();<br>       }<br>       <span class="hljs-keyword">return</span> <span class="hljs-keyword"><code class="language-hljs Java"><span class="hljs-function"><span class="hljs-keyword">public</span> Page <span class="hljs-title">readPage</span><span class="hljs-params">(PageId pid)</span> </span>{<br>       <span class="hljs-comment">// some code goes here</span><br>       <span class="hljs-keyword">byte</span>[] data = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[BufferPool.getPageSize()];<br>       <span class="hljs-keyword">int</span> startPosition = pid.getPageNumber() * BufferPool.getPageSize();<br>       <span class="hljs-keyword">try</span> {<br>           RandomAccessFile randomAccessFile = <span class="hljs-keyword">new</span> RandomAccessFile(<span class="hljs-keyword">this</span>.file, <span class="hljs-string">"r"</span>);<br>           randomAccessFile.seek(startPosition);<br>           randomAccessFile.read(data, <span class="hljs-number">0</span>, data.length);<br>           <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> HeapPage((HeapPageId) pid, data                                               );<br>       } <span class="hljs-keyword">catch</span> (FileNotFoundException e) {<br>           e.printStackTrace();<br>       } <span class="hljs-keyword">catch</span> (IOException e) {<br>           e.printStackTrace();<br>       }<br>       <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>   }<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <p>另一个很重要的需要我们实现的东西叫做Heap File的迭代器，我们在实现Heap Page的时候就已经实现了Heap Page的迭代器，这个迭代器会遍历页内的每一个元组，而Heap File的迭代器需要能够遍历整个数据表文件中所有的页的所有元组，我们的实现策略是：</p>
 <ul>
 <li>对于每一个特定的页，调用Heap Page的迭代器来完成任务</li>
@@ -418,349 +484,386 @@ mjx-container[display="true"] + br {
 <p>因此在实现的时候，我定义了一个方法<code>getTupleIterator</code>来实现Page Iterator的更新。</p>
 <h3 id="SeqScan"><a href="#SeqScan" class="headerlink" title="SeqScan"></a>SeqScan</h3><p>lab1的最后，我们要实现一个顺序扫描的运算符，实际上就是要实现一个能够实现顺序扫描的迭代器，我们上面实现的Heap File迭代器就可以直接调用，在SeqScan这个类中再封装一层就行，其他的没什么东西，无非就是多加了一些其他的属性以及get方法。</p>
 
-        </div>
-
-        
-            <div class="post-copyright-info">
-                <div class="article-copyright-info-container">
-    <ul>
-        <li>本文标题：MIT6.830数据库系统-lab1：SimpleDB Overview</li>
-        <li>本文作者：RandomStar</li>
-        <li>创建时间：2022-02-17 12:44:57</li>
-        <li>
-            本文链接：https://zhang-each.github.com/2022/02/17/simpledb1/
-        </li>
-        <li>
-            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
-        </li>
-    </ul>
-</div>
-
-            </div>
-        
-
-        
-            <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/02/20/summary6/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">随意的学习总结5：Hugging Face Transformers初探</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/2022/02/09/summary5/"
-                        >
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">随意的学习总结5：从Transformer到TinyBERT</span>
-                                <span class="post-nav-item">下一篇</span>
-                            </span>
-                            <span class="right arrow-icon flex-center">
-                              <i class="fas fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-        
-            <div class="comment-container">
-                <div class="comments-container">
-    <div id="comment-anchor"></div>
-    <div class="comment-area-title">
-        <i class="fas fa-comments">&nbsp;评论</i>
-    </div>
-    
-
-        
+              </div>
             
-    <div class="valine-container">
-        <script 
-                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
-        <div id="vcomments"></div>
-        <script >
-            function loadValine() {
-                new Valine({
-                    el: '#vcomments',
-                    appId: 'b6BpXpwUq5wyUMcLtbnNMD8N-gzGzoHsz',
-                    appKey: 'Qtl7JkpdLDat2Niacks6SyT5',
-                    meta: ['nick', 'mail', 'link'],
-                    avatar: 'wavatar',
-                    enableQQ: true,
-                    placeholder: '快来发表你的看法吧！',
-                    lang: 'zh-cn'.toLowerCase()
-                });
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
 
-                function getAuthor(language) {
-                    switch (language) {
-                        case 'en':
-                            return 'Author';
-                        case 'zh-CN':
-                            return '博主';
-                        default:
-                            return 'Master';
-                    }
-                }
-
-                // Add "Author" identify
-                const getValineDomTimer = setInterval(() => {
-                    const vcards = document.querySelectorAll('#vcomments .vcards .vcard');
-                    if (vcards.length > 0) {
-                        let author = 'RandomStar';
-
-                        if (author) {
-                            for (let vcard of vcards) {
-                                const vnick_dom = vcard.querySelector('.vhead .vnick');
-                                const vnick = vnick_dom.innerHTML;
-                                if (vnick === author) {
-                                    vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
-                                }
-                            }
-                        }
-                        clearInterval(getValineDomTimer);
-                    } else {
-                        clearInterval(getValineDomTimer);
-                    }
-                }, 2000);
-            }
-
-            if ('false') {
-                const loadValineTimeout = setTimeout(() => {
-                    loadValine();
-                    clearTimeout(loadValineTimeout);
-                }, 1000);
-            } else {
-                window.addEventListener('DOMContentLoaded', loadValine);
-            }
-        </script>
-    </div>
-
-
-
-        
+<span class="category-chains">
+  
+  
     
-</div>
-
-            </div>
+      <span class="category-chain">
         
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" class="category-chain-item">数据库系统的设计与实现</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
     </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/">#数据库系统</a>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">#计算机系统</a>
+      
+        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">#数据存储</a>
+      
+    </div>
+  
 </div>
 
 
-                
-            </div>
+              
+  
 
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>MIT6.830数据库系统-lab1：SimpleDB Overview</div>
+      <div>http://zhang-each.github.io/2022/02/17/simpledb1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Zhang-Each</div>
         </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月17日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
             
-              <span>2020</span>
-              -
             
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">RandomStar</a>
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
         </div>
-        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
-        </script>
-            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">399.9k</span>&nbsp;字
-            <span>
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            <span>
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
-            <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
-        
-        <div class="theme-info info-item">
-            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
-        </div>
-        
-        
+      </div>
     </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="tools-list">
-        <!-- TOC aside toggle -->
-        
-            <li class="tools-item page-aside-toggle">
-                <i class="fas fa-outdent"></i>
-            </li>
-        
-
-        <!-- go comment -->
-        
-            <li class="go-comment">
-                <i class="fas fa-comment"></i>
-            </li>
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="arrow-up fas fa-arrow-up"></i>
-                <span class="percent"></span>
-            </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-        <aside class="page-aside">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SimpleDB%E5%AD%98%E5%82%A8%E6%A8%A1%E5%9D%97%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">SimpleDB存储模块的架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tuple%E5%85%83%E7%BB%84"><span class="nav-number">2.1.</span> <span class="nav-text">Tuple元组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Catalog-Buffer%E7%9B%AE%E5%BD%95%E5%92%8C%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="nav-number">2.2.</span> <span class="nav-text">Catalog&#x2F;Buffer目录和缓冲区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HeapFile%E5%A0%86%E6%96%87%E4%BB%B6"><span class="nav-number">2.3.</span> <span class="nav-text">HeapFile堆文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SeqScan"><span class="nav-number">2.4.</span> <span class="nav-text">SeqScan</span></a></li></ol></li></ol>
-    </div>
-</div>
-        </aside>
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
+    <div class="license-icon iconfont"></div>
+  </div>
 
 
-    
-        <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-          <span class="search-input-field-pre">
-            <i class="fas fa-keyboard"></i>
-          </span>
-            <div class="search-input-container">
-                <input autocomplete="off"
-                       autocorrect="off"
-                       autocapitalize="off"
-                       placeholder="搜索..."
-                       spellcheck="false"
-                       type="search"
-                       class="search-input"
-                >
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/20/summary6/" title="随意的学习总结5：Hugging Face Transformers初探">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">随意的学习总结5：Hugging Face Transformers初探</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/09/summary5/" title="随意的学习总结5：从Transformer到TinyBERT">
+                        <span class="hidden-mobile">随意的学习总结5：从Transformer到TinyBERT</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
             </div>
-            <span class="popup-btn-close">
-                <i class="fas fa-times"></i>
-            </span>
+
+            
+          </article>
         </div>
-        <div id="search-result">
-            <div id="no-result">
-                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
-            </div>
-        </div>
+      </div>
     </div>
-</div>
 
-    
-
-</main>
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-    
-<script src="/js/local-search.js"></script>
-
-
-
-
-    
-<script src="/js/code-copy.js"></script>
-
-
-
-
-    
-<script src="/js/lazyload.js"></script>
-
-
-
-<div class="post-scripts">
-    
-        
-<script src="/js/left-side-toggle.js"></script>
-
-<script src="/js/libs/anime.min.js"></script>
-
-<script src="/js/toc.js"></script>
-
-    
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
 
 
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+
+  </script>
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+  &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+        class="white-color">402.1k</span>&nbsp;字
+    <span>
+        |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+            class="white-color"></span>&nbsp;次
+    </span>
+    <span>
+        |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+            class="white-color"></span>&nbsp;人
+    </span>
+    <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

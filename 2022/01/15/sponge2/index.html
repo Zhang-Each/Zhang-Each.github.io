@@ -1,31 +1,111 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
 <head>
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="RandomStar">
-    
-    <title>
-        
-            Stanford-CS144-计算机网络Lab2：TCP接收端 |
-        
-        在那不遥远的地方
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Zhang-Each">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Stanford CS144 Introduction to Computer Network课程Project的lab2，这个lab主要任务是实现一个TCP的接收端TCPReceiver">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Stanford-CS144-计算机网络Lab2：TCP接收端">
+<meta property="og:url" content="http://zhang-each.github.io/2022/01/15/sponge2/index.html">
+<meta property="og:site_name" content="在那不遥远的地方">
+<meta property="og:description" content="Stanford CS144 Introduction to Computer Network课程Project的lab2，这个lab主要任务是实现一个TCP的接收端TCPReceiver">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zhang-each.github.io/2022/01/15/sponge2/image-20211231000601186.png">
+<meta property="og:image" content="http://zhang-each.github.io/2022/01/15/sponge2/image-20220112235902345.png">
+<meta property="og:image" content="http://zhang-each.github.io/2022/01/15/sponge2/image-20220115180841287.png">
+<meta property="article:published_time" content="2022-01-15T10:38:55.000Z">
+<meta property="article:modified_time" content="2022-01-15T10:41:10.610Z">
+<meta property="article:author" content="Zhang-Each">
+<meta property="article:tag" content="计算机系统">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="TCP&#x2F;IP">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://zhang-each.github.io/2022/01/15/sponge2/image-20211231000601186.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Stanford-CS144-计算机网络Lab2：TCP接收端 - 在那不遥远的地方</title>
 
-    <link rel="shortcut icon" href="/images/logo.svg">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"zhang-each.github.io","root":"/","language":"zh-cn","path":"search.xml"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的回音。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
-    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhang-each.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
 <meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
@@ -143,250 +223,232 @@ mjx-container[display="true"] + br {
 
 
 <body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress-bar-container">
-    
-        <span class="scroll-progress-bar"></span>
-    
+  
 
-    
-</div>
-
-
-<main class="page-container">
-
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
     
 
-    <div class="page-main-content">
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>在那不遥远的地方</strong>
+    </a>
 
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                在那不遥远的地方
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/"
-                            >
-                                主页
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                归档
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/categories"
-                            >
-                                分类
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/tags"
-                            >
-                                标签
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/about"
-                            >
-                                关于
-                            </a>
-                        </li>
-                    
-                    
-                        <li class="menu-item search search-popup-trigger">
-                            <i class="fas fa-search"></i>
-                        </li>
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
+  </div>
+</nav>
 
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/">主页</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">归档</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/categories">分类</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/tags">标签</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/about">关于</a>
-                </li>
-            
-        </ul>
-    </div>
+  
 
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="fade-in-down-animation">
-    <div class="article-content-container">
-
-        <div class="article-title">
-            <span class="title-hover-animation">Stanford-CS144-计算机网络Lab2：TCP接收端</span>
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Stanford-CS144-计算机网络Lab2：TCP接收端"></span>
+          
         </div>
 
         
-            <div class="article-header">
-                <div class="avatar">
-                    <img src="/images/skadi.png">
-                </div>
-                <div class="info">
-                    <div class="author">
-                        <span class="name">RandomStar</span>
-                        
-                            <span class="author-label">Lv6</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;2022-01-15 18:38:55
-    </span>
+          
+  <div class="mt-3">
     
-        <span class="article-categories article-meta-item">
-            <i class="fas fa-folder"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Zhang-Each
+      </span>
     
     
-        <span class="article-tags article-meta-item">
-            <i class="fas fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">计算机系统</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/C/">C++</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/TCP-IP/">TCP/IP</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-01-15 18:38" pubdate>
+          2022年1月15日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          44 分钟
+        
+      </span>
     
 
     
     
-        <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>2.3k 字</span>
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
         </span>
+        
+      
     
-    
-        <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>8 分钟</span>
-        </span>
-    
-    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
 </div>
 
-                    </div>
-                </div>
-            </div>
-        
+</div>
 
-        <div class="article-content markdown-body">
-            <blockquote>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Stanford-CS144-计算机网络Lab2：TCP接收端</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
 <p>Stanford CS144 Introduction to Computer Network课程Project的lab2，这个lab主要任务是实现一个TCP的接收端TCPReceiver</p>
 </blockquote>
 <span id="more"></span>
 <!-- excerpt -->
 <!-- toc -->
-<h2 id="overview">Overview</h2>
-<p>上一个lab中，我们实现了一个TCP接收端的流重组器，接下来的lab3就要我们实现整个TCP接收端的东西，相比于流重组器，TCP的接收端还要处理一些接收到的TCP报文段中的信息，并将数据交给流重组器进行处理，每个TCPReceiver实际上管理了一个流重组器。</p>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>上一个lab中，我们实现了一个TCP接收端的流重组器，接下来的lab3就要我们实现整个TCP接收端的东西，相比于流重组器，TCP的接收端还要处理一些接收到的TCP报文段中的信息，并将数据交给流重组器进行处理，每个TCPReceiver实际上管理了一个流重组器。</p>
 <p>同时接收端还需要告诉发送端一些重要的信息并以报文的形式返回，包括：</p>
 <ul>
 <li>第一个没有进行整流的字节的索引，也被叫做<code>ackno</code>，这是接收端期望从发送端收到的第一个字节</li>
 <li>第一个没有进行整流和第一个没有收到的索引之间的距离，这个距离也就是TCP的窗口大小，这是告诉发送端，发送出来的东西的大小不要超过窗口的大小。</li>
 </ul>
 <p>上一次实验中给的一张图可以很好的表示这几个不同的索引之间的关系：</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20211231000601186.png" alt="image-20211231000601186"><figcaption aria-hidden="true">image-20211231000601186</figcaption>
-</figure>
+<p><img src="image-20211231000601186.png" srcset="/img/loading.gif" lazyload alt="image-20211231000601186"></p>
 <p>同时，<code>ackno</code>和窗口大小共同描述了接收端的窗口信息，告诉了发送方哪些东西是允许被发送的，通过这个窗口，接收端可以控制输入数据流的大小，并且让发送端控制发送的数据量，<code>ackno</code>实际上就是窗口的左端即开始的位置，而<code>ackno+window size</code>则是窗口的右端。下面我们开始具体的TCPReceiver的实现。</p>
-<h2 id="序列号格式的转换">序列号格式的转换</h2>
-<p>首先我们要做的一件工作是进行序列号在64位格式和32位格式之间的转换，我们之前实现的流重组器中的每个字节拥有的index是64位的，而在TCP协议中，index则是用32位来表示的(对应TCP中的序列号seqno，每个报文的seqno代表了该报文中发送的第一个字节的index)，所以我们需要先实现32位index和64位的序列号之间的格式转换。</p>
-<h3 id="序列号的特点">序列号的特点</h3>
-<p>虽然TCP协议中，序列号只有32位，最多能表示<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0" xmlns="http://www.w3.org/2000/svg" width="2.919ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 1290.1 833.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g></g></g></svg></mjx-container></span>字节，也就是4GB，但是TCP中的数据部分是没有长度限制的，所以如果一个字节的32位序列号到达了<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex" xmlns="http://www.w3.org/2000/svg" width="6.816ex" height="2.072ex" role="img" focusable="false" viewBox="0 -833.9 3012.6 915.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g><g data-mml-node="mo" transform="translate(1512.3,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(2512.6,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g></svg></mjx-container></span>，那么下一个字节的序列号就是变成0</p>
-<p>同时序列号是从一个随机数字开始的，这是为了保证TCP协议在数据传输过程中的安全性，并且可以不受两个端点之前已经建立的TCP通信的影响(因为每次TCP连接建立之后，发送的数据的开始序列号都是一个随机数，如果都是从0开始，可能几个TCP之间会互相搞混)，我们将TCP中开始的第一个序列号称为Initial Sequence Number(ISN)，后面的字节的序列号也就依次往后+1并且要模<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0" xmlns="http://www.w3.org/2000/svg" width="2.919ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 1290.1 833.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g></g></g></svg></mjx-container></span>(这个操作称为wrapping)</p>
+<h2 id="序列号格式的转换"><a href="#序列号格式的转换" class="headerlink" title="序列号格式的转换"></a>序列号格式的转换</h2><p>首先我们要做的一件工作是进行序列号在64位格式和32位格式之间的转换，我们之前实现的流重组器中的每个字节拥有的index是64位的，而在TCP协议中，index则是用32位来表示的(对应TCP中的序列号seqno，每个报文的seqno代表了该报文中发送的第一个字节的index)，所以我们需要先实现32位index和64位的序列号之间的格式转换。</p>
+<h3 id="序列号的特点"><a href="#序列号的特点" class="headerlink" title="序列号的特点"></a>序列号的特点</h3><p>虽然TCP协议中，序列号只有32位，最多能表示<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0" xmlns="http://www.w3.org/2000/svg" width="2.919ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 1290.1 833.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g></g></g></svg></mjx-container>字节，也就是4GB，但是TCP中的数据部分是没有长度限制的，所以如果一个字节的32位序列号到达了<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex" xmlns="http://www.w3.org/2000/svg" width="6.816ex" height="2.072ex" role="img" focusable="false" viewBox="0 -833.9 3012.6 915.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g><g data-mml-node="mo" transform="translate(1512.3,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(2512.6,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g></svg></mjx-container>，那么下一个字节的序列号就是变成0</p>
+<p>同时序列号是从一个随机数字开始的，这是为了保证TCP协议在数据传输过程中的安全性，并且可以不受两个端点之前已经建立的TCP通信的影响(因为每次TCP连接建立之后，发送的数据的开始序列号都是一个随机数，如果都是从0开始，可能几个TCP之间会互相搞混)，我们将TCP中开始的第一个序列号称为Initial Sequence Number(ISN)，后面的字节的序列号也就依次往后+1并且要模<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0" xmlns="http://www.w3.org/2000/svg" width="2.919ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 1290.1 833.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g></g></g></svg></mjx-container>(这个操作称为wrapping)</p>
 <p>而在TCP中，整个数据流的开始和结束位置上还各有一个特殊的字节分别表示数据流的开始(SYN)和结束(FIN)，同时TCP中保留了专门的几个位置来记录这些特殊的字节。</p>
-<p>这个lab中，我们要做的第一个工作就是实现stream index和seqno之间的转换,stream index是每个字节在数据流中对应的64位索引，代表了数据流中有效字节的相对位置，而seqno是TCP中的32位索引，从SYN开始，另外有一个概念叫做绝对序列号Absolute Sequence Number，代表了每个字节相对于数据流头部SYN的位置(很奇怪不是吗，相对位置被称为绝对序列号)，我们可以结合一个例子来看，假设一个TCP报文包含了cat这3个字符，而且其SYN是<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex" xmlns="http://www.w3.org/2000/svg" width="6.816ex" height="2.072ex" role="img" focusable="false" viewBox="0 -833.9 3012.6 915.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g><g data-mml-node="mo" transform="translate(1512.3,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(2512.6,0)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g></g></svg></mjx-container></span>，那么这个报文对应的数据流中每个字节的seqno，absolute seqno和stream index分别是：</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20220112235902345.png" alt="image-20220112235902345"><figcaption aria-hidden="true">image-20220112235902345</figcaption>
-</figure>
+<p>这个lab中，我们要做的第一个工作就是实现stream index和seqno之间的转换,stream index是每个字节在数据流中对应的64位索引，代表了数据流中有效字节的相对位置，而seqno是TCP中的32位索引，从SYN开始，另外有一个概念叫做绝对序列号Absolute Sequence Number，代表了每个字节相对于数据流头部SYN的位置(很奇怪不是吗，相对位置被称为绝对序列号)，我们可以结合一个例子来看，假设一个TCP报文包含了cat这3个字符，而且其SYN是<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex" xmlns="http://www.w3.org/2000/svg" width="6.816ex" height="2.072ex" role="img" focusable="false" viewBox="0 -833.9 3012.6 915.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g><g data-mml-node="mo" transform="translate(1512.3,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(2512.6,0)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g></g></svg></mjx-container>，那么这个报文对应的数据流中每个字节的seqno，absolute seqno和stream index分别是：</p>
+<p><img src="image-20220112235902345.png" srcset="/img/loading.gif" lazyload alt="image-20220112235902345"></p>
 <p>从中我们可以归纳出三种index的区别：</p>
+<div class="table-container">
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>索引类型</th>
 <th>seqno</th>
 <th>absolute seqno</th>
@@ -394,19 +456,19 @@ mjx-container[display="true"] + br {
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>起始点</td>
 <td>ISN</td>
 <td>从0开始</td>
 <td>从0开始</td>
 </tr>
-<tr class="even">
+<tr>
 <td>是否包含SYN和FIN</td>
 <td>包含</td>
 <td>包含</td>
 <td>不包含</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>长度</td>
 <td>32位，需要wrapping</td>
 <td>64位，不需要wrapping</td>
@@ -414,377 +476,409 @@ mjx-container[display="true"] + br {
 </tr>
 </tbody>
 </table>
-<h3 id="代码实现">代码实现</h3>
-<p>我们要实现的其实就是两个函数wrap和unwrap，其中wrap是将64位的absolute seqno转化成为32位的seqno，而unwrap则反之。wrap实际上就是根据ISN的值转换成32位的seqno，不过值得注意的是，在unwrap的过程中，32位转换成64位可能不止一个结果，因为64位数字中只有最低的32位是确定的，而高位的32位是不能确定的，满足条件的数字可能有多个(以<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0" xmlns="http://www.w3.org/2000/svg" width="2.919ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 1290.1 833.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g></g></g></svg></mjx-container></span>为倍数再往上不断累加就可以)，因此，sponge中设定了一个64位的数字checkpoint作为监督，题目要求生成的seqno必须是所有可能结果中最接近checkpoint的那个。</p>
-<p>wrap的实现非常简单，而unwrap就需要稍微注意一下，因为需要考虑checkpoint，我们可以采用如下方式快速计算离checkpoint最近的seqno——考虑到最接近checkpoint的结果应该有两个候选答案，分别是checkpoint左右侧离checkpoint最近的那个seqno，我们只要根据简单的小学数学知识找到左边那个，然后加上<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0" xmlns="http://www.w3.org/2000/svg" width="2.919ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 1290.1 833.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g></g></g></svg></mjx-container></span>就可以找到右边那个，然后比较一下哪个更合适就可以。最终代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">WrappingInt32 <span class="title">wrap</span><span class="params">(<span class="keyword">uint64_t</span> n, WrappingInt32 isn)</span> </span>{</span><br><span class="line">    <span class="comment">// uint64 to uint32</span></span><br><span class="line">    <span class="keyword">uint32_t</span> offset = n &amp; <span class="number">0xFFFFFFFF</span>;</span><br><span class="line">    <span class="keyword">return</span> WrappingInt32{isn + offset};</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">uint64_t</span> <span class="title">unwrap</span><span class="params">(WrappingInt32 n, WrappingInt32 isn, <span class="keyword">uint64_t</span> checkpoint)</span> </span>{</span><br><span class="line">    <span class="comment">// change the checkpoint to a seqno</span></span><br><span class="line">    <span class="keyword">uint32_t</span> offset = n - isn; <span class="comment">// the absolute seqno</span></span><br><span class="line">    <span class="keyword">if</span> (checkpoint &lt;= offset) {</span><br><span class="line">        <span class="keyword">return</span> offset;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// find the closest offset t checkpoint</span></span><br><span class="line">    <span class="keyword">uint64_t</span> overflow_part = (checkpoint - offset) / (<span class="number">1ul</span> &lt;&lt; <span class="number">32</span>);</span><br><span class="line">    <span class="keyword">uint64_t</span> left_closest = offset + overflow_part * (<span class="number">1ul</span> &lt;&lt; <span class="number">32</span>);</span><br><span class="line">    <span class="keyword">uint64_t</span> right_closest = left_closest + (<span class="number">1ul</span> &lt;&lt; <span class="number">32</span>);</span><br><span class="line">    <span class="keyword">if</span> (checkpoint - left_closest &lt; right_closest - checkpoint) {</span><br><span class="line">        <span class="keyword">return</span> left_closest;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> right_closest;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="tcpreceiver">TCPReceiver</h2>
-<p>TCPReceiver的主要功能是接收Sender发送的TCP报文段(TCP报文的格式可以见下图)，并进行对应的处理，Sponge中实现了TCPSegment类来表示TCP的一个报文段，我们需要重点关注的部分包括seqno，SYN/FIN标记等等。</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20220115180841287.png" alt="image-20220115180841287"><figcaption aria-hidden="true">image-20220115180841287</figcaption>
-</figure>
+</div>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>我们要实现的其实就是两个函数wrap和unwrap，其中wrap是将64位的absolute seqno转化成为32位的seqno，而unwrap则反之。wrap实际上就是根据ISN的值转换成32位的seqno，不过值得注意的是，在unwrap的过程中，32位转换成64位可能不止一个结果，因为64位数字中只有最低的32位是确定的，而高位的32位是不能确定的，满足条件的数字可能有多个(以<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0" xmlns="http://www.w3.org/2000/svg" width="2.919ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 1290.1 833.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g></g></g></svg></mjx-container>为倍数再往上不断累加就可以)，因此，sponge中设定了一个64位的数字checkpoint作为监督，题目要求生成的seqno必须是所有可能结果中最接近checkpoint的那个。</p>
+<p>wrap的实现非常简单，而unwrap就需要稍微注意一下，因为需要考虑checkpoint，我们可以采用如下方式快速计算离checkpoint最近的seqno——考虑到最接近checkpoint的结果应该有两个候选答案，分别是checkpoint左右侧离checkpoint最近的那个seqno，我们只要根据简单的小学数学知识找到左边那个，然后加上<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0" xmlns="http://www.w3.org/2000/svg" width="2.919ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 1290.1 833.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g></g></g></svg></mjx-container>就可以找到右边那个，然后比较一下哪个更合适就可以。最终代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++"><span class="hljs-function">WrappingInt32 <span class="hljs-title">wrap</span><span class="hljs-params">(<span class="hljs-keyword">uint64_t</span> n, WrappingInt32 isn)</span> </span>{<br>    <span class="hljs-comment">// uint64 to uint32</span><br>    <span class="hljs-keyword">uint32_t</span> offset = n &amp; <span class="hljs-number">0xFFFFFFFF</span>;<br>    <span class="hljs-keyword">return</span> WrappingInt32{isn + offset};<br>}<br><br><span class="hljs-function"><span class="hljs-keyword">uint64_t</span> <span class="hljs-title">unwrap</span><span class="hljs-params">(WrappingInt32 n, WrappingInt32 isn, <span class="hljs-keyword">uint64_t</span> checkpoint)</span> </span>{<br>    <span class="hljs-comment">// change the checkpoint to a seqno</span><br>    <span class="hljs-keyword">uint32_t</span> offset = n - isn; <span class="hljs-comment">// the absolute seqno</span><br>    <span class="hljs-keyword">if</span> (checkpoint &lt;= offset) {<br>        <span class="hljs-keyword">return</span> offset;<br>    }<br>    <span class="hljs-comment">// find the closest offset t checkpoint</span><br>    <span class="hljs-keyword">uint64_t</span> overflow_part = (checkpoint - offset) / (<span class="hljs-number">1ul</span> &lt;&lt; <span class="hljs-number">32</span>);<br>    <span class="hljs-keyword">uint64_t</span> left_closest = offset + overflow_part * (<span class="hljs-number">1ul</span> &lt;&lt; <span class="hljs-number">32</span>);<br>    <span class="hljs-keyword">uint64_t</span> right_closest = left_closest + (<span class="hljs-number">1ul</span> &lt;&lt; <span class="hljs-number">32</span>);<br>    <span class="hljs-keyword">if</span> (checkpoint - left_closest &lt; right_closest - checkpoint) {<br>        <span class="hljs-keyword">return</span> left_closest;<br>    }<br>    <span class="hljs-keyword"><code class="language-hljs c++"><span class="hljs-function">WrappingInt32 <span class="hljs-title">wrap</span><span class="hljs-params">(<span class="hljs-keyword">uint64_t</span> n, WrappingInt32 isn)</span> </span>{<br>    <span class="hljs-comment">// uint64 to uint32</span><br>    <span class="hljs-keyword">uint32_t</span> offset = n &amp; <span class="hljs-number">0xFFFFFFFF</span>;<br>    <span class="hljs-keyword">return</span> WrappingInt32{isn + offset};<br>}<br><br><span class="hljs-function"><span class="hljs-keyword">uint64_t</span> <span class="hljs-title">unwrap</span><span class="hljs-params">(WrappingInt32 n, WrappingInt32 isn, <span class="hljs-keyword">uint64_t</span> checkpoint)</span> </span>{<br>    <span class="hljs-comment">// change the checkpoint to a seqno</span><br>    <span class="hljs-keyword">uint32_t</span> offset = n - isn; <span class="hljs-comment">// the absolute seqno</span><br>    <span class="hljs-keyword">if</span> (checkpoint &lt;= offset) {<br>        <span class="hljs-keyword">return</span> offset;<br>    }<br>    <span class="hljs-comment">// find the closest offset t checkpoint</span><br>    <span class="hljs-keyword">uint64_t</span> overflow_part = (checkpoint - offset) / (<span class="hljs-number">1ul</span> &lt;&lt; <span class="hljs-number">32</span>);<br>    <span class="hljs-keyword">uint64_t</span> left_closest = offset + overflow_part * (<span class="hljs-number">1ul</span> &lt;&lt; <span class="hljs-number">32</span>);<br>    <span class="hljs-keyword">uint64_t</span> right_closest = left_closest + (<span class="hljs-number">1ul</span> &lt;&lt; <span class="hljs-number">32</span>);<br>    <span class="hljs-keyword">if</span> (checkpoint - left_closest &lt; right_closest - checkpoint) {<br>        <span class="hljs-keyword">return</span> left_closest;<br>    }<br>    <span class="hljs-keyword">return</span> right_closest;<br>}<br><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<h2 id="TCPReceiver"><a href="#TCPReceiver" class="headerlink" title="TCPReceiver"></a>TCPReceiver</h2><p>TCPReceiver的主要功能是接收Sender发送的TCP报文段(TCP报文的格式可以见下图)，并进行对应的处理，Sponge中实现了TCPSegment类来表示TCP的一个报文段，我们需要重点关注的部分包括seqno，SYN/FIN标记等等。</p>
+<p><img src="image-20220115180841287.png" srcset="/img/loading.gif" lazyload alt="image-20220115180841287"></p>
 <p>我们需要重点关注的函数有这样几个：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TCPReceiver</span> {</span></span><br><span class="line">    <span class="comment">//! Our data structure for re-assembling bytes.</span></span><br><span class="line">    StreamReassembler _reassembler;</span><br><span class="line">    std::unique_ptr&lt;WrappingInt32&gt; _isn;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! The maximum number of bytes we'll store.</span></span><br><span class="line">    <span class="keyword">size_t</span> _capacity;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function">std::optional&lt;WrappingInt32&gt; <span class="title">ackno</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">size_t</span> <span class="title">window_size</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="comment">//! \brief number of bytes stored but not yet reassembled</span></span><br><span class="line">    <span class="function"><span class="keyword">size_t</span> <span class="title">unassembled_bytes</span><span class="params">()</span> <span class="keyword">const</span> </span>{ <span class="keyword">return</span> _reassembler.<span class="built_in">unassembled_bytes</span>(); }</span><br><span class="line">    <span class="function">std::optional&lt;WrappingInt32&gt; <span class="title">ackno</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="comment">//! \brief handle an inbound segment</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">segment_received</span><span class="params">(<span class="keyword">const</span> TCPSegment &amp;seg)</span></span>;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TCPReceiver</span> {</span><br>    <span class="hljs-comment">//! Our data structure for re-assembling bytes.</span><br>    StreamReassembler _reassembler;<br>    std::unique_ptr&lt;WrappingInt32&gt; _isn;<br><br>    <span class="hljs-comment">//! The maximum number of bytes we'll store.</span><br>    <span class="hljs-keyword">size_t</span> _capacity;<br><br>  <span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">std::optional&lt;WrappingInt32&gt; <span class="hljs-title">ackno</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">window_size</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br>    <span class="hljs-comment">//! \brief number of bytes stored but not yet reassembled</span><br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">unassembled_bytes</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{ <span class="hljs-keyword">return</span> _reassembler.<span class="hljs-built_in">unassembled_bytes</span>(); }<br>    <span class="hljs-function">std::optional&lt;WrappingInt32&gt; <span class="hljs-title">ackno</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br>    <span class="hljs-comment">//! \brief handle an inbound segment</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">segment_received</span><span class="hljs-params">(<span class="hljs-keyword"><code class="language-hljs c++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TCPReceiver</span> {</span><br>    <span class="hljs-comment">//! Our data structure for re-assembling bytes.</span><br>    StreamReassembler _reassembler;<br>    std::unique_ptr&lt;WrappingInt32&gt; _isn;<br><br>    <span class="hljs-comment">//! The maximum number of bytes we'll store.</span><br>    <span class="hljs-keyword">size_t</span> _capacity;<br><br>  <span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">std::optional&lt;WrappingInt32&gt; <span class="hljs-title">ackno</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">window_size</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br>    <span class="hljs-comment">//! \brief number of bytes stored but not yet reassembled</span><br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">unassembled_bytes</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{ <span class="hljs-keyword">return</span> _reassembler.<span class="hljs-built_in">unassembled_bytes</span>(); }<br>    <span class="hljs-function">std::optional&lt;WrappingInt32&gt; <span class="hljs-title">ackno</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br>    <span class="hljs-comment">//! \brief handle an inbound segment</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">segment_received</span><span class="hljs-params">(<span class="hljs-keyword">const</span> TCPSegment &seg)</span></span>;<br>};<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <p>其中<code>segment_received</code>函数主要用来处理收到的TCP段，这里主要依赖我们之前实现的流重组器，而<code>ackno</code>函数表示要Receiver期望收到的ackno，<code>window_size</code>表示当前Receiver的窗口大小的上限。</p>
-<h3 id="ackno和window_size">ackno和window_size</h3>
-<p>这个方法需要我们返回Receiver的ackno，前面说过ackno代表的就是第一个没有收到的字节的index，并且要用TCP能接受的32位格式，同时，如果ISN还没有被设置(即Receiver还没有收到包含SYN的报文)时，这个函数要返回空指针，所以它的具体实现如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">optional&lt;WrappingInt32&gt; <span class="title">TCPReceiver::ackno</span><span class="params">()</span> <span class="keyword">const</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (_isn == <span class="literal">nullptr</span>) {</span><br><span class="line">        <span class="keyword">return</span> nullopt;</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">uint64_t</span> n = _reassembler.<span class="built_in">stream_out</span>().<span class="built_in">bytes_written</span>() + <span class="number">1</span>;</span><br><span class="line">        n += <span class="keyword">static_cast</span>&lt;<span class="keyword">uint64_t</span>&gt;(_reassembler.<span class="built_in">stream_out</span>().<span class="built_in">input_ended</span>());</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">wrap</span>(n, *_isn);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="ackno和window-size"><a href="#ackno和window-size" class="headerlink" title="ackno和window_size"></a>ackno和window_size</h3><p>这个方法需要我们返回Receiver的ackno，前面说过ackno代表的就是第一个没有收到的字节的index，并且要用TCP能接受的32位格式，同时，如果ISN还没有被设置(即Receiver还没有收到包含SYN的报文)时，这个函数要返回空指针，所以它的具体实现如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++"><span class="hljs-function">optional&lt;WrappingInt32&gt; <span class="hljs-title">TCPReceiver::ackno</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{<br>    <span class="hljs-keyword">if</span> (_isn == <span class="hljs-literal">nullptr</span>) {<br>        <span class="hljs-keyword">return</span> nullopt;<br>    } <span class="hljs-keyword">else</span> {<br>        <span class="hljs-keyword">uint64_t</span> n = _reassembler.<span class="hljs-built_in">stream_out</span>().<span class="hljs-built_in">bytes_written</span>() + <span class="hljs-number">1</span>;<br>        n += <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-keyword">uint64_t</span>&gt;(_reassembler.<span class="hljs-built_in">stream_out</span>().<span class="hljs-built_in">input_ended</span>());<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in"><code class="language-hljs c++"><span class="hljs-function">optional&lt;WrappingInt32&gt; <span class="hljs-title">TCPReceiver::ackno</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{<br>    <span class="hljs-keyword">if</span> (_isn == <span class="hljs-literal">nullptr</span>) {<br>        <span class="hljs-keyword">return</span> nullopt;<br>    } <span class="hljs-keyword">else</span> {<br>        <span class="hljs-keyword">uint64_t</span> n = _reassembler.<span class="hljs-built_in">stream_out</span>().<span class="hljs-built_in">bytes_written</span>() + <span class="hljs-number">1</span>;<br>        n += <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-keyword">uint64_t</span>&gt;(_reassembler.<span class="hljs-built_in">stream_out</span>().<span class="hljs-built_in">input_ended</span>());<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">wrap</span>(n, *_isn);<br>    }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <p>这里其实就是找到流重组器没有写入的第一个字节的下标并转化成32位格式。</p>
 <p>而window_size这个函数只需要计算当前Receiver的窗口大小，即第一个没有整流的字节到第一个没有收到的字节的下标之差。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">TCPReceiver::window_size</span><span class="params">()</span> <span class="keyword">const</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> _capacity - _reassembler.<span class="built_in">stream_out</span>().<span class="built_in">buffer_size</span>();</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="segment_received">segment_received</h3>
-<p>而segment_received方法则麻烦一点，它的主要作用有两个：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++"><span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">TCPReceiver::window_size</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{<br>    <span class="hljs-keyword">return</span> _capacity - _reassembler.<span class="hljs-built_in">stream_out</span>().<span class="hljs-built_in"><code class="language-hljs c++"><span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">TCPReceiver::window_size</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{<br>    <span class="hljs-keyword">return</span> _capacity - _reassembler.<span class="hljs-built_in">stream_out</span>().<span class="hljs-built_in">buffer_size</span>();<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<h3 id="segment-received"><a href="#segment-received" class="headerlink" title="segment_received"></a>segment_received</h3><p>而segment_received方法则麻烦一点，它的主要作用有两个：</p>
 <ul>
 <li>在必要的时候设置ISN，ISN时TCP连接中需要传输的数据的第一个字节的index，我们需要关注发送过来的报文是不是有SYN标记为True的，有SYN=True的报文才是逻辑上的第一个报文，这个时候它的seqno就要被拿来当作ISN</li>
 <li>将收到的数据放到流重组器中进行整流，同时要注意报文中的FIN标记，如果发现了FIN=True表明这个报文的最后一个字节就是整个TCP数据流的结束，这个时候要通知流重组器结束TCP报文的整流。</li>
 </ul>
 <p>在ISN被设定好之前，Receiver会<strong>丢弃收到的其他报文</strong>(其实就是不做对应的处理)</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TCPReceiver::segment_received</span><span class="params">(<span class="keyword">const</span> TCPSegment &amp;seg)</span> </span>{</span><br><span class="line">    WrappingInt32 seqno = seg.<span class="built_in">header</span>().seqno;</span><br><span class="line">    <span class="keyword">if</span> (_isn == <span class="literal">nullptr</span>) {</span><br><span class="line">        <span class="keyword">if</span> (seg.<span class="built_in">header</span>().syn == <span class="literal">true</span>) {</span><br><span class="line">            <span class="function">WrappingInt32 <span class="title">seq</span><span class="params">(seqno)</span></span>;</span><br><span class="line">            _isn.<span class="built_in">reset</span>(<span class="keyword">new</span> <span class="built_in">WrappingInt32</span>(seq));</span><br><span class="line">            _reassembler.<span class="built_in">push_substring</span>(<span class="built_in">string</span>(seg.<span class="built_in">payload</span>().<span class="built_in">str</span>()), <span class="number">0</span>, seg.<span class="built_in">header</span>().fin);</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">uint64_t</span> abs_seqno = <span class="built_in">unwrap</span>(seqno, *_isn, _reassembler.<span class="built_in">stream_out</span>().<span class="built_in">bytes_written</span>() + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (abs_seqno == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">uint64_t</span> index = abs_seqno - <span class="number">1</span>;</span><br><span class="line">        string data = <span class="built_in">string</span>(seg.<span class="built_in">payload</span>().<span class="built_in">str</span>());</span><br><span class="line">        _reassembler.<span class="built_in">push_substring</span>(data, index, seg.<span class="built_in">header</span>().fin);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">TCPReceiver::segment_received</span><span class="hljs-params">(<span class="hljs-keyword">const</span> TCPSegment &amp;seg)</span> </span>{<br>    WrappingInt32 seqno = seg.<span class="hljs-built_in">header</span>().seqno;<br>    <span class="hljs-keyword">if</span> (_isn == <span class="hljs-literal">nullptr</span>) {<br>        <span class="hljs-keyword">if</span> (seg.<span class="hljs-built_in">header</span>().syn == <span class="hljs-literal">true</span>) {<br>            <span class="hljs-function">WrappingInt32 <span class="hljs-title">seq</span><span class="hljs-params">(seqno)</span></span>;<br>            _isn.<span class="hljs-built_in">reset</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">WrappingInt32</span>(seq));<br>            _reassembler.<span class="hljs-built_in">push_substring</span>(<span class="hljs-built_in">string</span>(seg.<span class="hljs-built_in">payload</span>().<span class="hljs-built_in">str</span>()), <span class="hljs-number">0</span>, seg.<span class="hljs-built_in">header</span>().fin);<br>        }<br>    } <span class="hljs-keyword">else</span> {<br>        <span class="hljs-keyword">uint64_t</span> abs_seqno = <span class="hljs-built_in">unwrap</span>(seqno, *_isn, _reassembler.<span class="hljs-built_in">stream_out</span>().<span class="hljs-built_in">bytes_written</span>() + <span class="hljs-number">1</span>);<br>        <span class="hljs-keyword">if</span> (abs_seqno == <span class="hljs-number">0</span>) {<br>            <span class="hljs-keyword">return</span>;<br>        }<br>        <span class="hljs-keyword">uint64_t</span> index = abs_seqno - <span class="hljs-number">1</span>;<br>        string data = <span class="hljs-built_in">string</span>(seg.<span class="hljs-built_in">payload</span>().<span class="hljs-built_in">str</span>());<br>        _reassembler.<span class="hljs-built_in">push_substring</span>(data, index, seg.<span class="hljs-built_in"><code class="language-hljs c++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">TCPReceiver::segment_received</span><span class="hljs-params">(<span class="hljs-keyword">const</span> TCPSegment &amp;seg)</span> </span>{<br>    WrappingInt32 seqno = seg.<span class="hljs-built_in">header</span>().seqno;<br>    <span class="hljs-keyword">if</span> (_isn == <span class="hljs-literal">nullptr</span>) {<br>        <span class="hljs-keyword">if</span> (seg.<span class="hljs-built_in">header</span>().syn == <span class="hljs-literal">true</span>) {<br>            <span class="hljs-function">WrappingInt32 <span class="hljs-title">seq</span><span class="hljs-params">(seqno)</span></span>;<br>            _isn.<span class="hljs-built_in">reset</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">WrappingInt32</span>(seq));<br>            _reassembler.<span class="hljs-built_in">push_substring</span>(<span class="hljs-built_in">string</span>(seg.<span class="hljs-built_in">payload</span>().<span class="hljs-built_in">str</span>()), <span class="hljs-number">0</span>, seg.<span class="hljs-built_in">header</span>().fin);<br>        }<br>    } <span class="hljs-keyword">else</span> {<br>        <span class="hljs-keyword">uint64_t</span> abs_seqno = <span class="hljs-built_in">unwrap</span>(seqno, *_isn, _reassembler.<span class="hljs-built_in">stream_out</span>().<span class="hljs-built_in">bytes_written</span>() + <span class="hljs-number">1</span>);<br>        <span class="hljs-keyword">if</span> (abs_seqno == <span class="hljs-number">0</span>) {<br>            <span class="hljs-keyword">return</span>;<br>        }<br>        <span class="hljs-keyword">uint64_t</span> index = abs_seqno - <span class="hljs-number">1</span>;<br>        string data = <span class="hljs-built_in">string</span>(seg.<span class="hljs-built_in">payload</span>().<span class="hljs-built_in">str</span>());<br>        _reassembler.<span class="hljs-built_in">push_substring</span>(data, index, seg.<span class="hljs-built_in">header</span>().fin);<br>    }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <p>因此我们首先要从TCP报文段中获得seqno，然后等待SYN报文到了来设置ISN，之后每次收到报文，先计算它的<strong>绝对seqno，如果是0表示重复的SYN报文</strong>，这个时候就不需要再进行处理了，然后关注一下TCP段的fin标签并且将东西都一股脑倒入reassembler中即可。</p>
 
-        </div>
-
-        
-            <div class="post-copyright-info">
-                <div class="article-copyright-info-container">
-    <ul>
-        <li>本文标题：Stanford-CS144-计算机网络Lab2：TCP接收端</li>
-        <li>本文作者：RandomStar</li>
-        <li>创建时间：2022-01-15 18:38:55</li>
-        <li>
-            本文链接：https://zhang-each.github.com/2022/01/15/sponge2/
-        </li>
-        <li>
-            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
-        </li>
-    </ul>
-</div>
-
-            </div>
-        
-
-        
-            <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/01/18/pgm1/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">CMU10-708概率图模型1：Introduction</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/2022/01/07/adbt/"
-                        >
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">高级数据库技术期末复习整理</span>
-                                <span class="post-nav-item">下一篇</span>
-                            </span>
-                            <span class="right arrow-icon flex-center">
-                              <i class="fas fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-        
-            <div class="comment-container">
-                <div class="comments-container">
-    <div id="comment-anchor"></div>
-    <div class="comment-area-title">
-        <i class="fas fa-comments">&nbsp;评论</i>
-    </div>
-    
-
-        
+              </div>
             
-    <div class="valine-container">
-        <script 
-                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
-        <div id="vcomments"></div>
-        <script >
-            function loadValine() {
-                new Valine({
-                    el: '#vcomments',
-                    appId: 'b6BpXpwUq5wyUMcLtbnNMD8N-gzGzoHsz',
-                    appKey: 'Qtl7JkpdLDat2Niacks6SyT5',
-                    meta: ['nick', 'mail', 'link'],
-                    avatar: 'wavatar',
-                    enableQQ: true,
-                    placeholder: '快来发表你的看法吧！',
-                    lang: 'zh-cn'.toLowerCase()
-                });
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
 
-                function getAuthor(language) {
-                    switch (language) {
-                        case 'en':
-                            return 'Author';
-                        case 'zh-CN':
-                            return '博主';
-                        default:
-                            return 'Master';
-                    }
-                }
-
-                // Add "Author" identify
-                const getValineDomTimer = setInterval(() => {
-                    const vcards = document.querySelectorAll('#vcomments .vcards .vcard');
-                    if (vcards.length > 0) {
-                        let author = 'RandomStar';
-
-                        if (author) {
-                            for (let vcard of vcards) {
-                                const vnick_dom = vcard.querySelector('.vhead .vnick');
-                                const vnick = vnick_dom.innerHTML;
-                                if (vnick === author) {
-                                    vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
-                                }
-                            }
-                        }
-                        clearInterval(getValineDomTimer);
-                    } else {
-                        clearInterval(getValineDomTimer);
-                    }
-                }, 2000);
-            }
-
-            if ('false') {
-                const loadValineTimeout = setTimeout(() => {
-                    loadValine();
-                    clearTimeout(loadValineTimeout);
-                }, 1000);
-            } else {
-                window.addEventListener('DOMContentLoaded', loadValine);
-            }
-        </script>
-    </div>
-
-
-
-        
+<span class="category-chains">
+  
+  
     
-</div>
-
-            </div>
+      <span class="category-chain">
         
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
     </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">#计算机系统</a>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+      
+        <a href="/tags/TCP-IP/">#TCP/IP</a>
+      
+        <a href="/tags/C/">#C++</a>
+      
+    </div>
+  
 </div>
 
 
-                
-            </div>
+              
+  
 
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Stanford-CS144-计算机网络Lab2：TCP接收端</div>
+      <div>http://zhang-each.github.io/2022/01/15/sponge2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Zhang-Each</div>
         </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年1月15日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
             
-              <span>2020</span>
-              -
             
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">RandomStar</a>
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
         </div>
-        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
-        </script>
-            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">399.9k</span>&nbsp;字
-            <span>
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            <span>
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
-            <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
-        
-        <div class="theme-info info-item">
-            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
-        </div>
-        
-        
+      </div>
     </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="tools-list">
-        <!-- TOC aside toggle -->
-        
-            <li class="tools-item page-aside-toggle">
-                <i class="fas fa-outdent"></i>
-            </li>
-        
-
-        <!-- go comment -->
-        
-            <li class="go-comment">
-                <i class="fas fa-comment"></i>
-            </li>
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="arrow-up fas fa-arrow-up"></i>
-                <span class="percent"></span>
-            </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-        <aside class="page-aside">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E5%8F%B7%E6%A0%BC%E5%BC%8F%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">2.</span> <span class="nav-text">序列号格式的转换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E5%8F%B7%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-number">2.1.</span> <span class="nav-text">序列号的特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.2.</span> <span class="nav-text">代码实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tcpreceiver"><span class="nav-number">3.</span> <span class="nav-text">TCPReceiver</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ackno%E5%92%8Cwindow_size"><span class="nav-number">3.1.</span> <span class="nav-text">ackno和window_size</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#segment_received"><span class="nav-number">3.2.</span> <span class="nav-text">segment_received</span></a></li></ol></li></ol>
-    </div>
-</div>
-        </aside>
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
+    <div class="license-icon iconfont"></div>
+  </div>
 
 
-    
-        <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-          <span class="search-input-field-pre">
-            <i class="fas fa-keyboard"></i>
-          </span>
-            <div class="search-input-container">
-                <input autocomplete="off"
-                       autocorrect="off"
-                       autocapitalize="off"
-                       placeholder="搜索..."
-                       spellcheck="false"
-                       type="search"
-                       class="search-input"
-                >
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/01/18/pgm1/" title="CMU10-708概率图模型1：Introduction">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CMU10-708概率图模型1：Introduction</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/01/07/adbt/" title="高级数据库技术期末复习整理">
+                        <span class="hidden-mobile">高级数据库技术期末复习整理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
             </div>
-            <span class="popup-btn-close">
-                <i class="fas fa-times"></i>
-            </span>
+
+            
+          </article>
         </div>
-        <div id="search-result">
-            <div id="no-result">
-                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
-            </div>
-        </div>
+      </div>
     </div>
-</div>
 
-    
-
-</main>
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-    
-<script src="/js/local-search.js"></script>
-
-
-
-
-    
-<script src="/js/code-copy.js"></script>
-
-
-
-
-    
-<script src="/js/lazyload.js"></script>
-
-
-
-<div class="post-scripts">
-    
-        
-<script src="/js/left-side-toggle.js"></script>
-
-<script src="/js/libs/anime.min.js"></script>
-
-<script src="/js/toc.js"></script>
-
-    
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
 
 
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+
+  </script>
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+  &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+        class="white-color">402.1k</span>&nbsp;字
+    <span>
+        |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+            class="white-color"></span>&nbsp;次
+    </span>
+    <span>
+        |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+            class="white-color"></span>&nbsp;人
+    </span>
+    <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

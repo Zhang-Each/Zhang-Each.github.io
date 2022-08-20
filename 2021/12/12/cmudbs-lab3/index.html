@@ -1,31 +1,107 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
 <head>
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="RandomStar">
-    
-    <title>
-        
-            CMU15-445数据库系统Project3：Query Execution |
-        
-        在那不遥远的地方
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Zhang-Each">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="CMU15-445的Project3，目标是实现若干种数据库操作的查询执行器，这一Project的重大意义在于理解Bustub数据库引擎中对于executor的模块和迭代查询处理模型的设计和实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMU15-445数据库系统Project3：Query Execution">
+<meta property="og:url" content="http://zhang-each.github.io/2021/12/12/cmudbs-lab3/index.html">
+<meta property="og:site_name" content="在那不遥远的地方">
+<meta property="og:description" content="CMU15-445的Project3，目标是实现若干种数据库操作的查询执行器，这一Project的重大意义在于理解Bustub数据库引擎中对于executor的模块和迭代查询处理模型的设计和实现。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-12-12T07:59:16.000Z">
+<meta property="article:modified_time" content="2021-12-12T08:00:47.307Z">
+<meta property="article:author" content="Zhang-Each">
+<meta property="article:tag" content="数据库系统">
+<meta property="article:tag" content="计算机系统">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="数据存储">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>CMU15-445数据库系统Project3：Query Execution - 在那不遥远的地方</title>
 
-    <link rel="shortcut icon" href="/images/logo.svg">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"zhang-each.github.io","root":"/","language":"zh-cn","path":"search.xml"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的回音。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
-    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhang-each.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
 <meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
@@ -143,219 +219,207 @@ mjx-container[display="true"] + br {
 
 
 <body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress-bar-container">
-    
-        <span class="scroll-progress-bar"></span>
-    
+  
 
-    
-</div>
-
-
-<main class="page-container">
-
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
     
 
-    <div class="page-main-content">
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>在那不遥远的地方</strong>
+    </a>
 
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                在那不遥远的地方
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/"
-                            >
-                                主页
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                归档
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/categories"
-                            >
-                                分类
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/tags"
-                            >
-                                标签
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/about"
-                            >
-                                关于
-                            </a>
-                        </li>
-                    
-                    
-                        <li class="menu-item search search-popup-trigger">
-                            <i class="fas fa-search"></i>
-                        </li>
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
+  </div>
+</nav>
 
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/">主页</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">归档</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/categories">分类</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/tags">标签</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/about">关于</a>
-                </li>
-            
-        </ul>
-    </div>
+  
 
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="fade-in-down-animation">
-    <div class="article-content-container">
-
-        <div class="article-title">
-            <span class="title-hover-animation">CMU15-445数据库系统Project3：Query Execution</span>
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CMU15-445数据库系统Project3：Query Execution"></span>
+          
         </div>
 
         
-            <div class="article-header">
-                <div class="avatar">
-                    <img src="/images/skadi.png">
-                </div>
-                <div class="info">
-                    <div class="author">
-                        <span class="name">RandomStar</span>
-                        
-                            <span class="author-label">Lv6</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;2021-12-12 15:59:16
-    </span>
+          
+  <div class="mt-3">
     
-        <span class="article-categories article-meta-item">
-            <i class="fas fa-folder"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">数据库系统的设计与实现</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Zhang-Each
+      </span>
     
     
-        <span class="article-tags article-meta-item">
-            <i class="fas fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">计算机系统</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/">数据库系统</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">数据存储</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-12-12 15:59" pubdate>
+          2021年12月12日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          72 分钟
+        
+      </span>
     
 
     
     
-        <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>2.5k 字</span>
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
         </span>
+        
+      
     
-    
-        <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>10 分钟</span>
-        </span>
-    
-    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
 </div>
 
-                    </div>
-                </div>
-            </div>
-        
+</div>
 
-        <div class="article-content markdown-body">
-            <blockquote>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">CMU15-445数据库系统Project3：Query Execution</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
 <p>CMU15-445的Project3，目标是实现若干种数据库操作的查询执行器，这一Project的重大意义在于理解Bustub数据库引擎中对于executor的模块和迭代查询处理模型的设计和实现。</p>
 </blockquote>
 <span id="more"></span>
@@ -385,19 +449,19 @@ mjx-container[display="true"] + br {
 <h3 id="Catalog数据结构设计"><a href="#Catalog数据结构设计" class="headerlink" title="Catalog数据结构设计"></a>Catalog数据结构设计</h3><p>Bustub中的catalog定义了一系列用来维护数据元信息的数据结构，包括<code>Catalog, TableInfo, IndexInfo</code>等等，<code>TableInfo</code>和<code>IndexInfo</code>分别代表了一个表/索引的元信息，而Catalog定义了整个数据库系统的元信息，包括了若干表和索引组成的数组。而一个表和索引中最关键的信息就是一个被称为<code>Schema</code>的类，这个类中定义了<strong>表/索引每一列的性质</strong>，包括数据类型，长度限制等等，一个列所具有的特征用<code>Column</code>这个类来表示，Schema中就集成了一系列的Column并提供对外访问的API。</p>
 <p>综上所属，Bustub的Catalog部分的关键类之间的组合关系是<code>Column --&gt; Schema --&gt; TableInfo/ IndexInfo --&gt; Catalog</code> </p>
 <h3 id="Execution数据结构设计"><a href="#Execution数据结构设计" class="headerlink" title="Execution数据结构设计"></a>Execution数据结构设计</h3><h4 id="查询上下文的设计"><a href="#查询上下文的设计" class="headerlink" title="查询上下文的设计"></a>查询上下文的设计</h4><p>查询上下文是一个用来<strong>保存查询处理的时候的上下文环境</strong>的泪，它的定义中包含了如下内容：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExecutorContext</span> {</span></span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">  <span class="comment">/** The transaction context associated with this executor context */</span></span><br><span class="line">  Transaction *transaction_;</span><br><span class="line">  <span class="comment">/** The datbase catalog associated with this executor context */</span></span><br><span class="line">  Catalog *catalog_;</span><br><span class="line">  <span class="comment">/** The buffer pool manager associated with this executor context */</span></span><br><span class="line">  BufferPoolManager *bpm_;</span><br><span class="line">  <span class="comment">/** The transaction manager associated with this executor context */</span></span><br><span class="line">  TransactionManager *txn_mgr_;</span><br><span class="line">  <span class="comment">/** The lock manager associated with this executor context */</span></span><br><span class="line">  LockManager *lock_mgr_;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs cpp"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ExecutorContext</span> {</span><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-comment">/** The transaction context associated with this executor context */</span><br>  Transaction *transaction_;<br>  <span class="hljs-comment">/** The datbase catalog associated with this executor context */</span><br>  Catalog *catalog_;<br>  <span class="hljs-comment">/** The buffer pool manager associated with this executor context */</span><br>  BufferPoolManager *bpm_;<br>  <span class="hljs-comment">/** The transaction manager associated with this executor context */</span><br>  TransactionManager *txn_mgr_;<br>  <span class="hljs-comment"><code class="language-hljs cpp"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ExecutorContext</span> {</span><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-comment">/** The transaction context associated with this executor context */</span><br>  Transaction *transaction_;<br>  <span class="hljs-comment">/** The datbase catalog associated with this executor context */</span><br>  Catalog *catalog_;<br>  <span class="hljs-comment">/** The buffer pool manager associated with this executor context */</span><br>  BufferPoolManager *bpm_;<br>  <span class="hljs-comment">/** The transaction manager associated with this executor context */</span><br>  TransactionManager *txn_mgr_;<br>  <span class="hljs-comment">/** The lock manager associated with this executor context */</span><br>  LockManager *lock_mgr_;<br>};<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <p>我们可以看到它包含了前面提到的<code>Catalog</code>类，还包括了管理Buffer的BufferManager和管理事务的TransactionManager，这些信息共同构成了查询计划执行过程中的上下文。</p>
 <h4 id="查询执行器的设计"><a href="#查询执行器的设计" class="headerlink" title="查询执行器的设计"></a>查询执行器的设计</h4><p>Bustub中抽象出了一个查询执行器类，定义为：<code>AbstractExecutor</code>，这个类中定义了一个执行器的基本结构，其定义的代码如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AbstractExecutor</span> {</span></span><br><span class="line"> <span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Construct a new AbstractExecutor instance.</span></span><br><span class="line"><span class="comment">   * @param exec_ctx the executor context that the executor runs with</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">explicit</span> <span class="title">AbstractExecutor</span><span class="params">(ExecutorContext *exec_ctx)</span> : exec_ctx_{</span>exec_ctx} {}</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Virtual destructor. */</span></span><br><span class="line">  <span class="keyword">virtual</span> ~<span class="built_in">AbstractExecutor</span>() = <span class="keyword">default</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Initialize the executor.</span></span><br><span class="line"><span class="comment">   * @warning This function must be called before Next() is called!</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Init</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Yield the next tuple from this executor.</span></span><br><span class="line"><span class="comment">   * @param[out] tuple The next tuple produced by this executor</span></span><br><span class="line"><span class="comment">   * @param[out] rid The next tuple RID produced by this executor</span></span><br><span class="line"><span class="comment">   * @return `true` if a tuple was produced, `false` if there are no more tuples</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">Next</span><span class="params">(Tuple *tuple, RID *rid)</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** @return The schema of the tuples that this executor produces */</span></span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="keyword">const</span> Schema *<span class="title">GetOutputSchema</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">protected</span>:</span><br><span class="line">  <span class="comment">/** The executor context in which the executor runs */</span></span><br><span class="line">  ExecutorContext *exec_ctx_;</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs cpp"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AbstractExecutor</span> {</span><br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">   * Construct a new AbstractExecutor instance.</span><br><span class="hljs-comment">   * @param exec_ctx the executor context that the executor runs with</span><br><span class="hljs-comment">   */</span><br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">AbstractExecutor</span><span class="hljs-params">(ExecutorContext *exec_ctx)</span> : exec_ctx_{</span>exec_ctx} {}<br><br>  <span class="hljs-comment">/** Virtual destructor. */</span><br>  <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">AbstractExecutor</span>() = <span class="hljs-keyword">default</span>;<br><br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">   * Initialize the executor.</span><br><span class="hljs-comment">   * @warning This function must be called before Next() is called!</span><br><span class="hljs-comment">   */</span><br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Init</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;<br><br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">   * Yield the next tuple from this executor.</span><br><span class="hljs-comment">   * @param[out] tuple The next tuple produced by this executor</span><br><span class="hljs-comment">   * @param[out] rid The next tuple RID produced by this executor</span><br><span class="hljs-comment">   * @return `true` if a tuple was produced, `false` if there are no more tuples</span><br><span class="hljs-comment">   */</span><br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">bool</span> <span class="hljs-title">Next</span><span class="hljs-params">(Tuple *tuple, RID *rid)</span> </span>= <span class="hljs-number">0</span>;<br><br>  <span class="hljs-comment">/** @return The schema of the tuples that this executor produces */</span><br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">const</span> Schema *<span class="hljs-title">GetOutputSchema</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;<br><br> <span class="hljs-keyword">protected</span>:<br>  <span class="hljs-comment"><code class="language-hljs cpp"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AbstractExecutor</span> {</span><br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">   * Construct a new AbstractExecutor instance.</span><br><span class="hljs-comment">   * @param exec_ctx the executor context that the executor runs with</span><br><span class="hljs-comment">   */</span><br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">AbstractExecutor</span><span class="hljs-params">(ExecutorContext *exec_ctx)</span> : exec_ctx_{</span>exec_ctx} {}<br><br>  <span class="hljs-comment">/** Virtual destructor. */</span><br>  <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">AbstractExecutor</span>() = <span class="hljs-keyword">default</span>;<br><br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">   * Initialize the executor.</span><br><span class="hljs-comment">   * @warning This function must be called before Next() is called!</span><br><span class="hljs-comment">   */</span><br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Init</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;<br><br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">   * Yield the next tuple from this executor.</span><br><span class="hljs-comment">   * @param[out] tuple The next tuple produced by this executor</span><br><span class="hljs-comment">   * @param[out] rid The next tuple RID produced by this executor</span><br><span class="hljs-comment">   * @return `true` if a tuple was produced, `false` if there are no more tuples</span><br><span class="hljs-comment">   */</span><br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">bool</span> <span class="hljs-title">Next</span><span class="hljs-params">(Tuple *tuple, RID *rid)</span> </span>= <span class="hljs-number">0</span>;<br><br>  <span class="hljs-comment">/** @return The schema of the tuples that this executor produces */</span><br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">const</span> Schema *<span class="hljs-title">GetOutputSchema</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;<br><br> <span class="hljs-keyword">protected</span>:<br>  <span class="hljs-comment">/** The executor context in which the executor runs */</span><br>  ExecutorContext *exec_ctx_;<br>};<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <p>每个执行器对象会拥有自己的输出格式(<code>OutputSchema</code>)和执行上下文，这个类被不同SQL操作对应的执行器继承，形成一系列执行器。</p>
 <p>Bustub中执行器的设计采用了<strong>工厂模式</strong>，定义了一个<code>ExecutorFactory</code>以及静态函数<code>CreateExecutor</code>来生成一个执行器。这个静态函数的定义如下所示：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> std::unique_ptr&lt;AbstractExecutor&gt; </span><br><span class="line">  <span class="built_in">CreateExecutor</span>(ExecutorContext *exec_ctx, <span class="keyword">const</span> AbstractPlanNode *plan);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++"><span class="hljs-keyword">static</span> std::unique_ptr&lt;AbstractExecutor&gt; <br>  <span class="hljs-built_in">CreateExecutor</span>(ExecutorContext *exec_ctx, <span class="hljs-keyword"><code class="language-hljs c++"><span class="hljs-keyword">static</span> std::unique_ptr&lt;AbstractExecutor&gt; <br>  <span class="hljs-built_in">CreateExecutor</span>(ExecutorContext *exec_ctx, <span class="hljs-keyword">const</span> AbstractPlanNode *plan);<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <p>它会根据执行上下文和执行计划中包含的操作类型，返回对应操作的执行器。</p>
 <h4 id="查询计划的设计"><a href="#查询计划的设计" class="headerlink" title="查询计划的设计"></a>查询计划的设计</h4><p>查询计划在Bustub中被定义为了文件<code>abstract_plan.h</code> 中的一个抽象类<code>AbstractPlanNode</code>，这个抽象类中记录了查询计划节点<strong>所应该具有的抽象特征和元信息</strong>，其关键的定义如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AbstractPlanNode</span> {</span></span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * The schema for the output of this plan node. In the volcano model, every plan node will spit out tuples,</span></span><br><span class="line"><span class="comment">   * and this tells you what schema this plan node's tuples will have.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">const</span> Schema *output_schema_;</span><br><span class="line">  <span class="comment">/** The children of this plan node. */</span></span><br><span class="line">  std::vector&lt;<span class="keyword">const</span> AbstractPlanNode *&gt; children_;</span><br><span class="line">};</span><br><span class="line">}  <span class="comment">// namespace bustub</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AbstractPlanNode</span> {</span><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">   * The schema for the output of this plan node. In the volcano model, every plan node will spit out tuples,</span><br><span class="hljs-comment">   * and this tells you what schema this plan node's tuples will have.</span><br><span class="hljs-comment">   */</span><br>  <span class="hljs-keyword">const</span> Schema *output_schema_;<br>  <span class="hljs-comment">/** The children of this plan node. */</span><br>  std::vector&lt;<span class="hljs-keyword">const</span> AbstractPlanNode *&gt; children_;<br>};<br>}  <span class="hljs-comment"><code class="language-hljs c++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AbstractPlanNode</span> {</span><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">   * The schema for the output of this plan node. In the volcano model, every plan node will spit out tuples,</span><br><span class="hljs-comment">   * and this tells you what schema this plan node's tuples will have.</span><br><span class="hljs-comment">   */</span><br>  <span class="hljs-keyword">const</span> Schema *output_schema_;<br>  <span class="hljs-comment">/** The children of this plan node. */</span><br>  std::vector&lt;<span class="hljs-keyword">const</span> AbstractPlanNode *&gt; children_;<br>};<br>}  <span class="hljs-comment">// namespace bustub</span><br><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <p>其中<code>Output_schema</code>表示输出结果(按照常识，查询的输出结果也应该是一个表的形式)的Schema，而children则是记录了当前节点的子结点的指针，因为一个查询计划是一个树形的结构，由一系列<code>AbstractPlanNode</code>组成，然后<code>AbstractPlanNode</code>被不同的SQL操作对应的查询计划继承，衍生出了如<code>seq_scan_plan</code>之类的一系列具体的查询计划类。</p>
 <h4 id="查询执行引擎的设计"><a href="#查询执行引擎的设计" class="headerlink" title="查询执行引擎的设计"></a>查询执行引擎的设计</h4><p>查询执行引擎的类<code>ExecutionEngine</code>对外提供了一个执行查询计划的函数<code>Execute</code>，它的定义如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Execute</span><span class="params">(<span class="keyword">const</span> AbstractPlanNode *plan, std::vector&lt;Tuple&gt; *result_set, Transaction *txn,</span></span></span><br><span class="line"><span class="function"><span class="params">               ExecutorContext *exec_ctx)</span> </span>{</span><br><span class="line">    <span class="comment">// Construct and executor for the plan</span></span><br><span class="line">    <span class="keyword">auto</span> executor = ExecutorFactory::<span class="built_in">CreateExecutor</span>(exec_ctx, plan);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Prepare the root executor</span></span><br><span class="line">    executor-&gt;<span class="built_in">Init</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Execute the query plan</span></span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">      Tuple tuple;</span><br><span class="line">      RID rid;</span><br><span class="line">      <span class="keyword">while</span> (executor-&gt;<span class="built_in">Next</span>(&amp;tuple, &amp;rid)) {</span><br><span class="line">        <span class="keyword">if</span> (result_set != <span class="literal">nullptr</span>) {</span><br><span class="line">          result_set-&gt;<span class="built_in">push_back</span>(tuple);</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    } <span class="built_in"><span class="keyword">catch</span></span> (Exception &amp;e) {</span><br><span class="line">      <span class="comment">// TODO(student): handle exceptions</span></span><br><span class="line">      <span class="built_in">LOG_DEBUG</span>(<span class="string">"%s"</span>, e.<span class="built_in">what</span>());</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  }</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">Execute</span><span class="hljs-params">(<span class="hljs-keyword">const</span> AbstractPlanNode *plan, std::vector&lt;Tuple&gt; *result_set, Transaction *txn,</span></span><br><span class="hljs-function"><span class="hljs-params">               ExecutorContext *exec_ctx)</span> </span>{<br>    <span class="hljs-comment">// Construct and executor for the plan</span><br>    <span class="hljs-keyword">auto</span> executor = ExecutorFactory::<span class="hljs-built_in">CreateExecutor</span>(exec_ctx, plan);<br><br>    <span class="hljs-comment">// Prepare the root executor</span><br>    executor-&gt;<span class="hljs-built_in">Init</span>();<br><br>    <span class="hljs-comment">// Execute the query plan</span><br>    <span class="hljs-keyword">try</span> {<br>      Tuple tuple;<br>      RID rid;<br>      <span class="hljs-keyword">while</span> (executor-&gt;<span class="hljs-built_in">Next</span>(&amp;tuple, &amp;rid)) {<br>        <span class="hljs-keyword">if</span> (result_set != <span class="hljs-literal">nullptr</span>) {<br>          result_set-&gt;<span class="hljs-built_in">push_back</span>(tuple);<br>        }<br>      }<br>    } <span class="hljs-built_in"><span class="hljs-keyword">catch</span></span> (Exception &amp;e) {<br>      <span class="hljs-comment">// TODO(student): handle exceptions</span><br>      <span class="hljs-built_in">LOG_DEBUG</span>(<span class="hljs-string">"%s"</span>, e.<span class="hljs-built_in">what</span>());<br>    }<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal"><code class="language-hljs c++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">Execute</span><span class="hljs-params">(<span class="hljs-keyword">const</span> AbstractPlanNode *plan, std::vector&lt;Tuple&gt; *result_set, Transaction *txn,</span></span><br><span class="hljs-function"><span class="hljs-params">               ExecutorContext *exec_ctx)</span> </span>{<br>    <span class="hljs-comment">// Construct and executor for the plan</span><br>    <span class="hljs-keyword">auto</span> executor = ExecutorFactory::<span class="hljs-built_in">CreateExecutor</span>(exec_ctx, plan);<br><br>    <span class="hljs-comment">// Prepare the root executor</span><br>    executor-&gt;<span class="hljs-built_in">Init</span>();<br><br>    <span class="hljs-comment">// Execute the query plan</span><br>    <span class="hljs-keyword">try</span> {<br>      Tuple tuple;<br>      RID rid;<br>      <span class="hljs-keyword">while</span> (executor-&gt;<span class="hljs-built_in">Next</span>(&amp;tuple, &amp;rid)) {<br>        <span class="hljs-keyword">if</span> (result_set != <span class="hljs-literal">nullptr</span>) {<br>          result_set-&gt;<span class="hljs-built_in">push_back</span>(tuple);<br>        }<br>      }<br>    } <span class="hljs-built_in"><span class="hljs-keyword">catch</span></span> (Exception &amp;e) {<br>      <span class="hljs-comment">// TODO(student): handle exceptions</span><br>      <span class="hljs-built_in">LOG_DEBUG</span>(<span class="hljs-string">"%s"</span>, e.<span class="hljs-built_in">what</span>());<br>    }<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>  }<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <p>这个函数会根据查询计划和上下文来创建对应的执行器，并用执行器来实现对应的数据库操作。</p>
 <h2 id="运算执行器的实现"><a href="#运算执行器的实现" class="headerlink" title="运算执行器的实现"></a>运算执行器的实现</h2><h3 id="顺序扫描"><a href="#顺序扫描" class="headerlink" title="顺序扫描"></a>顺序扫描</h3><p>顺序扫描执行器 <code>SeqScanExecutor</code>是最基本的一个执行器，它会在一个表上进行迭代式的扫描并返回其元组的信息，每次返回一个，一个顺序扫描被一个<code>SeqScanPlanNode</code>来定义，这个执行计划结点会指定需要扫描的表，同时这个结点中可能会包含一个判断条件(Predicate)，需要过滤掉不符合要求的元组。</p>
 <p>同时Bustub中已经提高了一个<code>TableIterator</code>对象可以用来遍历一个表，并且在表达式类<code>AbstractExpression</code>中提供了一个<code>Evaluate()</code>函数可以用来判断一个元组是否满足Predicate中的表达式，它会返回一个Value对象，将其转化成bool类型之后就可以表示元组是否满足表达式中的判断条件。</p>
@@ -405,363 +469,400 @@ mjx-container[display="true"] + br {
 <li>所以顺序扫描其实对应的就是有条件的<code>SELECT</code>操作</li>
 </ul>
 <p>顺序扫描的代码实现如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">SeqScanExecutor::<span class="built_in">SeqScanExecutor</span>(ExecutorContext *exec_ctx, <span class="keyword">const</span> SeqScanPlanNode *plan) </span><br><span class="line">: <span class="built_in">AbstractExecutor</span>(exec_ctx), <span class="built_in">plan_</span>(plan) {}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SeqScanExecutor::Init</span><span class="params">()</span> </span>{</span><br><span class="line">  table_info_ = exec_ctx_-&gt;<span class="built_in">GetCatalog</span>()-&gt;<span class="built_in">GetTable</span>(plan_-&gt;<span class="built_in">GetTableOid</span>());</span><br><span class="line">  table_iter = table_info_-&gt;table_-&gt;<span class="built_in">Begin</span>(exec_ctx_-&gt;<span class="built_in">GetTransaction</span>());</span><br><span class="line">  table_end_iter = table_info_-&gt;table_-&gt;<span class="built_in">End</span>();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">SeqScanExecutor::Next</span><span class="params">(Tuple *tuple, RID *rid)</span> </span>{</span><br><span class="line">  <span class="keyword">for</span> (; table_iter != table_end_iter; table_iter ++) {</span><br><span class="line">    exec_ctx_-&gt;<span class="built_in">GetLockManager</span>()-&gt;<span class="built_in">LockShared</span>(exec_ctx_-&gt;<span class="built_in">GetTransaction</span>(), table_iter-&gt;<span class="built_in">GetRid</span>());</span><br><span class="line">    *tuple = *table_iter;</span><br><span class="line">    *rid = tuple-&gt;<span class="built_in">GetRid</span>();</span><br><span class="line">    <span class="keyword">if</span> (plan_-&gt;<span class="built_in">GetPredicate</span>() != <span class="literal">nullptr</span>) {</span><br><span class="line">      <span class="keyword">if</span> (plan_-&gt;<span class="built_in">GetPredicate</span>()-&gt;<span class="built_in">Evaluate</span>(tuple, plan_-&gt;<span class="built_in">OutputSchema</span>()).GetAs&lt;<span class="keyword">bool</span>&gt;()) {</span><br><span class="line">        table_iter ++;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">      }</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">      table_iter ++;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++">SeqScanExecutor::<span class="hljs-built_in">SeqScanExecutor</span>(ExecutorContext *exec_ctx, <span class="hljs-keyword">const</span> SeqScanPlanNode *plan) <br>: <span class="hljs-built_in">AbstractExecutor</span>(exec_ctx), <span class="hljs-built_in">plan_</span>(plan) {}<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SeqScanExecutor::Init</span><span class="hljs-params">()</span> </span>{<br>  table_info_ = exec_ctx_-&gt;<span class="hljs-built_in">GetCatalog</span>()-&gt;<span class="hljs-built_in">GetTable</span>(plan_-&gt;<span class="hljs-built_in">GetTableOid</span>());<br>  table_iter = table_info_-&gt;table_-&gt;<span class="hljs-built_in">Begin</span>(exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>());<br>  table_end_iter = table_info_-&gt;table_-&gt;<span class="hljs-built_in">End</span>();<br>}<br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">SeqScanExecutor::Next</span><span class="hljs-params">(Tuple *tuple, RID *rid)</span> </span>{<br>  <span class="hljs-keyword">for</span> (; table_iter != table_end_iter; table_iter ++) {<br>    exec_ctx_-&gt;<span class="hljs-built_in">GetLockManager</span>()-&gt;<span class="hljs-built_in">LockShared</span>(exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>(), table_iter-&gt;<span class="hljs-built_in">GetRid</span>());<br>    *tuple = *table_iter;<br>    *rid = tuple-&gt;<span class="hljs-built_in">GetRid</span>();<br>    <span class="hljs-keyword">if</span> (plan_-&gt;<span class="hljs-built_in">GetPredicate</span>() != <span class="hljs-literal">nullptr</span>) {<br>      <span class="hljs-keyword">if</span> (plan_-&gt;<span class="hljs-built_in">GetPredicate</span>()-&gt;<span class="hljs-built_in">Evaluate</span>(tuple, plan_-&gt;<span class="hljs-built_in">OutputSchema</span>()).GetAs&lt;<span class="hljs-keyword">bool</span>&gt;()) {<br>        table_iter ++;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>      }<br>    } <span class="hljs-keyword">else</span> {<br>      table_iter ++;<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    }<br>  }<br>  <span class="hljs-keyword">return</span> <span class="hljs-literal"><code class="language-hljs c++">SeqScanExecutor::<span class="hljs-built_in">SeqScanExecutor</span>(ExecutorContext *exec_ctx, <span class="hljs-keyword">const</span> SeqScanPlanNode *plan) <br>: <span class="hljs-built_in">AbstractExecutor</span>(exec_ctx), <span class="hljs-built_in">plan_</span>(plan) {}<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SeqScanExecutor::Init</span><span class="hljs-params">()</span> </span>{<br>  table_info_ = exec_ctx_-&gt;<span class="hljs-built_in">GetCatalog</span>()-&gt;<span class="hljs-built_in">GetTable</span>(plan_-&gt;<span class="hljs-built_in">GetTableOid</span>());<br>  table_iter = table_info_-&gt;table_-&gt;<span class="hljs-built_in">Begin</span>(exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>());<br>  table_end_iter = table_info_-&gt;table_-&gt;<span class="hljs-built_in">End</span>();<br>}<br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">SeqScanExecutor::Next</span><span class="hljs-params">(Tuple *tuple, RID *rid)</span> </span>{<br>  <span class="hljs-keyword">for</span> (; table_iter != table_end_iter; table_iter ++) {<br>    exec_ctx_-&gt;<span class="hljs-built_in">GetLockManager</span>()-&gt;<span class="hljs-built_in">LockShared</span>(exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>(), table_iter-&gt;<span class="hljs-built_in">GetRid</span>());<br>    *tuple = *table_iter;<br>    *rid = tuple-&gt;<span class="hljs-built_in">GetRid</span>();<br>    <span class="hljs-keyword">if</span> (plan_-&gt;<span class="hljs-built_in">GetPredicate</span>() != <span class="hljs-literal">nullptr</span>) {<br>      <span class="hljs-keyword">if</span> (plan_-&gt;<span class="hljs-built_in">GetPredicate</span>()-&gt;<span class="hljs-built_in">Evaluate</span>(tuple, plan_-&gt;<span class="hljs-built_in">OutputSchema</span>()).GetAs&lt;<span class="hljs-keyword">bool</span>&gt;()) {<br>        table_iter ++;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>      }<br>    } <span class="hljs-keyword">else</span> {<br>      table_iter ++;<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    }<br>  }<br>  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><p>插入操作需要实现的功能是将元组插入表中，并且插入操作分成两种不同的类型：</p>
 <ul>
 <li>第一种插入操作是指，需要插入的值本身包含在查询计划的结点中，我们称为行插入</li>
 <li>第二种插入操作是指插入的值来自于一个子结点上的执行器，比如InsertNode下面可以有一个SeqScan的子结点</li>
 </ul>
 <p>在执行器初始化的时候，我们需要先从Catalog中获取表的信息，然后再使用<code>TableHeap</code>来完成表的更新。所以插入操作的初始化实现如下(注意要在InsertExecutor中定义相关的变量)：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">InsertExecutor::Init</span><span class="params">()</span> </span>{</span><br><span class="line">  Catalog *catalog = <span class="built_in">GetExecutorContext</span>()-&gt;<span class="built_in">GetCatalog</span>();</span><br><span class="line">  table_info_ = catalog-&gt;<span class="built_in">GetTable</span>();</span><br><span class="line">  std::string table = table_info_-&gt;name_;</span><br><span class="line">  index_info_vector_ = catalog-&gt;<span class="built_in">GetTableIndexes</span>(table);</span><br><span class="line">  <span class="comment">// 对应两种不同的查询方式</span></span><br><span class="line">  <span class="keyword">if</span> (plan_-&gt;<span class="built_in">IsRawInsert</span>()) {</span><br><span class="line">    iter_ = plan_-&gt;<span class="built_in">RawValues</span>().<span class="built_in">begin</span>();</span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">    <span class="comment">// 如果插入的数据是从子结点来的，就对子结点进行初始化</span></span><br><span class="line">    child_executor_-&gt;<span class="built_in">Init</span>();</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">InsertExecutor::Init</span><span class="hljs-params">()</span> </span>{<br>  Catalog *catalog = <span class="hljs-built_in">GetExecutorContext</span>()-&gt;<span class="hljs-built_in">GetCatalog</span>();<br>  table_info_ = catalog-&gt;<span class="hljs-built_in">GetTable</span>();<br>  std::string table = table_info_-&gt;name_;<br>  index_info_vector_ = catalog-&gt;<span class="hljs-built_in">GetTableIndexes</span>(table);<br>  <span class="hljs-comment">// 对应两种不同的查询方式</span><br>  <span class="hljs-keyword">if</span> (plan_-&gt;<span class="hljs-built_in">IsRawInsert</span>()) {<br>    iter_ = plan_-&gt;<span class="hljs-built_in">RawValues</span>().<span class="hljs-built_in">begin</span>();<br>  } <span class="hljs-keyword">else</span> {<br>    <span class="hljs-comment">// 如果插入的数据是从子结点来的，就对子结点进行初始化</span><br>    child_executor_-&gt;<span class="hljs-built_in"><code class="language-hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">InsertExecutor::Init</span><span class="hljs-params">()</span> </span>{<br>  Catalog *catalog = <span class="hljs-built_in">GetExecutorContext</span>()-&gt;<span class="hljs-built_in">GetCatalog</span>();<br>  table_info_ = catalog-&gt;<span class="hljs-built_in">GetTable</span>();<br>  std::string table = table_info_-&gt;name_;<br>  index_info_vector_ = catalog-&gt;<span class="hljs-built_in">GetTableIndexes</span>(table);<br>  <span class="hljs-comment">// 对应两种不同的查询方式</span><br>  <span class="hljs-keyword">if</span> (plan_-&gt;<span class="hljs-built_in">IsRawInsert</span>()) {<br>    iter_ = plan_-&gt;<span class="hljs-built_in">RawValues</span>().<span class="hljs-built_in">begin</span>();<br>  } <span class="hljs-keyword">else</span> {<br>    <span class="hljs-comment">// 如果插入的数据是从子结点来的，就对子结点进行初始化</span><br>    child_executor_-&gt;<span class="hljs-built_in">Init</span>();<br>  }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <p>此外我们把插入数据的过程单独抽象成一个函数<code>Insert</code>，并且在<code>Next</code>中调用，然后在<code>Next</code>中分成两种情况的insert分别写就好了：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">InsertExecutor::Insert</span><span class="params">(Tuple &amp;tuple, RID *rid)</span> </span>{</span><br><span class="line">  TableHeap *table_heap = table_info_-&gt;table_.<span class="built_in">get</span>();</span><br><span class="line">  table_heap-&gt;<span class="built_in">InsertTuple</span>(tuple, rid, <span class="built_in">GetExecutorContext</span>()-&gt;<span class="built_in">GetTransaction</span>());</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;index_info: index_info_vector_) {</span><br><span class="line">    HASH_TABLE_INDEX_TYPE *hash_index = <span class="keyword">reinterpret_cast</span>&lt;HASH_TABLE_INDEX_TYPE*&gt;(index_info-&gt;index_.<span class="built_in">get</span>());</span><br><span class="line">    IndexWriteRecord index_record{*rid, plan_-&gt;<span class="built_in">TableOid</span>(), WType::INSERT,</span><br><span class="line">                                  tuple, index_info-&gt;index_oid_, <span class="built_in">GetExecutorContext</span>()-&gt;<span class="built_in">GetCatalog</span>()};</span><br><span class="line">    <span class="built_in">GetExecutorContext</span>()-&gt;<span class="built_in">GetTransaction</span>()-&gt;<span class="built_in">AppendTableWriteRecord</span>(index_record);</span><br><span class="line">    hash_index-&gt;<span class="built_in">InsertEntry</span>(tuple.<span class="built_in">KeyFromTuple</span>(table_info_-&gt;schema_, index_info-&gt;key_schema_,</span><br><span class="line">                                               index_info-&gt;index_-&gt;<span class="built_in">GetMetadata</span>()-&gt;<span class="built_in">GetKeyAttrs</span>()),</span><br><span class="line">                            *rid, <span class="built_in">GetExecutorContext</span>()-&gt;<span class="built_in">GetTransaction</span>());</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">InsertExecutor::Next</span><span class="params">([[maybe_unused]] Tuple *tuple, RID *rid)</span> </span>{</span><br><span class="line">  <span class="keyword">if</span> (!plan_-&gt;<span class="built_in">IsRawInsert</span>()) {</span><br><span class="line">    <span class="keyword">if</span> (child_executor_-&gt;<span class="built_in">Next</span>(tuple, rid)) {</span><br><span class="line">      <span class="built_in">Insert</span>(tuple, rid);</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">if</span> (iter_ != plan_-&gt;<span class="built_in">RawValues</span>().<span class="built_in">end</span>()) {</span><br><span class="line">    <span class="function">Tuple <span class="title">insert_tuple</span><span class="params">(*iter_ ++, &amp;table_info_-&gt;schema_)</span></span>;</span><br><span class="line">    <span class="built_in">Insert</span>(insert_tuple, rid);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">InsertExecutor::Insert</span><span class="hljs-params">(Tuple &amp;tuple, RID *rid)</span> </span>{<br>  TableHeap *table_heap = table_info_-&gt;table_.<span class="hljs-built_in">get</span>();<br>  table_heap-&gt;<span class="hljs-built_in">InsertTuple</span>(tuple, rid, <span class="hljs-built_in">GetExecutorContext</span>()-&gt;<span class="hljs-built_in">GetTransaction</span>());<br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;index_info: index_info_vector_) {<br>    HASH_TABLE_INDEX_TYPE *hash_index = <span class="hljs-keyword">reinterpret_cast</span>&lt;HASH_TABLE_INDEX_TYPE*&gt;(index_info-&gt;index_.<span class="hljs-built_in">get</span>());<br>    IndexWriteRecord index_record{*rid, plan_-&gt;<span class="hljs-built_in">TableOid</span>(), WType::INSERT,<br>                                  tuple, index_info-&gt;index_oid_, <span class="hljs-built_in">GetExecutorContext</span>()-&gt;<span class="hljs-built_in">GetCatalog</span>()};<br>    <span class="hljs-built_in">GetExecutorContext</span>()-&gt;<span class="hljs-built_in">GetTransaction</span>()-&gt;<span class="hljs-built_in">AppendTableWriteRecord</span>(index_record);<br>    hash_index-&gt;<span class="hljs-built_in">InsertEntry</span>(tuple.<span class="hljs-built_in">KeyFromTuple</span>(table_info_-&gt;schema_, index_info-&gt;key_schema_,<br>                                               index_info-&gt;index_-&gt;<span class="hljs-built_in">GetMetadata</span>()-&gt;<span class="hljs-built_in">GetKeyAttrs</span>()),<br>                            *rid, <span class="hljs-built_in">GetExecutorContext</span>()-&gt;<span class="hljs-built_in">GetTransaction</span>());<br>  }<br>}<br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">InsertExecutor::Next</span><span class="hljs-params">([[maybe_unused]] Tuple *tuple, RID *rid)</span> </span>{<br>  <span class="hljs-keyword">if</span> (!plan_-&gt;<span class="hljs-built_in">IsRawInsert</span>()) {<br>    <span class="hljs-keyword">if</span> (child_executor_-&gt;<span class="hljs-built_in">Next</span>(tuple, rid)) {<br>      <span class="hljs-built_in">Insert</span>(tuple, rid);<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    }<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>  }<br>  <span class="hljs-keyword">if</span> (iter_ != plan_-&gt;<span class="hljs-built_in">RawValues</span>().<span class="hljs-built_in">end</span>()) {<br>    <span class="hljs-function">Tuple <span class="hljs-title">insert_tuple</span><span class="hljs-params">(*iter_ ++, &amp;table_info_-&gt;schema_)</span></span>;<br>    <span class="hljs-built_in">Insert</span>(insert_tuple, rid);<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>  }<br>  <span class="hljs-keyword">return</span> <span class="hljs-literal"><code class="language-hljs c++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">InsertExecutor::Insert</span><span class="hljs-params">(Tuple &amp;tuple, RID *rid)</span> </span>{<br>  TableHeap *table_heap = table_info_-&gt;table_.<span class="hljs-built_in">get</span>();<br>  table_heap-&gt;<span class="hljs-built_in">InsertTuple</span>(tuple, rid, <span class="hljs-built_in">GetExecutorContext</span>()-&gt;<span class="hljs-built_in">GetTransaction</span>());<br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;index_info: index_info_vector_) {<br>    HASH_TABLE_INDEX_TYPE *hash_index = <span class="hljs-keyword">reinterpret_cast</span>&lt;HASH_TABLE_INDEX_TYPE*&gt;(index_info-&gt;index_.<span class="hljs-built_in">get</span>());<br>    IndexWriteRecord index_record{*rid, plan_-&gt;<span class="hljs-built_in">TableOid</span>(), WType::INSERT,<br>                                  tuple, index_info-&gt;index_oid_, <span class="hljs-built_in">GetExecutorContext</span>()-&gt;<span class="hljs-built_in">GetCatalog</span>()};<br>    <span class="hljs-built_in">GetExecutorContext</span>()-&gt;<span class="hljs-built_in">GetTransaction</span>()-&gt;<span class="hljs-built_in">AppendTableWriteRecord</span>(index_record);<br>    hash_index-&gt;<span class="hljs-built_in">InsertEntry</span>(tuple.<span class="hljs-built_in">KeyFromTuple</span>(table_info_-&gt;schema_, index_info-&gt;key_schema_,<br>                                               index_info-&gt;index_-&gt;<span class="hljs-built_in">GetMetadata</span>()-&gt;<span class="hljs-built_in">GetKeyAttrs</span>()),<br>                            *rid, <span class="hljs-built_in">GetExecutorContext</span>()-&gt;<span class="hljs-built_in">GetTransaction</span>());<br>  }<br>}<br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">InsertExecutor::Next</span><span class="hljs-params">([[maybe_unused]] Tuple *tuple, RID *rid)</span> </span>{<br>  <span class="hljs-keyword">if</span> (!plan_-&gt;<span class="hljs-built_in">IsRawInsert</span>()) {<br>    <span class="hljs-keyword">if</span> (child_executor_-&gt;<span class="hljs-built_in">Next</span>(tuple, rid)) {<br>      <span class="hljs-built_in">Insert</span>(tuple, rid);<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    }<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>  }<br>  <span class="hljs-keyword">if</span> (iter_ != plan_-&gt;<span class="hljs-built_in">RawValues</span>().<span class="hljs-built_in">end</span>()) {<br>    <span class="hljs-function">Tuple <span class="hljs-title">insert_tuple</span><span class="hljs-params">(*iter_ ++, &amp;table_info_-&gt;schema_)</span></span>;<br>    <span class="hljs-built_in">Insert</span>(insert_tuple, rid);<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>  }<br>  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>}<br><br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <h3 id="更新操作"><a href="#更新操作" class="headerlink" title="更新操作"></a>更新操作</h3><p>更新操作是在表中修改一个元素并在索引中进行更新，这个执行器的子执行器会提供需要修改的元组的RID信息，同时更新操作总是从子执行器(查询计划的子结点)中获得要操作的元组信息，即Update一定会跟一个Select操作(虽然SQL里面没有，但是数据库系统实际执行过程中就是要先Select出所有的元组然后再Update的)</p>
 <p>同时Bustub中提供了<code>GenerateUpdatedTuple</code>来根据查询计划中的Schema生成修改后的元组，并在TableHeap里进行表的修改。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">UpdateExecutor::Next</span><span class="params">([[maybe_unused]] Tuple *tuple, RID *rid)</span> </span>{</span><br><span class="line">  <span class="keyword">if</span> (!enable_logging) {</span><br><span class="line">    <span class="keyword">if</span> (exec_ctx_-&gt;<span class="built_in">GetTransaction</span>()-&gt;<span class="built_in">IsSharedLocked</span>(*rid)) {</span><br><span class="line">      <span class="keyword">if</span> (!exec_ctx_-&gt;<span class="built_in">GetLockManager</span>()-&gt;<span class="built_in">LockUpgrade</span>(exec_ctx_-&gt;<span class="built_in">GetTransaction</span>(), *rid)) {</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">      }</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">      <span class="keyword">if</span> (!exec_ctx_-&gt;<span class="built_in">GetLockManager</span>()-&gt;<span class="built_in">LockExclusive</span>(exec_ctx_-&gt;<span class="built_in">GetTransaction</span>(), *rid)) {</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">if</span> (child_executor_-&gt;<span class="built_in">Next</span>(tuple, rid)) {</span><br><span class="line">    Tuple t = <span class="built_in">GenerateUpdatedTuple</span>(*tuple);</span><br><span class="line">    <span class="keyword">if</span> (table_info_-&gt;table_-&gt;<span class="built_in">UpdateTuple</span>(t, *rid, exec_ctx_-&gt;<span class="built_in">GetTransaction</span>())) {</span><br><span class="line">      table_info_-&gt;table_-&gt;<span class="built_in">GetTuple</span>(*rid, tuple, exec_ctx_-&gt;<span class="built_in">GetTransaction</span>());</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">      <span class="keyword">throw</span> <span class="built_in">Exception</span>(<span class="string">"Update Error!"</span>);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">UpdateExecutor::Next</span><span class="hljs-params">([[maybe_unused]] Tuple *tuple, RID *rid)</span> </span>{<br>  <span class="hljs-keyword">if</span> (!enable_logging) {<br>    <span class="hljs-keyword">if</span> (exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>()-&gt;<span class="hljs-built_in">IsSharedLocked</span>(*rid)) {<br>      <span class="hljs-keyword">if</span> (!exec_ctx_-&gt;<span class="hljs-built_in">GetLockManager</span>()-&gt;<span class="hljs-built_in">LockUpgrade</span>(exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>(), *rid)) {<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>      }<br>    } <span class="hljs-keyword">else</span> {<br>      <span class="hljs-keyword">if</span> (!exec_ctx_-&gt;<span class="hljs-built_in">GetLockManager</span>()-&gt;<span class="hljs-built_in">LockExclusive</span>(exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>(), *rid)) {<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>      }<br>    }<br>  }<br>  <span class="hljs-keyword">if</span> (child_executor_-&gt;<span class="hljs-built_in">Next</span>(tuple, rid)) {<br>    Tuple t = <span class="hljs-built_in">GenerateUpdatedTuple</span>(*tuple);<br>    <span class="hljs-keyword">if</span> (table_info_-&gt;table_-&gt;<span class="hljs-built_in">UpdateTuple</span>(t, *rid, exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>())) {<br>      table_info_-&gt;table_-&gt;<span class="hljs-built_in">GetTuple</span>(*rid, tuple, exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>());<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    } <span class="hljs-keyword">else</span> {<br>      <span class="hljs-keyword">throw</span> <span class="hljs-built_in">Exception</span>(<span class="hljs-string">"Update Error!"</span>);<br>    }<br>  }<br>  <span class="hljs-keyword">return</span> <span class="hljs-literal"><code class="language-hljs c++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">UpdateExecutor::Next</span><span class="hljs-params">([[maybe_unused]] Tuple *tuple, RID *rid)</span> </span>{<br>  <span class="hljs-keyword">if</span> (!enable_logging) {<br>    <span class="hljs-keyword">if</span> (exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>()-&gt;<span class="hljs-built_in">IsSharedLocked</span>(*rid)) {<br>      <span class="hljs-keyword">if</span> (!exec_ctx_-&gt;<span class="hljs-built_in">GetLockManager</span>()-&gt;<span class="hljs-built_in">LockUpgrade</span>(exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>(), *rid)) {<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>      }<br>    } <span class="hljs-keyword">else</span> {<br>      <span class="hljs-keyword">if</span> (!exec_ctx_-&gt;<span class="hljs-built_in">GetLockManager</span>()-&gt;<span class="hljs-built_in">LockExclusive</span>(exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>(), *rid)) {<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>      }<br>    }<br>  }<br>  <span class="hljs-keyword">if</span> (child_executor_-&gt;<span class="hljs-built_in">Next</span>(tuple, rid)) {<br>    Tuple t = <span class="hljs-built_in">GenerateUpdatedTuple</span>(*tuple);<br>    <span class="hljs-keyword">if</span> (table_info_-&gt;table_-&gt;<span class="hljs-built_in">UpdateTuple</span>(t, *rid, exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>())) {<br>      table_info_-&gt;table_-&gt;<span class="hljs-built_in">GetTuple</span>(*rid, tuple, exec_ctx_-&gt;<span class="hljs-built_in">GetTransaction</span>());<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    } <span class="hljs-keyword">else</span> {<br>      <span class="hljs-keyword">throw</span> <span class="hljs-built_in">Exception</span>(<span class="hljs-string">"Update Error!"</span>);<br>    }<br>  }<br>  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <h3 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a>未完待续</h3>
-        </div>
-
-        
-            <div class="post-copyright-info">
-                <div class="article-copyright-info-container">
-    <ul>
-        <li>本文标题：CMU15-445数据库系统Project3：Query Execution</li>
-        <li>本文作者：RandomStar</li>
-        <li>创建时间：2021-12-12 15:59:16</li>
-        <li>
-            本文链接：https://zhang-each.github.com/2021/12/12/cmudbs-lab3/
-        </li>
-        <li>
-            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
-        </li>
-    </ul>
-</div>
-
-            </div>
-        
-
-        
-            <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2021/12/17/reading29/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">论文阅读笔记29：异构GCN</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/2021/12/10/se-courses/"
-                        >
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">对我校软件工程专业本科课程设置的一些意见</span>
-                                <span class="post-nav-item">下一篇</span>
-                            </span>
-                            <span class="right arrow-icon flex-center">
-                              <i class="fas fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-        
-            <div class="comment-container">
-                <div class="comments-container">
-    <div id="comment-anchor"></div>
-    <div class="comment-area-title">
-        <i class="fas fa-comments">&nbsp;评论</i>
-    </div>
-    
-
-        
+              </div>
             
-    <div class="valine-container">
-        <script 
-                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
-        <div id="vcomments"></div>
-        <script >
-            function loadValine() {
-                new Valine({
-                    el: '#vcomments',
-                    appId: 'b6BpXpwUq5wyUMcLtbnNMD8N-gzGzoHsz',
-                    appKey: 'Qtl7JkpdLDat2Niacks6SyT5',
-                    meta: ['nick', 'mail', 'link'],
-                    avatar: 'wavatar',
-                    enableQQ: true,
-                    placeholder: '快来发表你的看法吧！',
-                    lang: 'zh-cn'.toLowerCase()
-                });
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
 
-                function getAuthor(language) {
-                    switch (language) {
-                        case 'en':
-                            return 'Author';
-                        case 'zh-CN':
-                            return '博主';
-                        default:
-                            return 'Master';
-                    }
-                }
-
-                // Add "Author" identify
-                const getValineDomTimer = setInterval(() => {
-                    const vcards = document.querySelectorAll('#vcomments .vcards .vcard');
-                    if (vcards.length > 0) {
-                        let author = 'RandomStar';
-
-                        if (author) {
-                            for (let vcard of vcards) {
-                                const vnick_dom = vcard.querySelector('.vhead .vnick');
-                                const vnick = vnick_dom.innerHTML;
-                                if (vnick === author) {
-                                    vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
-                                }
-                            }
-                        }
-                        clearInterval(getValineDomTimer);
-                    } else {
-                        clearInterval(getValineDomTimer);
-                    }
-                }, 2000);
-            }
-
-            if ('false') {
-                const loadValineTimeout = setTimeout(() => {
-                    loadValine();
-                    clearTimeout(loadValineTimeout);
-                }, 1000);
-            } else {
-                window.addEventListener('DOMContentLoaded', loadValine);
-            }
-        </script>
-    </div>
-
-
-
-        
+<span class="category-chains">
+  
+  
     
-</div>
-
-            </div>
+      <span class="category-chain">
         
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" class="category-chain-item">数据库系统的设计与实现</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
     </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/">#数据库系统</a>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">#计算机系统</a>
+      
+        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">#数据存储</a>
+      
+    </div>
+  
 </div>
 
 
-                
-            </div>
+              
+  
 
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CMU15-445数据库系统Project3：Query Execution</div>
+      <div>http://zhang-each.github.io/2021/12/12/cmudbs-lab3/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Zhang-Each</div>
         </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年12月12日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
             
-              <span>2020</span>
-              -
             
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">RandomStar</a>
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
         </div>
-        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
-        </script>
-            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">399.9k</span>&nbsp;字
-            <span>
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            <span>
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
-            <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
-        
-        <div class="theme-info info-item">
-            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
-        </div>
-        
-        
+      </div>
     </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="tools-list">
-        <!-- TOC aside toggle -->
-        
-            <li class="tools-item page-aside-toggle">
-                <i class="fas fa-outdent"></i>
-            </li>
-        
-
-        <!-- go comment -->
-        
-            <li class="go-comment">
-                <i class="fas fa-comment"></i>
-            </li>
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="arrow-up fas fa-arrow-up"></i>
-                <span class="percent"></span>
-            </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-        <aside class="page-aside">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#START"><span class="nav-number">1.</span> <span class="nav-text">START</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bustub%E4%B8%AD%E7%9A%84%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.</span> <span class="nav-text">Bustub中的系统架构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Catalog%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.1.</span> <span class="nav-text">Catalog数据结构设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Execution%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.</span> <span class="nav-text">Execution数据结构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.1.</span> <span class="nav-text">查询上下文的设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.2.</span> <span class="nav-text">查询执行器的设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E8%AE%A1%E5%88%92%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.3.</span> <span class="nav-text">查询计划的设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.4.</span> <span class="nav-text">查询执行引擎的设计</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E6%89%A7%E8%A1%8C%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">运算执行器的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E6%89%AB%E6%8F%8F"><span class="nav-number">3.1.</span> <span class="nav-text">顺序扫描</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E5%85%A5"><span class="nav-number">3.2.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E6%93%8D%E4%BD%9C"><span class="nav-number">3.3.</span> <span class="nav-text">更新操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD"><span class="nav-number">3.4.</span> <span class="nav-text">未完待续</span></a></li></ol></li></ol>
-    </div>
-</div>
-        </aside>
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
+    <div class="license-icon iconfont"></div>
+  </div>
 
 
-    
-        <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-          <span class="search-input-field-pre">
-            <i class="fas fa-keyboard"></i>
-          </span>
-            <div class="search-input-container">
-                <input autocomplete="off"
-                       autocorrect="off"
-                       autocapitalize="off"
-                       placeholder="搜索..."
-                       spellcheck="false"
-                       type="search"
-                       class="search-input"
-                >
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/12/17/reading29/" title="论文阅读笔记29：异构GCN">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">论文阅读笔记29：异构GCN</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/12/10/se-courses/" title="对我校软件工程专业本科课程设置的一些意见">
+                        <span class="hidden-mobile">对我校软件工程专业本科课程设置的一些意见</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
             </div>
-            <span class="popup-btn-close">
-                <i class="fas fa-times"></i>
-            </span>
+
+            
+          </article>
         </div>
-        <div id="search-result">
-            <div id="no-result">
-                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
-            </div>
-        </div>
+      </div>
     </div>
-</div>
 
-    
-
-</main>
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-    
-<script src="/js/local-search.js"></script>
-
-
-
-
-    
-<script src="/js/code-copy.js"></script>
-
-
-
-
-    
-<script src="/js/lazyload.js"></script>
-
-
-
-<div class="post-scripts">
-    
-        
-<script src="/js/left-side-toggle.js"></script>
-
-<script src="/js/libs/anime.min.js"></script>
-
-<script src="/js/toc.js"></script>
-
-    
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
 
 
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+
+  </script>
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+  &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+        class="white-color">402.1k</span>&nbsp;字
+    <span>
+        |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+            class="white-color"></span>&nbsp;次
+    </span>
+    <span>
+        |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+            class="white-color"></span>&nbsp;人
+    </span>
+    <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

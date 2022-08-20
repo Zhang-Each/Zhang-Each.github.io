@@ -1,31 +1,107 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
 <head>
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="RandomStar">
-    
-    <title>
-        
-            2021春招实习-设计模式 |
-        
-        在那不遥远的地方
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Zhang-Each">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 单例模式 单例模式的类的对象只允许一个实例存在，比如服务器中的配置信息读取可以由单一对象完成 单例模式的实现主要通过以下两步： 将该类的构造方法定义为private的，这样一来别的地方的代码就无法调用该类的构造方法来实例化该类的对象，只有通过该类提供的静态方法来访问该类产生的唯一一个对象 在该类内提供一个静态方法，当我们调用这个方法时，如果类持有的引用不为空就返回这个引用，如果类保持的引用为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2021春招实习-设计模式">
+<meta property="og:url" content="http://zhang-each.github.io/2021/05/16/intern2/index.html">
+<meta property="og:site_name" content="在那不遥远的地方">
+<meta property="og:description" content="1. 单例模式 单例模式的类的对象只允许一个实例存在，比如服务器中的配置信息读取可以由单一对象完成 单例模式的实现主要通过以下两步： 将该类的构造方法定义为private的，这样一来别的地方的代码就无法调用该类的构造方法来实例化该类的对象，只有通过该类提供的静态方法来访问该类产生的唯一一个对象 在该类内提供一个静态方法，当我们调用这个方法时，如果类持有的引用不为空就返回这个引用，如果类保持的引用为">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-05-16T15:44:48.000Z">
+<meta property="article:modified_time" content="2021-05-16T15:50:08.025Z">
+<meta property="article:author" content="Zhang-Each">
+<meta property="article:tag" content="实习">
+<meta property="article:tag" content="面试">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>2021春招实习-设计模式 - 在那不遥远的地方</title>
 
-    <link rel="shortcut icon" href="/images/logo.svg">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"zhang-each.github.io","root":"/","language":"zh-cn","path":"search.xml"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的回音。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
-    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhang-each.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
 <meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
@@ -143,706 +219,733 @@ mjx-container[display="true"] + br {
 
 
 <body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress-bar-container">
-    
-        <span class="scroll-progress-bar"></span>
-    
+  
 
-    
-</div>
-
-
-<main class="page-container">
-
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
     
 
-    <div class="page-main-content">
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>在那不遥远的地方</strong>
+    </a>
 
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                在那不遥远的地方
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/"
-                            >
-                                主页
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                归档
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/categories"
-                            >
-                                分类
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/tags"
-                            >
-                                标签
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/about"
-                            >
-                                关于
-                            </a>
-                        </li>
-                    
-                    
-                        <li class="menu-item search search-popup-trigger">
-                            <i class="fas fa-search"></i>
-                        </li>
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
+  </div>
+</nav>
 
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/">主页</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">归档</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/categories">分类</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/tags">标签</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/about">关于</a>
-                </li>
-            
-        </ul>
-    </div>
+  
 
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="fade-in-down-animation">
-    <div class="article-content-container">
-
-        <div class="article-title">
-            <span class="title-hover-animation">2021春招实习-设计模式</span>
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2021春招实习-设计模式"></span>
+          
         </div>
 
         
-            <div class="article-header">
-                <div class="avatar">
-                    <img src="/images/skadi.png">
-                </div>
-                <div class="info">
-                    <div class="author">
-                        <span class="name">RandomStar</span>
-                        
-                            <span class="author-label">Lv6</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;2021-05-16 23:44:48
-    </span>
+          
+  <div class="mt-3">
     
-        <span class="article-categories article-meta-item">
-            <i class="fas fa-folder"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/categories/%E5%AE%9E%E4%B9%A0-%E5%B7%A5%E4%BD%9C/">实习/工作</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Zhang-Each
+      </span>
     
     
-        <span class="article-tags article-meta-item">
-            <i class="fas fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/%E5%AE%9E%E4%B9%A0/">实习</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E9%9D%A2%E8%AF%95/">面试</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/Java/">Java</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-05-16 23:44" pubdate>
+          2021年5月16日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          82 分钟
+        
+      </span>
     
 
     
     
-        <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>3.1k 字</span>
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
         </span>
+        
+      
     
-    
-        <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>12 分钟</span>
-        </span>
-    
-    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
 </div>
 
-                    </div>
-                </div>
-            </div>
-        
+</div>
 
-        <div class="article-content markdown-body">
-            <h2 id="单例模式">1. 单例模式</h2>
-<ul>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">2021春招实习-设计模式</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-单例模式"><a href="#1-单例模式" class="headerlink" title="1. 单例模式"></a>1. 单例模式</h2><ul>
 <li>单例模式的<strong>类的对象只允许一个实例存在</strong>，比如服务器中的配置信息读取可以由单一对象完成</li>
-<li>单例模式的实现主要通过以下两步：
-<ul>
+<li>单例模式的实现主要通过以下两步：<ul>
 <li>将该<strong>类的构造方法定义为private</strong>的，这样一来别的地方的代码就无法调用该类的构造方法来实例化该类的对象，只有通过该类提供的静态方法来访问该类产生的唯一一个对象</li>
 <li>在该类内<strong>提供一个静态方法</strong>，当我们调用这个方法时，如果类持有的引用不为空就返回这个引用，如果类保持的引用为空就创建该类的实例并将实例的引用赋予该类保持的引用</li>
-</ul></li>
 </ul>
-<h3 id="优缺点">1.1 优缺点</h3>
-<ul>
-<li>优点
-<ul>
+</li>
+</ul>
+<h3 id="1-1-优缺点"><a href="#1-1-优缺点" class="headerlink" title="1.1 优缺点"></a>1.1 优缺点</h3><ul>
+<li>优点<ul>
 <li>在内存中只有一个对象，节省内存空间；</li>
 <li>避免频繁的创建销毁对象，可以提高性能；</li>
 <li>避免对共享资源的多重占用，简化访问；</li>
 <li>为整个系统提供一个全局访问点</li>
-</ul></li>
-<li>缺点：
-<ul>
+</ul>
+</li>
+<li>缺点：<ul>
 <li>不适用于变化频繁的对象；</li>
 <li>滥用单例将带来一些负面问题，如为了节省资源将数据库连接池对象设计为的单例类，可能会导致共享连接池对象的程序过多而出现连接池溢出；</li>
 <li>如果实例化的对象长时间不被利用，系统会认为该对象是垃圾而被回收，这可能会导致对象状态的丢失</li>
-</ul></li>
 </ul>
-<h3 id="实现方式1饿汉式">实现方式1：饿汉式</h3>
-<ul>
+</li>
+</ul>
+<h3 id="实现方式1：饿汉式"><a href="#实现方式1：饿汉式" class="headerlink" title="实现方式1：饿汉式"></a>实现方式1：饿汉式</h3><ul>
 <li>一个简单的实现方式的代码如下：</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">singleton1</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> instance = <span class="keyword">new</span> singleton1();</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">singleton1</span><span class="params">()</span> </span>{}</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> singleton1 <span class="title">getInstance</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">singleton1</span> </span>{<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> instance = <span class="hljs-keyword">new</span> singleton1();<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">singleton1</span><span class="hljs-params">()</span> </span>{}<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> singleton1 <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">singleton1</span> </span>{<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> instance = <span class="hljs-keyword">new</span> singleton1();<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">singleton1</span><span class="hljs-params">()</span> </span>{}<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> singleton1 <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">return</span> instance;<br>    }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <ul>
-<li>这种写法比较简单，在类装载的时候就完成实例化，没有达到Lazy Loading的效果。如果从始至终从未使用过这个实例，则会造成内存的浪费
-<ul>
+<li>这种写法比较简单，在类装载的时候就完成实例化，没有达到Lazy Loading的效果。如果从始至终从未使用过这个实例，则会造成内存的浪费<ul>
 <li>这种写法不用担心线程同步的问题</li>
-</ul></li>
 </ul>
-<h3 id="实现方式2懒汉式">实现方式2：懒汉式</h3>
-<ul>
+</li>
+</ul>
+<h3 id="实现方式2：懒汉式"><a href="#实现方式2：懒汉式" class="headerlink" title="实现方式2：懒汉式"></a>实现方式2：懒汉式</h3><ul>
 <li>对饿汉式的实现方式做出了一定的改进，在需要的时候才对其进行实例化，问题就是不支持多线程的操作，否则会产生多个实例</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">singleton1</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> instance;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">singleton1</span><span class="params">()</span> </span>{}</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> singleton1 <span class="title">getInstance</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) {</span><br><span class="line">            instance = <span class="keyword">new</span> singleton1();</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">singleton1</span> </span>{<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> instance;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">singleton1</span><span class="hljs-params">()</span> </span>{}<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> singleton1 <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">if</span> (instance == <span class="hljs-keyword">null</span>) {<br>            instance = <span class="hljs-keyword">new</span> singleton1();<br>        }<br>        <span class="hljs-keyword"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">singleton1</span> </span>{<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> instance;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">singleton1</span><span class="hljs-params">()</span> </span>{}<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> singleton1 <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">if</span> (instance == <span class="hljs-keyword">null</span>) {<br>            instance = <span class="hljs-keyword">new</span> singleton1();<br>        }<br>        <span class="hljs-keyword">return</span> instance;<br>    }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <ul>
 <li>为了解决线程安全问题，可以进行双重加锁。在new之前看看互斥锁有没有上锁</li>
 </ul>
-<h2 id="工厂模式">2. 工厂模式</h2>
-<ul>
-<li>工厂模式可以分为简单工厂模式、工厂方法模式和抽象工厂模式
-<ul>
+<h2 id="2-工厂模式"><a href="#2-工厂模式" class="headerlink" title="2. 工厂模式"></a>2. 工厂模式</h2><ul>
+<li>工厂模式可以分为简单工厂模式、工厂方法模式和抽象工厂模式<ul>
 <li>在设计模式的分类中都属于<strong>创建型模式</strong>，三种模式依次从上到下逐渐抽象</li>
 <li>创建型模式对类的实例化这一过程进行了抽象，能够将软件模块中对象的创建和对象的使用分离</li>
 <li>对象的实例化过程是通过工厂实现的，用工厂代替new操作，使用工厂模式就可以</li>
-</ul></li>
 </ul>
-<h3 id="简单工厂模式">2.1 简单工厂模式</h3>
-<ul>
-<li>简单的工厂模式就是用factory提供的方法来代替<strong>直接new一个新的product</strong>，对外部封装了产品生产的过程，比如A接口派生出了B和C类，我们可以定义一个A工厂类来帮助我们产生新的B和C类
-<ul>
+</li>
+</ul>
+<h3 id="2-1-简单工厂模式"><a href="#2-1-简单工厂模式" class="headerlink" title="2.1 简单工厂模式"></a>2.1 简单工厂模式</h3><ul>
+<li>简单的工厂模式就是用factory提供的方法来代替<strong>直接new一个新的product</strong>，对外部封装了产品生产的过程，比如A接口派生出了B和C类，我们可以定义一个A工厂类来帮助我们产生新的B和C类<ul>
 <li>简单工厂的模式不符合开闭原则</li>
-</ul></li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>{</span><br><span class="line">    A () { System.out.println(<span class="string">"new A"</span>);}</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>{</span><br><span class="line">    B () { System.out.println(<span class="string">"new B"</span>);}</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span> <span class="keyword">extends</span> <span class="title">A</span> </span>{</span><br><span class="line">    C () { System.out.println(<span class="string">"new C"</span>);}</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">factory</span> </span>{</span><br><span class="line">    <span class="function">B <span class="title">makeB</span> <span class="params">()</span> </span>{ <span class="keyword">return</span> <span class="keyword">new</span> B;}</span><br><span class="line">    <span class="function">C <span class="title">makeC</span> <span class="params">()</span> </span>{ <span class="keyword">return</span> <span class="keyword">new</span> C;}</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="工厂方法模式">2.2 工厂方法模式</h3>
-<ul>
-<li>工厂方法模式包含 4 个角色（要素）：
-<ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> </span>{<br>    A () { System.out.println(<span class="hljs-string">"new A"</span>);}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span> </span>{<br>    B () { System.out.println(<span class="hljs-string">"new B"</span>);}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span> </span>{<br>    C () { System.out.println(<span class="hljs-string">"new C"</span>);}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">factory</span> </span>{<br>    <span class="hljs-function">B <span class="hljs-title">makeB</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> B;}<br>    <span class="hljs-function">C <span class="hljs-title">makeC</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword"><code class="language-hljs java"><span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> </span>{<br>    A () { System.out.println(<span class="hljs-string">"new A"</span>);}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span> </span>{<br>    B () { System.out.println(<span class="hljs-string">"new B"</span>);}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span> </span>{<br>    C () { System.out.println(<span class="hljs-string">"new C"</span>);}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">factory</span> </span>{<br>    <span class="hljs-function">B <span class="hljs-title">makeB</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> B;}<br>    <span class="hljs-function">C <span class="hljs-title">makeC</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> C;}<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<h3 id="2-2-工厂方法模式"><a href="#2-2-工厂方法模式" class="headerlink" title="2.2 工厂方法模式"></a>2.2 工厂方法模式</h3><ul>
+<li>工厂方法模式包含 4 个角色（要素）：<ul>
 <li>Product：抽象产品，定义工厂方法所创建的对象的接口，也就是实际需要使用的对象的接口</li>
 <li>ConcreteProduct：具体产品，具体的Product接口的实现对象</li>
 <li>Factory：工厂接口，也可以叫 Creator(创建器)，声明工厂方法，通常返回一个 Product 类型的实例对象</li>
 <li>ConcreteFactory：工厂实现，或者叫 ConcreteCreator(创建器对象)，覆盖 Factory 定义的工厂方法，返回具体的 Product 实例</li>
-</ul></li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>{</span><br><span class="line">    A () { System.out.println(<span class="string">"new A"</span>);}</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>{</span><br><span class="line">    B () { System.out.println(<span class="string">"new B"</span>);}</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span> <span class="keyword">extends</span> <span class="title">A</span> </span>{</span><br><span class="line">    C () { System.out.println(<span class="string">"new C"</span>);}</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AbstractFactory</span> </span>{</span><br><span class="line">    <span class="function">A <span class="title">make</span><span class="params">()</span> </span>{}</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BFactory</span> <span class="keyword">extends</span> <span class="title">AbstractFactory</span> </span>{</span><br><span class="line">    <span class="meta">@override</span></span><br><span class="line">    <span class="function">A <span class="title">make</span><span class="params">()</span> </span>{ <span class="keyword">return</span> <span class="keyword">new</span> B; }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h3 id="抽象工厂模式">2.4 抽象工厂模式</h3>
-<ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> </span>{<br>    A () { System.out.println(<span class="hljs-string">"new A"</span>);}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span> </span>{<br>    B () { System.out.println(<span class="hljs-string">"new B"</span>);}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span> </span>{<br>    C () { System.out.println(<span class="hljs-string">"new C"</span>);}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AbstractFactory</span> </span>{<br>    <span class="hljs-function">A <span class="hljs-title">make</span><span class="hljs-params">()</span> </span>{}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BFactory</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractFactory</span> </span>{<br>    <span class="hljs-meta">@override</span><br>    <span class="hljs-function">A <span class="hljs-title">make</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword"><code class="language-hljs java"><span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> </span>{<br>    A () { System.out.println(<span class="hljs-string">"new A"</span>);}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span> </span>{<br>    B () { System.out.println(<span class="hljs-string">"new B"</span>);}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span> </span>{<br>    C () { System.out.println(<span class="hljs-string">"new C"</span>);}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AbstractFactory</span> </span>{<br>    <span class="hljs-function">A <span class="hljs-title">make</span><span class="hljs-params">()</span> </span>{}<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BFactory</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractFactory</span> </span>{<br>    <span class="hljs-meta">@override</span><br>    <span class="hljs-function">A <span class="hljs-title">make</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> B; }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<h3 id="2-4-抽象工厂模式"><a href="#2-4-抽象工厂模式" class="headerlink" title="2.4 抽象工厂模式"></a>2.4 抽象工厂模式</h3><ul>
 <li>可以创建多种类型的产品，抽象工厂模式通过在<strong>AbstarctFactory中增加创建产品的接口</strong>，并在具体子工厂中实现新加产品的创建，当然前提是子工厂支持生产该产品。否则继承的这个接口可以什么也不干</li>
 </ul>
-<h2 id="建造者模式">3. 建造者模式</h2>
-<h3 id="简介">3.1 简介</h3>
-<ul>
-<li><p>建造者模式使用多个简单的对象一步步构建一个复杂的对象，这种设计模式也是创建型模式，提供了一种创建对象的方式，一个Builder类会一步步构造最终的对象，并且是独立于其他对象的</p>
-<ul>
+<h2 id="3-建造者模式"><a href="#3-建造者模式" class="headerlink" title="3. 建造者模式"></a>3. 建造者模式</h2><h3 id="3-1-简介"><a href="#3-1-简介" class="headerlink" title="3.1 简介"></a>3.1 简介</h3><ul>
+<li>建造者模式使用多个简单的对象一步步构建一个复杂的对象，这种设计模式也是创建型模式，提供了一种创建对象的方式，一个Builder类会一步步构造最终的对象，并且是独立于其他对象的<ul>
 <li>这种设计模式的目的是将复杂的构造函数与其表示相分离，使得同样的构建过程可以创建不同的表示</li>
-<li>主要解决了一些基本部件不变而其组合方式进场会变化的类的创建问题
-<ul>
+<li>主要解决了一些基本部件不变而其组合方式进场会变化的类的创建问题<ul>
 <li>需要将变和不变分离开</li>
 <li>Java中的StringBuilder就是使用建造者模式设计的</li>
-</ul></li>
-</ul></li>
-<li><p>使用场景：生成的对象有复杂的内部结构，需要生成的对象的内部属性本身就互相依赖 ### 3.2 建造者模式的实例</p></li>
-<li><p>这是一个汉堡店套餐的类的设计模式，item是所有菜品的抽象，派生出了burger和drink等子类，然后meal类中有一个item的数组和若干方法，mealbuilder被用来创建不同的meal，具体的代码实现如下：</p></li>
-<li><p>基本的食物类和“包装”类 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Item</span> </span>{</span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">name</span><span class="params">()</span></span>;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> Packing <span class="title">packing</span><span class="params">()</span></span>;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">price</span><span class="params">()</span></span>;    </span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Burger</span> <span class="keyword">implements</span> <span class="title">Item</span> </span>{</span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> Packing <span class="title">packing</span><span class="params">()</span> </span>{</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Wrapper();</span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">float</span> <span class="title">price</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ColdDrink</span> <span class="keyword">implements</span> <span class="title">Item</span> </span>{</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Packing <span class="title">packing</span><span class="params">()</span> </span>{</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> Bottle();</span><br><span class="line">    }</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">float</span> <span class="title">price</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VegBurger</span> <span class="keyword">extends</span> <span class="title">Burger</span> </span>{</span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">price</span><span class="params">()</span> </span>{</span><br><span class="line">      <span class="keyword">return</span> <span class="number">25.0f</span>;</span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">name</span><span class="params">()</span> </span>{</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"Veg Burger"</span>;</span><br><span class="line">   }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Coke</span> <span class="keyword">extends</span> <span class="title">ColdDrink</span> </span>{</span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">price</span><span class="params">()</span> </span>{</span><br><span class="line">      <span class="keyword">return</span> <span class="number">30.0f</span>;</span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">name</span><span class="params">()</span> </span>{</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"Coke"</span>;</span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></table></figure> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Packing</span> </span>{</span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">pack</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Wrapper</span> <span class="keyword">implements</span> <span class="title">Packing</span> </span>{</span><br><span class="line"> </span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">pack</span><span class="params">()</span> </span>{</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"Wrapper"</span>;</span><br><span class="line">   }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Bottle</span> <span class="keyword">implements</span> <span class="title">Packing</span> </span>{</span><br><span class="line"> </span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">pack</span><span class="params">()</span> </span>{</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"Bottle"</span>;</span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p></li>
-<li><p>构建一个meal类，可以表示不同的套餐 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Meal</span> </span>{</span><br><span class="line">   <span class="keyword">private</span> List&lt;Item&gt; items = <span class="keyword">new</span> ArrayList&lt;Item&gt;();    </span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addItem</span><span class="params">(Item item)</span></span>{</span><br><span class="line">      items.add(item);</span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">getCost</span><span class="params">()</span></span>{</span><br><span class="line">      <span class="keyword">float</span> cost = <span class="number">0.0f</span>;</span><br><span class="line">      <span class="keyword">for</span> (Item item : items) {</span><br><span class="line">         cost += item.price();</span><br><span class="line">      }        </span><br><span class="line">      <span class="keyword">return</span> cost;</span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showItems</span><span class="params">()</span></span>{</span><br><span class="line">      <span class="keyword">for</span> (Item item : items) {</span><br><span class="line">         System.out.print(<span class="string">"Item : "</span>+item.name());</span><br><span class="line">         System.out.print(<span class="string">", Packing : "</span>+item.packing().pack());</span><br><span class="line">         System.out.println(<span class="string">", Price : "</span>+item.price());</span><br><span class="line">      }        </span><br><span class="line">   }    </span><br><span class="line">}</span><br></pre></td></tr></table></figure></p></li>
-<li><p>最后构建一个meal的builder，用于构造不同内容的meal <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MealBuilder</span> </span>{</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> Meal <span class="title">prepareVegMeal</span> <span class="params">()</span></span>{</span><br><span class="line">      Meal meal = <span class="keyword">new</span> Meal();</span><br><span class="line">      meal.addItem(<span class="keyword">new</span> VegBurger());</span><br><span class="line">      meal.addItem(<span class="keyword">new</span> Coke());</span><br><span class="line">      <span class="keyword">return</span> meal;</span><br><span class="line">   }   </span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> Meal <span class="title">prepareNonVegMeal</span> <span class="params">()</span></span>{</span><br><span class="line">      Meal meal = <span class="keyword">new</span> Meal();</span><br><span class="line">      meal.addItem(<span class="keyword">new</span> ChickenBurger());</span><br><span class="line">      meal.addItem(<span class="keyword">new</span> Pepsi());</span><br><span class="line">      <span class="keyword">return</span> meal;</span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p></li>
-<li><p>这种设计模式下，虽然套餐有很多种，但是组成的内容无非是若干种汉堡和饮料，而套餐的形式固定了下来，当有套餐需要添加或者删除修改的时候，<strong>只需要修改、添加builder类的构造方法</strong>就可以了。</p></li>
 </ul>
-<h2 id="原型模式">4. 原型模式</h2>
-<h3 id="简介-1">4.1 简介</h3>
-<ul>
-<li>原型模式Prototype Pattern是用于创建重复的对象，同时又能保证性能，也是创建型的设计模式，它提供了一种创建对象的方式。
-<ul>
+</li>
+</ul>
+</li>
+<li><p>使用场景：生成的对象有复杂的内部结构，需要生成的对象的内部属性本身就互相依赖</p>
+<h3 id="3-2-建造者模式的实例"><a href="#3-2-建造者模式的实例" class="headerlink" title="3.2 建造者模式的实例"></a>3.2 建造者模式的实例</h3></li>
+<li><p>这是一个汉堡店套餐的类的设计模式，item是所有菜品的抽象，派生出了burger和drink等子类，然后meal类中有一个item的数组和若干方法，mealbuilder被用来创建不同的meal，具体的代码实现如下：</p>
+</li>
+<li><p>基本的食物类和“包装”类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Item</span> </span>{<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">name</span><span class="hljs-params">()</span></span>;<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> Packing <span class="hljs-title">packing</span><span class="hljs-params">()</span></span>;<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">float</span> <span class="hljs-title">price</span><span class="hljs-params">()</span></span>;    <br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Burger</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Item</span> </span>{<br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> Packing <span class="hljs-title">packing</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Wrapper();<br>   }<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">float</span> <span class="hljs-title">price</span><span class="hljs-params">()</span></span>;<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ColdDrink</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Item</span> </span>{<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Packing <span class="hljs-title">packing</span><span class="hljs-params">()</span> </span>{<br>       <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Bottle();<br>    }<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">float</span> <span class="hljs-title">price</span><span class="hljs-params">()</span></span>;<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">VegBurger</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Burger</span> </span>{<br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">float</span> <span class="hljs-title">price</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">25.0f</span>;<br>   }<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">name</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-string">"Veg Burger"</span>;<br>   }<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Coke</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ColdDrink</span> </span>{<br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">float</span> <span class="hljs-title">price</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">30.0f</span>;<br>   }<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">name</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-string"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Item</span> </span>{<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">name</span><span class="hljs-params">()</span></span>;<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> Packing <span class="hljs-title">packing</span><span class="hljs-params">()</span></span>;<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">float</span> <span class="hljs-title">price</span><span class="hljs-params">()</span></span>;    <br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Burger</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Item</span> </span>{<br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> Packing <span class="hljs-title">packing</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Wrapper();<br>   }<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">float</span> <span class="hljs-title">price</span><span class="hljs-params">()</span></span>;<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ColdDrink</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Item</span> </span>{<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Packing <span class="hljs-title">packing</span><span class="hljs-params">()</span> </span>{<br>       <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Bottle();<br>    }<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">float</span> <span class="hljs-title">price</span><span class="hljs-params">()</span></span>;<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">VegBurger</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Burger</span> </span>{<br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">float</span> <span class="hljs-title">price</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">25.0f</span>;<br>   }<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">name</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-string">"Veg Burger"</span>;<br>   }<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Coke</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ColdDrink</span> </span>{<br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">float</span> <span class="hljs-title">price</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">30.0f</span>;<br>   }<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">name</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-string">"Coke"</span>;<br>   }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Packing</span> </span>{<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">pack</span><span class="hljs-params">()</span></span>;<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Wrapper</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Packing</span> </span>{<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">pack</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-string">"Wrapper"</span>;<br>   }<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bottle</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Packing</span> </span>{<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">pack</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-string"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Packing</span> </span>{<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">pack</span><span class="hljs-params">()</span></span>;<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Wrapper</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Packing</span> </span>{<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">pack</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-string">"Wrapper"</span>;<br>   }<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bottle</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Packing</span> </span>{<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">pack</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> <span class="hljs-string">"Bottle"</span>;<br>   }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+</li>
+<li><p>构建一个meal类，可以表示不同的套餐</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Meal</span> </span>{<br>   <span class="hljs-keyword">private</span> List&lt;Item&gt; items = <span class="hljs-keyword">new</span> ArrayList&lt;Item&gt;();    <br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">addItem</span><span class="hljs-params">(Item item)</span></span>{<br>      items.add(item);<br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">float</span> <span class="hljs-title">getCost</span><span class="hljs-params">()</span></span>{<br>      <span class="hljs-keyword">float</span> cost = <span class="hljs-number">0.0f</span>;<br>      <span class="hljs-keyword">for</span> (Item item : items) {<br>         cost += item.price();<br>      }        <br>      <span class="hljs-keyword">return</span> cost;<br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">showItems</span><span class="hljs-params">()</span></span>{<br>      <span class="hljs-keyword">for</span> (Item item : items) {<br>         System.out.print(<span class="hljs-string">"Item : "</span>+item.name());<br>         System.out.print(<span class="hljs-string">", Packing : "</span>+item.packing().pack());<br>         System.out.println(<span class="hljs-string"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Meal</span> </span>{<br>   <span class="hljs-keyword">private</span> List&lt;Item&gt; items = <span class="hljs-keyword">new</span> ArrayList&lt;Item&gt;();    <br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">addItem</span><span class="hljs-params">(Item item)</span></span>{<br>      items.add(item);<br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">float</span> <span class="hljs-title">getCost</span><span class="hljs-params">()</span></span>{<br>      <span class="hljs-keyword">float</span> cost = <span class="hljs-number">0.0f</span>;<br>      <span class="hljs-keyword">for</span> (Item item : items) {<br>         cost += item.price();<br>      }        <br>      <span class="hljs-keyword">return</span> cost;<br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">showItems</span><span class="hljs-params">()</span></span>{<br>      <span class="hljs-keyword">for</span> (Item item : items) {<br>         System.out.print(<span class="hljs-string">"Item : "</span>+item.name());<br>         System.out.print(<span class="hljs-string">", Packing : "</span>+item.packing().pack());<br>         System.out.println(<span class="hljs-string">", Price : "</span>+item.price());<br>      }        <br>   }    <br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+</li>
+<li><p>最后构建一个meal的builder，用于构造不同内容的meal</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MealBuilder</span> </span>{<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> Meal <span class="hljs-title">prepareVegMeal</span> <span class="hljs-params">()</span></span>{<br>      Meal meal = <span class="hljs-keyword">new</span> Meal();<br>      meal.addItem(<span class="hljs-keyword">new</span> VegBurger());<br>      meal.addItem(<span class="hljs-keyword">new</span> Coke());<br>      <span class="hljs-keyword">return</span> meal;<br>   }   <br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> Meal <span class="hljs-title">prepareNonVegMeal</span> <span class="hljs-params">()</span></span>{<br>      Meal meal = <span class="hljs-keyword">new</span> Meal();<br>      meal.addItem(<span class="hljs-keyword">new</span> ChickenBurger());<br>      meal.addItem(<span class="hljs-keyword">new</span> Pepsi());<br>      <span class="hljs-keyword"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MealBuilder</span> </span>{<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> Meal <span class="hljs-title">prepareVegMeal</span> <span class="hljs-params">()</span></span>{<br>      Meal meal = <span class="hljs-keyword">new</span> Meal();<br>      meal.addItem(<span class="hljs-keyword">new</span> VegBurger());<br>      meal.addItem(<span class="hljs-keyword">new</span> Coke());<br>      <span class="hljs-keyword">return</span> meal;<br>   }   <br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> Meal <span class="hljs-title">prepareNonVegMeal</span> <span class="hljs-params">()</span></span>{<br>      Meal meal = <span class="hljs-keyword">new</span> Meal();<br>      meal.addItem(<span class="hljs-keyword">new</span> ChickenBurger());<br>      meal.addItem(<span class="hljs-keyword">new</span> Pepsi());<br>      <span class="hljs-keyword">return</span> meal;<br>   }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+</li>
+<li><p>这种设计模式下，虽然套餐有很多种，但是组成的内容无非是若干种汉堡和饮料，而套餐的形式固定了下来，当有套餐需要添加或者删除修改的时候，<strong>只需要修改、添加builder类的构造方法</strong>就可以了。</p>
+</li>
+</ul>
+<h2 id="4-原型模式"><a href="#4-原型模式" class="headerlink" title="4. 原型模式"></a>4. 原型模式</h2><h3 id="4-1-简介"><a href="#4-1-简介" class="headerlink" title="4.1 简介"></a>4.1 简介</h3><ul>
+<li>原型模式Prototype Pattern是用于创建重复的对象，同时又能保证性能，也是创建型的设计模式，它提供了一种创建对象的方式。<ul>
 <li>这种模式是实现了一个<strong>原型接口</strong>，该接口用于创建<strong>当时对象的克隆</strong></li>
-</ul></li>
-<li>原型模式允许用原型实例创建指定对象的种类，并且通过拷贝这些原型创建新的对象。
-<ul>
+</ul>
+</li>
+<li>原型模式允许用原型实例创建指定对象的种类，并且通过拷贝这些原型创建新的对象。<ul>
 <li>实现原型模式的关键在于实现clone操作，使得对象变成可拷贝的</li>
 <li>原型模式同样用于隔离类对象的使用者和具体类型之间的耦合关系，同样要求这些易变类有稳定的结构</li>
-</ul></li>
-<li>原型模式使得代码的性能提高，经常用于资源优化的场景 ### 4.2 实例</li>
-<li>在实现了shape接口和三种具体类之后可以创建一个ShapeCache来保存一系列的shape <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShapeCache</span> </span>{</span><br><span class="line">    </span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> Hashtable&lt;String, Shape&gt; shapeMap </span><br><span class="line">      = <span class="keyword">new</span> Hashtable&lt;String, Shape&gt;();</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Shape <span class="title">getShape</span><span class="params">(String shapeId)</span> </span>{</span><br><span class="line">      Shape cachedShape = shapeMap.get(shapeId);</span><br><span class="line">      <span class="keyword">return</span> (Shape) cachedShape.clone();</span><br><span class="line">   }</span><br><span class="line">    </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">loadCache</span><span class="params">()</span> </span>{</span><br><span class="line">      Circle circle = <span class="keyword">new</span> Circle();</span><br><span class="line">      circle.setId(<span class="string">"1"</span>);</span><br><span class="line">      shapeMap.put(circle.getId(),circle);</span><br><span class="line">      Square square = <span class="keyword">new</span> Square();</span><br><span class="line">      square.setId(<span class="string">"2"</span>);</span><br><span class="line">      shapeMap.put(square.getId(),square);</span><br><span class="line">      Rectangle rectangle = <span class="keyword">new</span> Rectangle();</span><br><span class="line">      rectangle.setId(<span class="string">"3"</span>);</span><br><span class="line">      shapeMap.put(rectangle.getId(),rectangle);</span><br><span class="line">   }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PrototypePatternDemo</span> </span>{</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">      ShapeCache.loadCache(); <span class="comment">// 先装载各类和对应的id</span></span><br><span class="line">      Shape clonedShape = (Shape) ShapeCache.getShape(<span class="string">"1"</span>);</span><br><span class="line">      System.out.println(<span class="string">"Shape : "</span> + clonedShape.getType());        </span><br><span class="line">      Shape clonedShape2 = (Shape) ShapeCache.getShape(<span class="string">"2"</span>);</span><br><span class="line">      System.out.println(<span class="string">"Shape : "</span> + clonedShape2.getType());        </span><br><span class="line">      Shape clonedShape3 = (Shape) ShapeCache.getShape(<span class="string">"3"</span>);</span><br><span class="line">      System.out.println(<span class="string">"Shape : "</span> + clonedShape3.getType());        </span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="适配器模式">5. 适配器模式</h2>
-<h3 id="简介-2">5.1 简介</h3>
-<ul>
-<li>适配器模式是作为<strong>两个不兼容的接口之间的桥梁</strong>，这是一种结构型模式，结合了两个独立接口的功能
-<ul>
+</li>
+<li>原型模式使得代码的性能提高，经常用于资源优化的场景<h3 id="4-2-实例"><a href="#4-2-实例" class="headerlink" title="4.2 实例"></a>4.2 实例</h3></li>
+<li>在实现了shape接口和三种具体类之后可以创建一个ShapeCache来保存一系列的shape<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ShapeCache</span> </span>{<br>    <br>   <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Hashtable&lt;String, Shape&gt; shapeMap <br>      = <span class="hljs-keyword">new</span> Hashtable&lt;String, Shape&gt;();<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Shape <span class="hljs-title">getShape</span><span class="hljs-params">(String shapeId)</span> </span>{<br>      Shape cachedShape = shapeMap.get(shapeId);<br>      <span class="hljs-keyword">return</span> (Shape) cachedShape.clone();<br>   }<br>    <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">loadCache</span><span class="hljs-params">()</span> </span>{<br>      Circle circle = <span class="hljs-keyword">new</span> Circle();<br>      circle.setId(<span class="hljs-string">"1"</span>);<br>      shapeMap.put(circle.getId(),circle);<br>      Square square = <span class="hljs-keyword">new</span> Square();<br>      square.setId(<span class="hljs-string">"2"</span>);<br>      shapeMap.put(square.getId(),square);<br>      Rectangle rectangle = <span class="hljs-keyword">new</span> Rectangle();<br>      rectangle.setId(<span class="hljs-string">"3"</span>);<br>      shapeMap.put(rectangle.getId(),rectangle);<br>   }<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PrototypePatternDemo</span> </span>{<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>      ShapeCache.loadCache(); <span class="hljs-comment">// 先装载各类和对应的id</span><br>      Shape clonedShape = (Shape) ShapeCache.getShape(<span class="hljs-string">"1"</span>);<br>      System.out.println(<span class="hljs-string">"Shape : "</span> + clonedShape.getType());        <br>      Shape clonedShape2 = (Shape) ShapeCache.getShape(<span class="hljs-string">"2"</span>);<br>      System.out.println(<span class="hljs-string">"Shape : "</span> + clonedShape2.getType());        <br>      Shape clonedShape3 = (Shape) ShapeCache.getShape(<span class="hljs-string">"3"</span>);<br>      System.out.println(<span class="hljs-string"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ShapeCache</span> </span>{<br>    <br>   <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Hashtable&lt;String, Shape&gt; shapeMap <br>      = <span class="hljs-keyword">new</span> Hashtable&lt;String, Shape&gt;();<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Shape <span class="hljs-title">getShape</span><span class="hljs-params">(String shapeId)</span> </span>{<br>      Shape cachedShape = shapeMap.get(shapeId);<br>      <span class="hljs-keyword">return</span> (Shape) cachedShape.clone();<br>   }<br>    <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">loadCache</span><span class="hljs-params">()</span> </span>{<br>      Circle circle = <span class="hljs-keyword">new</span> Circle();<br>      circle.setId(<span class="hljs-string">"1"</span>);<br>      shapeMap.put(circle.getId(),circle);<br>      Square square = <span class="hljs-keyword">new</span> Square();<br>      square.setId(<span class="hljs-string">"2"</span>);<br>      shapeMap.put(square.getId(),square);<br>      Rectangle rectangle = <span class="hljs-keyword">new</span> Rectangle();<br>      rectangle.setId(<span class="hljs-string">"3"</span>);<br>      shapeMap.put(rectangle.getId(),rectangle);<br>   }<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PrototypePatternDemo</span> </span>{<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>      ShapeCache.loadCache(); <span class="hljs-comment">// 先装载各类和对应的id</span><br>      Shape clonedShape = (Shape) ShapeCache.getShape(<span class="hljs-string">"1"</span>);<br>      System.out.println(<span class="hljs-string">"Shape : "</span> + clonedShape.getType());        <br>      Shape clonedShape2 = (Shape) ShapeCache.getShape(<span class="hljs-string">"2"</span>);<br>      System.out.println(<span class="hljs-string">"Shape : "</span> + clonedShape2.getType());        <br>      Shape clonedShape3 = (Shape) ShapeCache.getShape(<span class="hljs-string">"3"</span>);<br>      System.out.println(<span class="hljs-string">"Shape : "</span> + clonedShape3.getType());        <br>   }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="5-适配器模式"><a href="#5-适配器模式" class="headerlink" title="5. 适配器模式"></a>5. 适配器模式</h2><h3 id="5-1-简介"><a href="#5-1-简介" class="headerlink" title="5.1 简介"></a>5.1 简介</h3><ul>
+<li>适配器模式是作为<strong>两个不兼容的接口之间的桥梁</strong>，这是一种结构型模式，结合了两个独立接口的功能<ul>
 <li>目的是将一个类的接口转换成客户希望的另外一个接口，适配器模式使得原来由于接口不兼容而不能工作的类可以一起工作</li>
 <li>主要的实现方式是继承或者依赖</li>
-</ul></li>
-<li>一个接口可能有多个实现方法，但是不需要继承一个接口全部的实现所有的方法，而是用一个抽象类继承接口，然后再选择性地继承和覆盖其中一些方法就可以</li>
-<li>一个很经典的例子就是Java中中的JDBC就是一个Java和数据库的适配器 ### 5.2 实例</li>
-<li>上面这个就是一个适配器模式的设计，为了使AudioPlayer可以使用advance中的功能，可以设计一个adapter类供player使用 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MediaAdapter</span> <span class="keyword">implements</span> <span class="title">MediaPlayer</span> </span>{</span><br><span class="line"> </span><br><span class="line">   AdvancedMediaPlayer advancedMusicPlayer;</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">MediaAdapter</span><span class="params">(String audioType)</span></span>{</span><br><span class="line">      <span class="keyword">if</span>(audioType.equalsIgnoreCase(<span class="string">"vlc"</span>) ){</span><br><span class="line">         advancedMusicPlayer = <span class="keyword">new</span> VlcPlayer();       </span><br><span class="line">      } <span class="keyword">else</span> <span class="keyword">if</span> (audioType.equalsIgnoreCase(<span class="string">"mp4"</span>)){</span><br><span class="line">         advancedMusicPlayer = <span class="keyword">new</span> Mp4Player();</span><br><span class="line">      }  </span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String audioType, String fileName)</span> </span>{</span><br><span class="line">      <span class="keyword">if</span>(audioType.equalsIgnoreCase(<span class="string">"vlc"</span>)){</span><br><span class="line">         advancedMusicPlayer.playVlc(fileName);</span><br><span class="line">      }<span class="keyword">else</span> <span class="keyword">if</span>(audioType.equalsIgnoreCase(<span class="string">"mp4"</span>)){</span><br><span class="line">         advancedMusicPlayer.playMp4(fileName);</span><br><span class="line">      }</span><br><span class="line">   }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AudioPlayer</span> <span class="keyword">implements</span> <span class="title">MediaPlayer</span> </span>{</span><br><span class="line">   MediaAdapter mediaAdapter; </span><br><span class="line"> </span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String audioType, String fileName)</span> </span>{    </span><br><span class="line"> </span><br><span class="line">      <span class="comment">//播放 mp3 音乐文件的内置支持</span></span><br><span class="line">      <span class="keyword">if</span>(audioType.equalsIgnoreCase(<span class="string">"mp3"</span>)){</span><br><span class="line">         System.out.println(<span class="string">"Playing mp3 file. Name: "</span>+ fileName);         </span><br><span class="line">      } </span><br><span class="line">      <span class="comment">//mediaAdapter 提供了播放其他文件格式的支持</span></span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span>(audioType.equalsIgnoreCase(<span class="string">"vlc"</span>) </span><br><span class="line">         || audioType.equalsIgnoreCase(<span class="string">"mp4"</span>)){</span><br><span class="line">         mediaAdapter = <span class="keyword">new</span> MediaAdapter(audioType);</span><br><span class="line">         mediaAdapter.play(audioType, fileName);</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">else</span>{</span><br><span class="line">         System.out.println(<span class="string">"Invalid media. "</span>+</span><br><span class="line">            audioType + <span class="string">" format not supported"</span>);</span><br><span class="line">      }</span><br><span class="line">   }   </span><br><span class="line">}</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="组合模式">6. 组合模式</h2>
-<ul>
+</li>
+<li>一个接口可能有多个实现方法，但是不需要继承一个接口全部的实现所有的方法，而是用一个抽象类继承接口，然后再选择性地继承和覆盖其中一些方法就可以</li>
+<li>一个很经典的例子就是Java中中的JDBC就是一个Java和数据库的适配器<h3 id="5-2-实例"><a href="#5-2-实例" class="headerlink" title="5.2 实例"></a>5.2 实例</h3></li>
+<li>上面这个就是一个适配器模式的设计，为了使AudioPlayer可以使用advance中的功能，可以设计一个adapter类供player使用<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MediaAdapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">MediaPlayer</span> </span>{<br> <br>   AdvancedMediaPlayer advancedMusicPlayer;<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MediaAdapter</span><span class="hljs-params">(String audioType)</span></span>{<br>      <span class="hljs-keyword">if</span>(audioType.equalsIgnoreCase(<span class="hljs-string">"vlc"</span>) ){<br>         advancedMusicPlayer = <span class="hljs-keyword">new</span> VlcPlayer();       <br>      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (audioType.equalsIgnoreCase(<span class="hljs-string">"mp4"</span>)){<br>         advancedMusicPlayer = <span class="hljs-keyword">new</span> Mp4Player();<br>      }  <br>   }<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">play</span><span class="hljs-params">(String audioType, String fileName)</span> </span>{<br>      <span class="hljs-keyword">if</span>(audioType.equalsIgnoreCase(<span class="hljs-string">"vlc"</span>)){<br>         advancedMusicPlayer.playVlc(fileName);<br>      }<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(audioType.equalsIgnoreCase(<span class="hljs-string">"mp4"</span>)){<br>         advancedMusicPlayer.playMp4(fileName);<br>      }<br>   }<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AudioPlayer</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">MediaPlayer</span> </span>{<br>   MediaAdapter mediaAdapter; <br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">play</span><span class="hljs-params">(String audioType, String fileName)</span> </span>{    <br> <br>      <span class="hljs-comment">//播放 mp3 音乐文件的内置支持</span><br>      <span class="hljs-keyword">if</span>(audioType.equalsIgnoreCase(<span class="hljs-string">"mp3"</span>)){<br>         System.out.println(<span class="hljs-string">"Playing mp3 file. Name: "</span>+ fileName);         <br>      } <br>      <span class="hljs-comment">//mediaAdapter 提供了播放其他文件格式的支持</span><br>      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(audioType.equalsIgnoreCase(<span class="hljs-string">"vlc"</span>) <br>         || audioType.equalsIgnoreCase(<span class="hljs-string">"mp4"</span>)){<br>         mediaAdapter = <span class="hljs-keyword">new</span> MediaAdapter(audioType);<br>         mediaAdapter.play(audioType, fileName);<br>      }<br>      <span class="hljs-keyword">else</span>{<br>         System.out.println(<span class="hljs-string">"Invalid media. "</span>+<br>            audioType + <span class="hljs-string"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MediaAdapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">MediaPlayer</span> </span>{<br> <br>   AdvancedMediaPlayer advancedMusicPlayer;<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MediaAdapter</span><span class="hljs-params">(String audioType)</span></span>{<br>      <span class="hljs-keyword">if</span>(audioType.equalsIgnoreCase(<span class="hljs-string">"vlc"</span>) ){<br>         advancedMusicPlayer = <span class="hljs-keyword">new</span> VlcPlayer();       <br>      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (audioType.equalsIgnoreCase(<span class="hljs-string">"mp4"</span>)){<br>         advancedMusicPlayer = <span class="hljs-keyword">new</span> Mp4Player();<br>      }  <br>   }<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">play</span><span class="hljs-params">(String audioType, String fileName)</span> </span>{<br>      <span class="hljs-keyword">if</span>(audioType.equalsIgnoreCase(<span class="hljs-string">"vlc"</span>)){<br>         advancedMusicPlayer.playVlc(fileName);<br>      }<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(audioType.equalsIgnoreCase(<span class="hljs-string">"mp4"</span>)){<br>         advancedMusicPlayer.playMp4(fileName);<br>      }<br>   }<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AudioPlayer</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">MediaPlayer</span> </span>{<br>   MediaAdapter mediaAdapter; <br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">play</span><span class="hljs-params">(String audioType, String fileName)</span> </span>{    <br> <br>      <span class="hljs-comment">//播放 mp3 音乐文件的内置支持</span><br>      <span class="hljs-keyword">if</span>(audioType.equalsIgnoreCase(<span class="hljs-string">"mp3"</span>)){<br>         System.out.println(<span class="hljs-string">"Playing mp3 file. Name: "</span>+ fileName);         <br>      } <br>      <span class="hljs-comment">//mediaAdapter 提供了播放其他文件格式的支持</span><br>      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(audioType.equalsIgnoreCase(<span class="hljs-string">"vlc"</span>) <br>         || audioType.equalsIgnoreCase(<span class="hljs-string">"mp4"</span>)){<br>         mediaAdapter = <span class="hljs-keyword">new</span> MediaAdapter(audioType);<br>         mediaAdapter.play(audioType, fileName);<br>      }<br>      <span class="hljs-keyword">else</span>{<br>         System.out.println(<span class="hljs-string">"Invalid media. "</span>+<br>            audioType + <span class="hljs-string">" format not supported"</span>);<br>      }<br>   }   <br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="6-组合模式"><a href="#6-组合模式" class="headerlink" title="6. 组合模式"></a>6. 组合模式</h2><ul>
 <li>又叫整体部分模式，其实就是类之间的组合，将一个类拆分成若干更具体的类的组合然后分别实现，按照一定的层次组合起来，这种设计模式属于结构型模式，说是模式其实是非常常用的模式。</li>
 <li>具体的就不用多说了</li>
 </ul>
-<h2 id="装饰器模式">7. 装饰器模式</h2>
-<ul>
+<h2 id="7-装饰器模式"><a href="#7-装饰器模式" class="headerlink" title="7. 装饰器模式"></a>7. 装饰器模式</h2><ul>
 <li>装饰器模式允许像一个现有的对象添加新的功能同时又不改变其原本的结构，这种设计模式是结构型模式，其实就是对现有的类进行一次包装。</li>
-<li>装饰类和被装饰类都可以独立扩展，不会相互耦合，装饰器模式比生成一个子类更为灵活。
-<ul>
-<li>具体步骤是先抽象出总的装饰器类，再继承出一个具体的装饰器 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ShapeDecorator</span> <span class="keyword">implements</span> <span class="title">Shape</span> </span>{</span><br><span class="line">   <span class="keyword">protected</span> Shape decoratedShape;</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">ShapeDecorator</span><span class="params">(Shape decoratedShape)</span></span>{</span><br><span class="line">      <span class="keyword">this</span>.decoratedShape = decoratedShape;</span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span></span>{</span><br><span class="line">      decoratedShape.draw();</span><br><span class="line">   }  </span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedShapeDecorator</span> <span class="keyword">extends</span> <span class="title">ShapeDecorator</span> </span>{</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">RedShapeDecorator</span><span class="params">(Shape decoratedShape)</span> </span>{</span><br><span class="line">      <span class="keyword">super</span>(decoratedShape);     </span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>{</span><br><span class="line">      decoratedShape.draw();         </span><br><span class="line">      setRedBorder(decoratedShape);</span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setRedBorder</span><span class="params">(Shape decoratedShape)</span></span>{</span><br><span class="line">      System.out.println(<span class="string">"Border Color: Red"</span>);</span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></li>
-</ul></li>
+<li>装饰类和被装饰类都可以独立扩展，不会相互耦合，装饰器模式比生成一个子类更为灵活。<ul>
+<li>具体步骤是先抽象出总的装饰器类，再继承出一个具体的装饰器<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ShapeDecorator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Shape</span> </span>{<br>   <span class="hljs-keyword">protected</span> Shape decoratedShape;<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ShapeDecorator</span><span class="hljs-params">(Shape decoratedShape)</span></span>{<br>      <span class="hljs-keyword">this</span>.decoratedShape = decoratedShape;<br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">draw</span><span class="hljs-params">()</span></span>{<br>      decoratedShape.draw();<br>   }  <br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedShapeDecorator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ShapeDecorator</span> </span>{<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">RedShapeDecorator</span><span class="hljs-params">(Shape decoratedShape)</span> </span>{<br>      <span class="hljs-keyword">super</span>(decoratedShape);     <br>   }<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">draw</span><span class="hljs-params">()</span> </span>{<br>      decoratedShape.draw();         <br>      setRedBorder(decoratedShape);<br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setRedBorder</span><span class="hljs-params">(Shape decoratedShape)</span></span>{<br>      System.out.println(<span class="hljs-string"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ShapeDecorator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Shape</span> </span>{<br>   <span class="hljs-keyword">protected</span> Shape decoratedShape;<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ShapeDecorator</span><span class="hljs-params">(Shape decoratedShape)</span></span>{<br>      <span class="hljs-keyword">this</span>.decoratedShape = decoratedShape;<br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">draw</span><span class="hljs-params">()</span></span>{<br>      decoratedShape.draw();<br>   }  <br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedShapeDecorator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ShapeDecorator</span> </span>{<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">RedShapeDecorator</span><span class="hljs-params">(Shape decoratedShape)</span> </span>{<br>      <span class="hljs-keyword">super</span>(decoratedShape);     <br>   }<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">draw</span><span class="hljs-params">()</span> </span>{<br>      decoratedShape.draw();         <br>      setRedBorder(decoratedShape);<br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setRedBorder</span><span class="hljs-params">(Shape decoratedShape)</span></span>{<br>      System.out.println(<span class="hljs-string">"Border Color: Red"</span>);<br>   }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+</li>
 </ul>
-<h2 id="观察者模式">8. 观察者模式</h2>
-<ul>
-<li><p>假设A对B的某个属性的变化非常敏感，当B的这个属性发生变化的时候A也需要相应地作出一些反映，这个时候就需要使用观察者模式，这里A就是观察者，B就是被观察者，当B中的属性发生变化的时候会立即通知与B关联的A对象。</p></li>
-<li><p>实现的关键在于在抽象类里面存放一系列的观察者。</p></li>
-<li><p>举例：使用三个类Subject、Observer和Client来实现观察者模式，其中Subject对象带有绑定观察者到client对象和从client对象中解绑观察者的方法，具体的代码如下：</p></li>
-<li><p>Subject类有一个状态state，同时有一系列的观察者 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Subject</span> </span>{</span><br><span class="line">   <span class="keyword">private</span> List&lt;Observer&gt; observers </span><br><span class="line">      = <span class="keyword">new</span> ArrayList&lt;Observer&gt;();</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">int</span> state;</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getState</span><span class="params">()</span> </span>{</span><br><span class="line">      <span class="keyword">return</span> state;</span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(<span class="keyword">int</span> state)</span> </span>{</span><br><span class="line">      <span class="keyword">this</span>.state = state;</span><br><span class="line">      notifyAllObservers();</span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">attach</span><span class="params">(Observer observer)</span></span>{</span><br><span class="line">      observers.add(observer);      </span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span></span>{</span><br><span class="line">      <span class="keyword">for</span> (Observer observer : observers) {</span><br><span class="line">         observer.update();</span><br><span class="line">      }</span><br><span class="line">   }  </span><br><span class="line">}</span><br></pre></td></tr></table></figure></p></li>
-<li><p>然后实现一个抽象类Observer，对Subject类进行一步封装 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Observer</span> </span>{</span><br><span class="line">   <span class="keyword">protected</span> Subject subject;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p></li>
-<li><p>然后实现具体的Observer类， <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinaryObserver</span> <span class="keyword">extends</span> <span class="title">Observer</span></span>{</span><br><span class="line"> </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">BinaryObserver</span><span class="params">(Subject subject)</span></span>{</span><br><span class="line">      <span class="keyword">this</span>.subject = subject;</span><br><span class="line">      <span class="keyword">this</span>.subject.attach(<span class="keyword">this</span>);</span><br><span class="line">   }</span><br><span class="line"> </span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span> </span>{</span><br><span class="line">      System.out.println( <span class="string">"Binary String: "</span> </span><br><span class="line">      + Integer.toBinaryString( subject.getState() ) ); </span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p></li>
+</li>
+</ul>
+<h2 id="8-观察者模式"><a href="#8-观察者模式" class="headerlink" title="8. 观察者模式"></a>8. 观察者模式</h2><ul>
+<li>假设A对B的某个属性的变化非常敏感，当B的这个属性发生变化的时候A也需要相应地作出一些反映，这个时候就需要使用观察者模式，这里A就是观察者，B就是被观察者，当B中的属性发生变化的时候会立即通知与B关联的A对象。</li>
+<li>实现的关键在于在抽象类里面存放一系列的观察者。</li>
+<li>举例：使用三个类Subject、Observer和Client来实现观察者模式，其中Subject对象带有绑定观察者到client对象和从client对象中解绑观察者的方法，具体的代码如下：</li>
+<li><p>Subject类有一个状态state，同时有一系列的观察者</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Subject</span> </span>{<br>   <span class="hljs-keyword">private</span> List&lt;Observer&gt; observers <br>      = <span class="hljs-keyword">new</span> ArrayList&lt;Observer&gt;();<br>   <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> state;<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getState</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> state;<br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setState</span><span class="hljs-params">(<span class="hljs-keyword">int</span> state)</span> </span>{<br>      <span class="hljs-keyword">this</span>.state = state;<br>      notifyAllObservers();<br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">attach</span><span class="hljs-params">(Observer observer)</span></span>{<br>      observers.add(observer);      <br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">notifyAllObservers</span><span class="hljs-params">()</span></span>{<br>      <span class="hljs-keyword"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Subject</span> </span>{<br>   <span class="hljs-keyword">private</span> List&lt;Observer&gt; observers <br>      = <span class="hljs-keyword">new</span> ArrayList&lt;Observer&gt;();<br>   <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> state;<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getState</span><span class="hljs-params">()</span> </span>{<br>      <span class="hljs-keyword">return</span> state;<br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setState</span><span class="hljs-params">(<span class="hljs-keyword">int</span> state)</span> </span>{<br>      <span class="hljs-keyword">this</span>.state = state;<br>      notifyAllObservers();<br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">attach</span><span class="hljs-params">(Observer observer)</span></span>{<br>      observers.add(observer);      <br>   }<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">notifyAllObservers</span><span class="hljs-params">()</span></span>{<br>      <span class="hljs-keyword">for</span> (Observer observer : observers) {<br>         observer.update();<br>      }<br>   }  <br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+</li>
+<li><p>然后实现一个抽象类Observer，对Subject类进行一步封装</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Observer</span> </span>{<br>   <span class="hljs-keyword">protected</span> Subject subject;<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Observer</span> </span>{<br>   <span class="hljs-keyword">protected</span> Subject subject;<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">()</span></span>;<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+</li>
+<li><p>然后实现具体的Observer类，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BinaryObserver</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Observer</span></span>{<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">BinaryObserver</span><span class="hljs-params">(Subject subject)</span></span>{<br>      <span class="hljs-keyword">this</span>.subject = subject;<br>      <span class="hljs-keyword">this</span>.subject.attach(<span class="hljs-keyword">this</span>);<br>   }<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">()</span> </span>{<br>      System.out.println( <span class="hljs-string"><code class="language-hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BinaryObserver</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Observer</span></span>{<br> <br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">BinaryObserver</span><span class="hljs-params">(Subject subject)</span></span>{<br>      <span class="hljs-keyword">this</span>.subject = subject;<br>      <span class="hljs-keyword">this</span>.subject.attach(<span class="hljs-keyword">this</span>);<br>   }<br> <br>   <span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">()</span> </span>{<br>      System.out.println( <span class="hljs-string">"Binary String: "</span> <br>      + Integer.toBinaryString( subject.getState() ) ); <br>   }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+</li>
 </ul>
 
-        </div>
-
-        
-            <div class="post-copyright-info">
-                <div class="article-copyright-info-container">
-    <ul>
-        <li>本文标题：2021春招实习-设计模式</li>
-        <li>本文作者：RandomStar</li>
-        <li>创建时间：2021-05-16 23:44:48</li>
-        <li>
-            本文链接：https://zhang-each.github.com/2021/05/16/intern2/
-        </li>
-        <li>
-            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
-        </li>
-    </ul>
-</div>
-
-            </div>
-        
-
-        
-            <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2021/05/16/intern3/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">2021春招实习-Java语法和底层原理</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/2021/05/16/intern1/"
-                        >
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">2021春招实习-MySQL知识整理</span>
-                                <span class="post-nav-item">下一篇</span>
-                            </span>
-                            <span class="right arrow-icon flex-center">
-                              <i class="fas fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-        
-            <div class="comment-container">
-                <div class="comments-container">
-    <div id="comment-anchor"></div>
-    <div class="comment-area-title">
-        <i class="fas fa-comments">&nbsp;评论</i>
-    </div>
-    
-
-        
+              </div>
             
-    <div class="valine-container">
-        <script 
-                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
-        <div id="vcomments"></div>
-        <script >
-            function loadValine() {
-                new Valine({
-                    el: '#vcomments',
-                    appId: 'b6BpXpwUq5wyUMcLtbnNMD8N-gzGzoHsz',
-                    appKey: 'Qtl7JkpdLDat2Niacks6SyT5',
-                    meta: ['nick', 'mail', 'link'],
-                    avatar: 'wavatar',
-                    enableQQ: true,
-                    placeholder: '快来发表你的看法吧！',
-                    lang: 'zh-cn'.toLowerCase()
-                });
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
 
-                function getAuthor(language) {
-                    switch (language) {
-                        case 'en':
-                            return 'Author';
-                        case 'zh-CN':
-                            return '博主';
-                        default:
-                            return 'Master';
-                    }
-                }
-
-                // Add "Author" identify
-                const getValineDomTimer = setInterval(() => {
-                    const vcards = document.querySelectorAll('#vcomments .vcards .vcard');
-                    if (vcards.length > 0) {
-                        let author = 'RandomStar';
-
-                        if (author) {
-                            for (let vcard of vcards) {
-                                const vnick_dom = vcard.querySelector('.vhead .vnick');
-                                const vnick = vnick_dom.innerHTML;
-                                if (vnick === author) {
-                                    vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
-                                }
-                            }
-                        }
-                        clearInterval(getValineDomTimer);
-                    } else {
-                        clearInterval(getValineDomTimer);
-                    }
-                }, 2000);
-            }
-
-            if ('false') {
-                const loadValineTimeout = setTimeout(() => {
-                    loadValine();
-                    clearTimeout(loadValineTimeout);
-                }, 1000);
-            } else {
-                window.addEventListener('DOMContentLoaded', loadValine);
-            }
-        </script>
-    </div>
-
-
-
-        
+<span class="category-chains">
+  
+  
     
-</div>
-
-            </div>
+      <span class="category-chain">
         
+  <a href="/categories/%E5%AE%9E%E4%B9%A0-%E5%B7%A5%E4%BD%9C/" class="category-chain-item">实习/工作</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
     </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%AE%9E%E4%B9%A0/">#实习</a>
+      
+        <a href="/tags/%E9%9D%A2%E8%AF%95/">#面试</a>
+      
+        <a href="/tags/Java/">#Java</a>
+      
+        <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">#设计模式</a>
+      
+    </div>
+  
 </div>
 
 
-                
-            </div>
+              
+  
 
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2021春招实习-设计模式</div>
+      <div>http://zhang-each.github.io/2021/05/16/intern2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Zhang-Each</div>
         </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年5月16日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
             
-              <span>2020</span>
-              -
             
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">RandomStar</a>
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
         </div>
-        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
-        </script>
-            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">399.9k</span>&nbsp;字
-            <span>
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            <span>
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
-            <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
-        
-        <div class="theme-info info-item">
-            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
-        </div>
-        
-        
+      </div>
     </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="tools-list">
-        <!-- TOC aside toggle -->
-        
-            <li class="tools-item page-aside-toggle">
-                <i class="fas fa-outdent"></i>
-            </li>
-        
-
-        <!-- go comment -->
-        
-            <li class="go-comment">
-                <i class="fas fa-comment"></i>
-            </li>
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="arrow-up fas fa-arrow-up"></i>
-                <span class="percent"></span>
-            </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-        <aside class="page-aside">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">1. 单例模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F1%E9%A5%BF%E6%B1%89%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">实现方式1：饿汉式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F2%E6%87%92%E6%B1%89%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">实现方式2：懒汉式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">2. 工厂模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 简单工厂模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 工厂方法模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.</span> <span class="nav-text">2.4 抽象工厂模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">3. 建造者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 简介</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">4. 原型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B-1"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 简介</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">5. 适配器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B-2"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 简介</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F"><span class="nav-number">6.</span> <span class="nav-text">6. 组合模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">7.</span> <span class="nav-text">7. 装饰器模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">8.</span> <span class="nav-text">8. 观察者模式</span></a></li></ol>
-    </div>
-</div>
-        </aside>
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
+    <div class="license-icon iconfont"></div>
+  </div>
 
 
-    
-        <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-          <span class="search-input-field-pre">
-            <i class="fas fa-keyboard"></i>
-          </span>
-            <div class="search-input-container">
-                <input autocomplete="off"
-                       autocorrect="off"
-                       autocapitalize="off"
-                       placeholder="搜索..."
-                       spellcheck="false"
-                       type="search"
-                       class="search-input"
-                >
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/05/16/intern3/" title="2021春招实习-Java语法和底层原理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2021春招实习-Java语法和底层原理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/05/16/intern1/" title="2021春招实习-MySQL知识整理">
+                        <span class="hidden-mobile">2021春招实习-MySQL知识整理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
             </div>
-            <span class="popup-btn-close">
-                <i class="fas fa-times"></i>
-            </span>
+
+            
+          </article>
         </div>
-        <div id="search-result">
-            <div id="no-result">
-                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
-            </div>
-        </div>
+      </div>
     </div>
-</div>
 
-    
-
-</main>
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-    
-<script src="/js/local-search.js"></script>
-
-
-
-
-    
-<script src="/js/code-copy.js"></script>
-
-
-
-
-    
-<script src="/js/lazyload.js"></script>
-
-
-
-<div class="post-scripts">
-    
-        
-<script src="/js/left-side-toggle.js"></script>
-
-<script src="/js/libs/anime.min.js"></script>
-
-<script src="/js/toc.js"></script>
-
-    
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
 
 
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+
+  </script>
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+  &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+        class="white-color">402.1k</span>&nbsp;字
+    <span>
+        |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+            class="white-color"></span>&nbsp;次
+    </span>
+    <span>
+        |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+            class="white-color"></span>&nbsp;人
+    </span>
+    <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

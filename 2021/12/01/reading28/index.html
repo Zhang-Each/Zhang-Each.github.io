@@ -1,31 +1,118 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
 <head>
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="RandomStar">
-    
-    <title>
-        
-            论文阅读笔记28：多模态BERT |
-        
-        在那不遥远的地方
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Zhang-Each">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="BERT模型是NLP领域近几年来最成功的预训练模型之一，而BERT一经提出，很多模仿BERT架构并用于其他的任务中的类BERT模型也不断涌现，这一次读的几篇文章都是多模态BERT相关的内容，分别是VisualBERT，VL-BERT和ViLBERT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文阅读笔记28：多模态BERT">
+<meta property="og:url" content="http://zhang-each.github.io/2021/12/01/reading28/index.html">
+<meta property="og:site_name" content="在那不遥远的地方">
+<meta property="og:description" content="BERT模型是NLP领域近几年来最成功的预训练模型之一，而BERT一经提出，很多模仿BERT架构并用于其他的任务中的类BERT模型也不断涌现，这一次读的几篇文章都是多模态BERT相关的内容，分别是VisualBERT，VL-BERT和ViLBERT">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zhang-each.github.io/2021/12/01/reading28/image-20211129154337899.png">
+<meta property="og:image" content="http://zhang-each.github.io/2021/12/01/reading28/image-20211129163909208.png">
+<meta property="og:image" content="http://zhang-each.github.io/2021/12/01/reading28/image-20211129170029774.png">
+<meta property="og:image" content="http://zhang-each.github.io/2021/12/01/reading28/image-20211129171052802.png">
+<meta property="og:image" content="http://zhang-each.github.io/2021/12/01/reading28/image-20211129171239350.png">
+<meta property="og:image" content="http://zhang-each.github.io/2021/12/01/reading28/image-20211129172731225.png">
+<meta property="og:image" content="http://zhang-each.github.io/2021/12/01/reading28/image-20211129172745199.png">
+<meta property="article:published_time" content="2021-12-01T09:35:47.000Z">
+<meta property="article:modified_time" content="2021-12-01T13:43:32.716Z">
+<meta property="article:author" content="Zhang-Each">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="多模态学习">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="计算机视觉">
+<meta property="article:tag" content="自然语言处理">
+<meta property="article:tag" content="表示学习">
+<meta property="article:tag" content="预训练">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://zhang-each.github.io/2021/12/01/reading28/image-20211129154337899.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>论文阅读笔记28：多模态BERT - 在那不遥远的地方</title>
 
-    <link rel="shortcut icon" href="/images/logo.svg">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"zhang-each.github.io","root":"/","language":"zh-cn","path":"search.xml"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的回音。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
-    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhang-each.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
 <meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
@@ -143,242 +230,215 @@ mjx-container[display="true"] + br {
 
 
 <body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress-bar-container">
-    
-        <span class="scroll-progress-bar"></span>
-    
+  
 
-    
-</div>
-
-
-<main class="page-container">
-
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
     
 
-    <div class="page-main-content">
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>在那不遥远的地方</strong>
+    </a>
 
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                在那不遥远的地方
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/"
-                            >
-                                主页
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                归档
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/categories"
-                            >
-                                分类
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/tags"
-                            >
-                                标签
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/about"
-                            >
-                                关于
-                            </a>
-                        </li>
-                    
-                    
-                        <li class="menu-item search search-popup-trigger">
-                            <i class="fas fa-search"></i>
-                        </li>
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
+  </div>
+</nav>
 
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/">主页</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">归档</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/categories">分类</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/tags">标签</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/about">关于</a>
-                </li>
-            
-        </ul>
-    </div>
+  
 
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="fade-in-down-animation">
-    <div class="article-content-container">
-
-        <div class="article-title">
-            <span class="title-hover-animation">论文阅读笔记28：多模态BERT</span>
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="论文阅读笔记28：多模态BERT"></span>
+          
         </div>
 
         
-            <div class="article-header">
-                <div class="avatar">
-                    <img src="/images/skadi.png">
-                </div>
-                <div class="info">
-                    <div class="author">
-                        <span class="name">RandomStar</span>
-                        
-                            <span class="author-label">Lv6</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;2021-12-01 17:35:47
-    </span>
+          
+  <div class="mt-3">
     
-        <span class="article-categories article-meta-item">
-            <i class="fas fa-folder"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Zhang-Each
+      </span>
     
     
-        <span class="article-tags article-meta-item">
-            <i class="fas fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">计算机视觉</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E8%A1%A8%E7%A4%BA%E5%AD%A6%E4%B9%A0/">表示学习</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/">预训练</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E5%A4%9A%E6%A8%A1%E6%80%81%E5%AD%A6%E4%B9%A0/">多模态学习</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-12-01 17:35" pubdate>
+          2021年12月1日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 分钟
+        
+      </span>
     
 
     
     
-        <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>2.9k 字</span>
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
         </span>
+        
+      
     
-    
-        <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>10 分钟</span>
-        </span>
-    
-    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
 </div>
 
-                    </div>
-                </div>
-            </div>
-        
+</div>
 
-        <div class="article-content markdown-body">
-            <blockquote>
-<p>BERT模型是NLP领域近几年来最成功的预训练模型之一，而BERT一经提出，很多模仿BERT架构并用于其他的任务中的类BERT模型也不断涌现，这一次读的几篇文章都是多模态BERT相关的内容，分别是<a class="link" target="_blank" rel="noopener" href="https://arxiv.org/pdf/1908.03557.pdf">VisualBERT<i class="fas fa-external-link-alt"></i></a>，<a class="link" target="_blank" rel="noopener" href="https://arxiv.org/pdf/1908.08530.pdf">VL-BERT<i class="fas fa-external-link-alt"></i></a>和<a class="link" target="_blank" rel="noopener" href="https://arxiv.org/pdf/1908.02265.pdf">ViLBERT<i class="fas fa-external-link-alt"></i></a></p>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">论文阅读笔记28：多模态BERT</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>BERT模型是NLP领域近几年来最成功的预训练模型之一，而BERT一经提出，很多模仿BERT架构并用于其他的任务中的类BERT模型也不断涌现，这一次读的几篇文章都是多模态BERT相关的内容，分别是<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1908.03557.pdf">VisualBERT</a>，<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1908.08530.pdf">VL-BERT</a>和<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1908.02265.pdf">ViLBERT</a></p>
 </blockquote>
 <span id="more"></span>
 <!-- excerpt -->
 <!-- toc -->
-<h2 id="introduction多模态bert">Introduction：多模态BERT</h2>
-<p>BERT预训练模型在NLP领域的成功已经不需要我再多说了，它的成功引来了深度学习的其他领域比如CV的争相效仿，各种各样不同却又相同的类BERT模型不断涌现出来，说它们不同是因为这些BERT模型在细节上各有区别，分别对应不同的使用场景做了不同的挑调整和优化，而说它们相同是因为它们都遵循了预训练+微调的范式，通过在海量的数据集上进行预训练，来完成下游任务。今天的重点在于多模态的BERT模型，这一系列模型都是BERT在多模态任务上的应用。</p>
-<h3 id="关于多模态任务">关于多模态任务</h3>
-<p>所谓的多模态任务，常见的有图片标准Image Captioning，可视问答VQA，图片-文本检索和可视常识推理等等，多模态的任务往往需要将给定的图片和文本信息结合起来，找到它们的内在联系，这也是多模态任务的最大特征，即数据集中的图片和文本信息往往是成对的，并且图像和文本之间存在着一定的语义关联性，而多模态机器学习的最重要任务就是挖掘出成对的图像和文本信息之间隐藏的关联性。</p>
-<h3 id="关于预训练模型">关于预训练模型</h3>
-<p>预训练模型的通用范式有两种，一种是基于特征的，即<strong>将从预训练好的模型中得到的特征</strong>作为额外的特征输入，而另一种是基于微调的，即在训练好的模型的基础上<strong>增加与下游任务相关的一些神经网络层</strong>，并且在下游任务的数据集上进行训练，这个过程就称为微调。而BERT系列的预训练模型都是基于微调的，我们需要在海量数据集上进行预训练，并将训练好的模型迁移到特定的下游任务中进行微调。</p>
+<h2 id="Introduction：多模态BERT"><a href="#Introduction：多模态BERT" class="headerlink" title="Introduction：多模态BERT"></a>Introduction：多模态BERT</h2><p>BERT预训练模型在NLP领域的成功已经不需要我再多说了，它的成功引来了深度学习的其他领域比如CV的争相效仿，各种各样不同却又相同的类BERT模型不断涌现出来，说它们不同是因为这些BERT模型在细节上各有区别，分别对应不同的使用场景做了不同的挑调整和优化，而说它们相同是因为它们都遵循了预训练+微调的范式，通过在海量的数据集上进行预训练，来完成下游任务。今天的重点在于多模态的BERT模型，这一系列模型都是BERT在多模态任务上的应用。</p>
+<h3 id="关于多模态任务"><a href="#关于多模态任务" class="headerlink" title="关于多模态任务"></a>关于多模态任务</h3><p>所谓的多模态任务，常见的有图片标准Image Captioning，可视问答VQA，图片-文本检索和可视常识推理等等，多模态的任务往往需要将给定的图片和文本信息结合起来，找到它们的内在联系，这也是多模态任务的最大特征，即数据集中的图片和文本信息往往是成对的，并且图像和文本之间存在着一定的语义关联性，而多模态机器学习的最重要任务就是挖掘出成对的图像和文本信息之间隐藏的关联性。</p>
+<h3 id="关于预训练模型"><a href="#关于预训练模型" class="headerlink" title="关于预训练模型"></a>关于预训练模型</h3><p>预训练模型的通用范式有两种，一种是基于特征的，即<strong>将从预训练好的模型中得到的特征</strong>作为额外的特征输入，而另一种是基于微调的，即在训练好的模型的基础上<strong>增加与下游任务相关的一些神经网络层</strong>，并且在下游任务的数据集上进行训练，这个过程就称为微调。而BERT系列的预训练模型都是基于微调的，我们需要在海量数据集上进行预训练，并将训练好的模型迁移到特定的下游任务中进行微调。</p>
 <p>对于微调型的预训练模型而言，最重要的几个组成部分是：</p>
 <ul>
 <li>模型的架构：比如BERT使用的是深层的双向Transformer</li>
@@ -386,87 +446,54 @@ mjx-container[display="true"] + br {
 <li>下游任务和对应的微调模型：这个就太多了，BERT针对不同的下游任务提出了不同的微调模型</li>
 </ul>
 <p>我们研究多模态的预训练模型也可以从这三个角度入手。</p>
-<h3 id="关于多模态bert的架构">关于多模态BERT的架构</h3>
-<p>多模态BERT模型的一般情况下可以分成两类：单流模型和双流模型，所谓的单流模型就是对文本特征和图像特征<strong>用同一个深层的双向Transformer进行编码</strong>，而双流模型则是图像和文本分开编码，然后用共同注意力机制进行特征的融合，下面提到的三个模型中，VisualBERT和VL-BERT都是单流模型，而ViLBERT则是双流模型。</p>
+<h3 id="关于多模态BERT的架构"><a href="#关于多模态BERT的架构" class="headerlink" title="关于多模态BERT的架构"></a>关于多模态BERT的架构</h3><p>多模态BERT模型的一般情况下可以分成两类：单流模型和双流模型，所谓的单流模型就是对文本特征和图像特征<strong>用同一个深层的双向Transformer进行编码</strong>，而双流模型则是图像和文本分开编码，然后用共同注意力机制进行特征的融合，下面提到的三个模型中，VisualBERT和VL-BERT都是单流模型，而ViLBERT则是双流模型。</p>
 <p>下面我们来分别介绍三个不同的多模态BERT，我们将重点放在它们各自的模型架构，预训练任务和下游任务上。</p>
-<h2 id="visualbert">VisualBERT</h2>
-<p>首先是第一篇VisualBERT，这个模型在ICLR2019的论文《VISUALBERT: A SIMPLE AND PERFORMANT BASELINE FOR VISION AND LANGUAGE》中被提出，它的模型结构如下图所示：</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20211129154337899.png" alt="image-20211129154337899"><figcaption aria-hidden="true">image-20211129154337899</figcaption>
-</figure>
-<h3 id="模型架构">模型架构</h3>
-<p>很明显这是一种单流模型，将文本和图像特征放在一个Transformer中进行编码，而对于文本编码，它采用的是和BERT一样的子词(subword)token化操作(实际上就是WordPiece)而图像特征则是先通过R-CNN等检测模型先提取出图像中的重要部分，然后再用这些部分输入模型。</p>
+<h2 id="VisualBERT"><a href="#VisualBERT" class="headerlink" title="VisualBERT"></a>VisualBERT</h2><p>首先是第一篇VisualBERT，这个模型在ICLR2019的论文《VISUALBERT: A SIMPLE AND PERFORMANT BASELINE FOR VISION AND LANGUAGE》中被提出，它的模型结构如下图所示：</p>
+<p><img src="image-20211129154337899.png" srcset="/img/loading.gif" lazyload alt="image-20211129154337899"></p>
+<h3 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h3><p>很明显这是一种单流模型，将文本和图像特征放在一个Transformer中进行编码，而对于文本编码，它采用的是和BERT一样的子词(subword)token化操作(实际上就是WordPiece)而图像特征则是先通过R-CNN等检测模型先提取出图像中的重要部分，然后再用这些部分输入模型。</p>
 <p>每个输入的token都包括三个部分的embedding相加，分别是位置编码，段编码和token本身的编码，对于文本来说token本身的编码是文本表示，而对于图像小块来说，自身的特征编码通过预训练好的CNN进行提取。</p>
 <p>同时输入的token中还有几个特殊的token包括<code>[CLS], [MASK], [SEP]</code>等等，它们的作用和BERT中的对应token基本一致。</p>
-<h3 id="预训练任务和数据集">预训练任务和数据集</h3>
-<p>VisualBERT中的预训练任务有两个，分别是：</p>
+<h3 id="预训练任务和数据集"><a href="#预训练任务和数据集" class="headerlink" title="预训练任务和数据集"></a>预训练任务和数据集</h3><p>VisualBERT中的预训练任务有两个，分别是：</p>
 <ul>
 <li>带有图片的掩码语言模型：在预训练阶段，一些输入的token会被处理成掩码，并且需要在训练的过程中来预测出被掩盖的MASK位置究竟对应了哪个单词，同时相对应的图片特征是不掩盖的，相当于模型要在预训练任务中，根据上下文和图像特征来共同预测某个位置被掩盖的token</li>
 <li>句子-图像预测：输入一个句子和一个图像，来判断二者是不是匹配的，通过处理输入数据，让错误的匹配和正确的匹配以1:1的比例输入(这种预训练方式主要是利用了图像的Captioning是图像的描述这一特点)</li>
 </ul>
 <p>同时VisualBERT的预训练分成两个阶段，一个阶段是在COCO数据集上进行任务无关的预训练，另一个阶段是在指定的任务数据集上进行同样任务的预训练，这样做的目的是为了让模型能够适应指定领域的任务。预训练过程中使用的数据集是COCO</p>
-<h3 id="下游任务">下游任务</h3>
-<p>VisualBERT的下游任务包括VQA/VCR和NLVR，其中NLVR任务是在给定句子和图像的情况下，判断一个句子是不是和这个图像对应。</p>
+<h3 id="下游任务"><a href="#下游任务" class="headerlink" title="下游任务"></a>下游任务</h3><p>VisualBERT的下游任务包括VQA/VCR和NLVR，其中NLVR任务是在给定句子和图像的情况下，判断一个句子是不是和这个图像对应。</p>
 <ul>
 <li>这篇论文的下游任务感觉写的可读性较差，所以我就不太想看了</li>
 </ul>
-<h2 id="vl-bert">VL-BERT</h2>
-<p>第二篇文章VL-BERT是ICLR2020上的论文《VL-BERT: PRE-TRAINING OF GENERIC VISUALLINGUISTIC REPRESENTATIONS》上提出的，这篇论文中提出了一种<strong>混合预训练的预训练方式</strong>，并且提供了一种改进的多模态模型架构。</p>
-<h3 id="模型架构-1">模型架构</h3>
-<p>Vl-BERT的模型架构如下图所示：</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20211129163909208.png" alt="image-20211129163909208"><figcaption aria-hidden="true">image-20211129163909208</figcaption>
-</figure>
+<h2 id="VL-BERT"><a href="#VL-BERT" class="headerlink" title="VL-BERT"></a>VL-BERT</h2><p>第二篇文章VL-BERT是ICLR2020上的论文《VL-BERT: PRE-TRAINING OF GENERIC VISUALLINGUISTIC REPRESENTATIONS》上提出的，这篇论文中提出了一种<strong>混合预训练的预训练方式</strong>，并且提供了一种改进的多模态模型架构。</p>
+<h3 id="模型架构-1"><a href="#模型架构-1" class="headerlink" title="模型架构"></a>模型架构</h3><p>Vl-BERT的模型架构如下图所示：</p>
+<p><img src="image-20211129163909208.png" srcset="/img/loading.gif" lazyload alt="image-20211129163909208"></p>
 <p>它的亮点在于对文本和图像模态的信息进行了更好的融合，对每一个输入的token都采取了token编码，可视编码，段编码和位置编码相加的方式，对于文本来说，文本中的每个token都要加上一个整张图片的特征编码，而对于抽取的图片块来说，可视编码就是这一小块自身的编码，而token编码就是一个专门的<code>[IMG]</code>标签。</p>
 <p>同时在R-CNN提取关键特征的步骤中，VL-BERT采用了先对图片进行掩码操作的方式。</p>
-<h3 id="预训练任务和数据集-1">预训练任务和数据集</h3>
-<p>VL-BERT采用了两种预训练任务，分别是经典的掩码语言模型和掩码ROI分类，其中掩码语言模型是结合图像特征的，而掩码ROI分类则是结合了文本特征。</p>
+<h3 id="预训练任务和数据集-1"><a href="#预训练任务和数据集-1" class="headerlink" title="预训练任务和数据集"></a>预训练任务和数据集</h3><p>VL-BERT采用了两种预训练任务，分别是经典的掩码语言模型和掩码ROI分类，其中掩码语言模型是结合图像特征的，而掩码ROI分类则是结合了文本特征。</p>
 <p>ROI是指Region Of Interest，即感兴趣区域，是R-CNN提取特征过程中圈定的重点区域，论文中的处理办法是，对于图像中的每个ROI，以一定的概率对其进行掩码操作并输入到模型中，而预训练时候的任务就是来预测被掩盖的这一块区域的所属分类。通过这种方式加强模型对图像信息的理解能力。</p>
 <p>同时论文还提出，在多模态模型中进行纯文本的预训练，这是因为多模态的预训练数据可以让模型建立对文本和图像的匹配能力，但是这类文本往往比较短，所以<strong>模型对句子的理解能力还是不够，通过纯文本的预训练可以让模型对长难句的理解更加到位</strong>。</p>
 <p>VL-BERT在预训练过程中使用的数据集是Conceptual Captions，它提供了大量有caption的图片。</p>
-<h3 id="下游任务-1">下游任务</h3>
-<p>Vl-BERT的下游任务包括VCR/VQA和Referring Expression Comprehension，第三个任务是指给定一个指向图像中某个目标的短语，让模型标注出所指对象的位置。</p>
+<h3 id="下游任务-1"><a href="#下游任务-1" class="headerlink" title="下游任务"></a>下游任务</h3><p>Vl-BERT的下游任务包括VCR/VQA和Referring Expression Comprehension，第三个任务是指给定一个指向图像中某个目标的短语，让模型标注出所指对象的位置。</p>
 <p>VL-BERT对三种不同的下游任务分别给出了不同的微调模型，其输入输出形式分别如下图所示：</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20211129170029774.png" alt="image-20211129170029774"><figcaption aria-hidden="true">image-20211129170029774</figcaption>
-</figure>
-<h2 id="vilbert">ViLBERT</h2>
-<p>ViLBERT是一个双流的多模态BERT模型，它和之间的模型的区别在于，ViLBERT使用了两个Transformer分别对图像和文本特征进行了编码，然后使用了共同注意力机制进行多模态信息的聚合。</p>
-<h3 id="模型架构-2">模型架构</h3>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20211129171052802.png" alt="image-20211129171052802"><figcaption aria-hidden="true">image-20211129171052802</figcaption>
-</figure>
+<p><img src="image-20211129170029774.png" srcset="/img/loading.gif" lazyload alt="image-20211129170029774"></p>
+<h2 id="ViLBERT"><a href="#ViLBERT" class="headerlink" title="ViLBERT"></a>ViLBERT</h2><p>ViLBERT是一个双流的多模态BERT模型，它和之间的模型的区别在于，ViLBERT使用了两个Transformer分别对图像和文本特征进行了编码，然后使用了共同注意力机制进行多模态信息的聚合。</p>
+<h3 id="模型架构-2"><a href="#模型架构-2" class="headerlink" title="模型架构"></a>模型架构</h3><p><img src="image-20211129171052802.png" srcset="/img/loading.gif" lazyload alt="image-20211129171052802"></p>
 <p>共同注意力机制可以用下图来表示：</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20211129171239350.png" alt="image-20211129171239350"><figcaption aria-hidden="true">image-20211129171239350</figcaption>
-</figure>
+<p><img src="image-20211129171239350.png" srcset="/img/loading.gif" lazyload alt="image-20211129171239350"></p>
 <p>共同注意力机制和普通的多头自注意力机制的区别在于，共同注意力机制交换了不同模态的K和V，即用文本特征的Q来对图像的K和V做注意力计算，然后通过FFN层再加上原本的文本特征，来达到多模态的信息融合的目的。</p>
-<h3 id="预训练任务和数据集-2">预训练任务和数据集</h3>
-<p>ViLBERT的预训练任务比较神奇，它的预训练任务有两个，分别是：</p>
+<h3 id="预训练任务和数据集-2"><a href="#预训练任务和数据集-2" class="headerlink" title="预训练任务和数据集"></a>预训练任务和数据集</h3><p>ViLBERT的预训练任务比较神奇，它的预训练任务有两个，分别是：</p>
 <ul>
 <li>掩码多模态学习：利用多模态的信息重新构建被掩盖的图像/单词</li>
 <li>多模态对齐预测：预测一对图像和文本是不是同一个东西，类似于Captioning</li>
 </ul>
 <p>同时ViL-BERT使用的数据集也是Conceptual Captions</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20211129172731225.png" alt="image-20211129172731225"><figcaption aria-hidden="true">image-20211129172731225</figcaption>
-</figure>
-<h3 id="下游任务-2">下游任务</h3>
-<p>ViL-BERT的下游任务包括VQA，Ground Referring Expression和基于Caption的图像检索</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20211129172745199.png" alt="image-20211129172745199"><figcaption aria-hidden="true">image-20211129172745199</figcaption>
-</figure>
-<h2 id="总结">总结</h2>
-<p>VisualBERT这篇文章看起来还是比较粗糙的，很多设计上都基本照搬了BERT，只不过把数据集改成了多模态的，并且把图像引入到了模型的架构中。而后面两片VL-BERT和ViLBERT逐渐提出了更复杂的预训练任务/模型架构和下游任务。在另一篇论文Unicoder-VL中，有对这几个模型的如下评价：</p>
+<p><img src="image-20211129172731225.png" srcset="/img/loading.gif" lazyload alt="image-20211129172731225"></p>
+<h3 id="下游任务-2"><a href="#下游任务-2" class="headerlink" title="下游任务"></a>下游任务</h3><p>ViL-BERT的下游任务包括VQA，Ground Referring Expression和基于Caption的图像检索</p>
+<p><img src="image-20211129172745199.png" srcset="/img/loading.gif" lazyload alt="image-20211129172745199"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>VisualBERT这篇文章看起来还是比较粗糙的，很多设计上都基本照搬了BERT，只不过把数据集改成了多模态的，并且把图像引入到了模型的架构中。而后面两片VL-BERT和ViLBERT逐渐提出了更复杂的预训练任务/模型架构和下游任务。在另一篇论文Unicoder-VL中，有对这几个模型的如下评价：</p>
+<div class="table-container">
 <table>
-<colgroup>
-<col style="width: 6%">
-<col style="width: 33%">
-<col style="width: 38%">
-<col style="width: 21%">
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>区别</th>
 <th>VisualBERT</th>
 <th>VL-BERT</th>
@@ -474,19 +501,19 @@ mjx-container[display="true"] + br {
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>模型架构</td>
 <td>单流模型</td>
 <td>单流模型</td>
 <td>双流模型</td>
 </tr>
-<tr class="even">
+<tr>
 <td>预训练任务</td>
 <td>都使用了掩码语言模型，VisualBERT没有使用目标预测任务</td>
 <td>对输入图片预先进行了掩码处理，但是没有使用跨模态匹配任务，因为论文任务这个任务是无效的</td>
 <td>没有啥特别的地方</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>数据集</td>
 <td>在MSCOCO数据集上进行预训练</td>
 <td>在Conceptual Captions上进行预训练</td>
@@ -494,351 +521,395 @@ mjx-container[display="true"] + br {
 </tr>
 </tbody>
 </table>
+</div>
 <p>总的来说这些多模态BERT虽然看起来很nb，但好像仍然处于多模态表示学习的初级阶段。我之前一直想用多模态BERT做一些下游任务，但是现在看来理想和现实还有有比较大的GAP，也不知道事情究竟能不能成。多模态BERT在<code>transformers</code>这个库里有的也不多，只看到了一个VisualBERT</p>
 
-        </div>
-
-        
-            <div class="post-copyright-info">
-                <div class="article-copyright-info-container">
-    <ul>
-        <li>本文标题：论文阅读笔记28：多模态BERT</li>
-        <li>本文作者：RandomStar</li>
-        <li>创建时间：2021-12-01 17:35:47</li>
-        <li>
-            本文链接：https://zhang-each.github.com/2021/12/01/reading28/
-        </li>
-        <li>
-            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
-        </li>
-    </ul>
-</div>
-
-            </div>
-        
-
-        
-            <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2021/12/01/cmudbs4/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">CMU15-445数据库系统4：查询优化</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/2021/11/28/cmudbs3/"
-                        >
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">CMU15-445数据库系统3：查询处理</span>
-                                <span class="post-nav-item">下一篇</span>
-                            </span>
-                            <span class="right arrow-icon flex-center">
-                              <i class="fas fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-        
-            <div class="comment-container">
-                <div class="comments-container">
-    <div id="comment-anchor"></div>
-    <div class="comment-area-title">
-        <i class="fas fa-comments">&nbsp;评论</i>
-    </div>
-    
-
-        
+              </div>
             
-    <div class="valine-container">
-        <script 
-                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
-        <div id="vcomments"></div>
-        <script >
-            function loadValine() {
-                new Valine({
-                    el: '#vcomments',
-                    appId: 'b6BpXpwUq5wyUMcLtbnNMD8N-gzGzoHsz',
-                    appKey: 'Qtl7JkpdLDat2Niacks6SyT5',
-                    meta: ['nick', 'mail', 'link'],
-                    avatar: 'wavatar',
-                    enableQQ: true,
-                    placeholder: '快来发表你的看法吧！',
-                    lang: 'zh-cn'.toLowerCase()
-                });
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
 
-                function getAuthor(language) {
-                    switch (language) {
-                        case 'en':
-                            return 'Author';
-                        case 'zh-CN':
-                            return '博主';
-                        default:
-                            return 'Master';
-                    }
-                }
-
-                // Add "Author" identify
-                const getValineDomTimer = setInterval(() => {
-                    const vcards = document.querySelectorAll('#vcomments .vcards .vcard');
-                    if (vcards.length > 0) {
-                        let author = 'RandomStar';
-
-                        if (author) {
-                            for (let vcard of vcards) {
-                                const vnick_dom = vcard.querySelector('.vhead .vnick');
-                                const vnick = vnick_dom.innerHTML;
-                                if (vnick === author) {
-                                    vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
-                                }
-                            }
-                        }
-                        clearInterval(getValineDomTimer);
-                    } else {
-                        clearInterval(getValineDomTimer);
-                    }
-                }, 2000);
-            }
-
-            if ('false') {
-                const loadValineTimeout = setTimeout(() => {
-                    loadValine();
-                    clearTimeout(loadValineTimeout);
-                }, 1000);
-            } else {
-                window.addEventListener('DOMContentLoaded', loadValine);
-            }
-        </script>
-    </div>
-
-
-
-        
+<span class="category-chains">
+  
+  
     
-</div>
-
-            </div>
+      <span class="category-chain">
         
+  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="category-chain-item">论文阅读</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
     </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">#人工智能</a>
+      
+        <a href="/tags/%E5%A4%9A%E6%A8%A1%E6%80%81%E5%AD%A6%E4%B9%A0/">#多模态学习</a>
+      
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+      
+        <a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">#自然语言处理</a>
+      
+        <a href="/tags/%E8%A1%A8%E7%A4%BA%E5%AD%A6%E4%B9%A0/">#表示学习</a>
+      
+        <a href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/">#预训练</a>
+      
+    </div>
+  
 </div>
 
 
-                
-            </div>
+              
+  
 
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>论文阅读笔记28：多模态BERT</div>
+      <div>http://zhang-each.github.io/2021/12/01/reading28/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Zhang-Each</div>
         </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年12月1日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
             
-              <span>2020</span>
-              -
             
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">RandomStar</a>
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
         </div>
-        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
-        </script>
-            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">399.9k</span>&nbsp;字
-            <span>
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            <span>
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
-            <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
-        
-        <div class="theme-info info-item">
-            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
-        </div>
-        
-        
+      </div>
     </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="tools-list">
-        <!-- TOC aside toggle -->
-        
-            <li class="tools-item page-aside-toggle">
-                <i class="fas fa-outdent"></i>
-            </li>
-        
-
-        <!-- go comment -->
-        
-            <li class="go-comment">
-                <i class="fas fa-comment"></i>
-            </li>
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="arrow-up fas fa-arrow-up"></i>
-                <span class="percent"></span>
-            </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-        <aside class="page-aside">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#introduction%E5%A4%9A%E6%A8%A1%E6%80%81bert"><span class="nav-number">1.</span> <span class="nav-text">Introduction：多模态BERT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%A4%9A%E6%A8%A1%E6%80%81%E4%BB%BB%E5%8A%A1"><span class="nav-number">1.1.</span> <span class="nav-text">关于多模态任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">关于预训练模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%A4%9A%E6%A8%A1%E6%80%81bert%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.</span> <span class="nav-text">关于多模态BERT的架构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#visualbert"><span class="nav-number">2.</span> <span class="nav-text">VisualBERT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">模型架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">2.2.</span> <span class="nav-text">预训练任务和数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1"><span class="nav-number">2.3.</span> <span class="nav-text">下游任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vl-bert"><span class="nav-number">3.</span> <span class="nav-text">VL-BERT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84-1"><span class="nav-number">3.1.</span> <span class="nav-text">模型架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9B%86-1"><span class="nav-number">3.2.</span> <span class="nav-text">预训练任务和数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1-1"><span class="nav-number">3.3.</span> <span class="nav-text">下游任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vilbert"><span class="nav-number">4.</span> <span class="nav-text">ViLBERT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84-2"><span class="nav-number">4.1.</span> <span class="nav-text">模型架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9B%86-2"><span class="nav-number">4.2.</span> <span class="nav-text">预训练任务和数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1-2"><span class="nav-number">4.3.</span> <span class="nav-text">下游任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol>
-    </div>
-</div>
-        </aside>
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
+    <div class="license-icon iconfont"></div>
+  </div>
 
 
-    
-        <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-          <span class="search-input-field-pre">
-            <i class="fas fa-keyboard"></i>
-          </span>
-            <div class="search-input-container">
-                <input autocomplete="off"
-                       autocorrect="off"
-                       autocapitalize="off"
-                       placeholder="搜索..."
-                       spellcheck="false"
-                       type="search"
-                       class="search-input"
-                >
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/12/01/cmudbs4/" title="CMU15-445数据库系统4：查询优化">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CMU15-445数据库系统4：查询优化</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/11/28/cmudbs3/" title="CMU15-445数据库系统3：查询处理">
+                        <span class="hidden-mobile">CMU15-445数据库系统3：查询处理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
             </div>
-            <span class="popup-btn-close">
-                <i class="fas fa-times"></i>
-            </span>
+
+            
+          </article>
         </div>
-        <div id="search-result">
-            <div id="no-result">
-                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
-            </div>
-        </div>
+      </div>
     </div>
-</div>
 
-    
-
-</main>
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-    
-<script src="/js/local-search.js"></script>
-
-
-
-
-    
-<script src="/js/code-copy.js"></script>
-
-
-
-
-    
-<script src="/js/lazyload.js"></script>
-
-
-
-<div class="post-scripts">
-    
-        
-<script src="/js/left-side-toggle.js"></script>
-
-<script src="/js/libs/anime.min.js"></script>
-
-<script src="/js/toc.js"></script>
-
-    
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
 
 
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+
+  </script>
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+  &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+        class="white-color">402.1k</span>&nbsp;字
+    <span>
+        |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+            class="white-color"></span>&nbsp;次
+    </span>
+    <span>
+        |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+            class="white-color"></span>&nbsp;人
+    </span>
+    <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>

@@ -1,31 +1,109 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
 <head>
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="Hexo Theme Keep">
-    <meta name="description" content="Hexo Theme Keep">
-    <meta name="author" content="RandomStar">
-    
-    <title>
-        
-            Stanford-CS144-计算机网络Lab0：可信字节流 |
-        
-        在那不遥远的地方
-    </title>
-    
-<link rel="stylesheet" href="/css/style.css">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Zhang-Each">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="开了新坑CS144计算机网络课程，这门课的授课内容是根据《计算机网络自顶向下方法》来的，但是听说授课质量比较一般，我也没具体看过Lecture，这门课价值最大的地方在于它的Project, 一共包含8个lab, 可以实现一套自己的简易TCP&#x2F;IP协议栈，使用C++完成。因为我本科期间计网这门课学的不是很好，所以打算再做一做CS144的lab补一补，希望能坚持做完这些lab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Stanford-CS144-计算机网络Lab0：可信字节流">
+<meta property="og:url" content="http://zhang-each.github.io/2021/12/26/sponge0/index.html">
+<meta property="og:site_name" content="在那不遥远的地方">
+<meta property="og:description" content="开了新坑CS144计算机网络课程，这门课的授课内容是根据《计算机网络自顶向下方法》来的，但是听说授课质量比较一般，我也没具体看过Lecture，这门课价值最大的地方在于它的Project, 一共包含8个lab, 可以实现一套自己的简易TCP&#x2F;IP协议栈，使用C++完成。因为我本科期间计网这门课学的不是很好，所以打算再做一做CS144的lab补一补，希望能坚持做完这些lab">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zhang-each.github.io/2021/12/26/sponge0/image-20211225232917632.png">
+<meta property="article:published_time" content="2021-12-26T06:58:30.000Z">
+<meta property="article:modified_time" content="2022-01-15T10:40:26.883Z">
+<meta property="article:author" content="Zhang-Each">
+<meta property="article:tag" content="计算机系统">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="TCP&#x2F;IP">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://zhang-each.github.io/2021/12/26/sponge0/image-20211225232917632.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Stanford-CS144-计算机网络Lab0：可信字节流 - 在那不遥远的地方</title>
 
-    <link rel="shortcut icon" href="/images/logo.svg">
-    
-<link rel="stylesheet" href="/css/font-awesome.min.css">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
-    <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"zhang-each.github.io","root":"/","language":"zh-cn","path":"search.xml"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#FF6600","avatar":"/images/skadi.png","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"孤身藏在夜空里等你的回音。"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.3"};
-    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhang-each.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
 <meta name="generator" content="Hexo 5.4.0"><style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
@@ -143,234 +221,220 @@ mjx-container[display="true"] + br {
 
 
 <body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress-bar-container">
-    
-        <span class="scroll-progress-bar"></span>
-    
+  
 
-    
-</div>
-
-
-<main class="page-container">
-
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
     
 
-    <div class="page-main-content">
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>在那不遥远的地方</strong>
+    </a>
 
-        <div class="page-main-content-top">
-            <header class="header-wrapper">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-    <div class="header-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                在那不遥远的地方
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
-        </div>
-
-        <div class="right">
-            <div class="pc">
-                <ul class="menu-list">
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/"
-                            >
-                                主页
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/archives"
-                            >
-                                归档
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/categories"
-                            >
-                                分类
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/tags"
-                            >
-                                标签
-                            </a>
-                        </li>
-                    
-                        <li class="menu-item">
-                            <a class=""
-                               href="/about"
-                            >
-                                关于
-                            </a>
-                        </li>
-                    
-                    
-                        <li class="menu-item search search-popup-trigger">
-                            <i class="fas fa-search"></i>
-                        </li>
-                    
-                </ul>
-            </div>
-            <div class="mobile">
-                
-                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
-                
-                <div class="icon-item menu-bar">
-                    <div class="menu-bar-middle"></div>
-                </div>
-            </div>
-        </div>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
+  </div>
+</nav>
 
-    <div class="header-drawer">
-        <ul class="drawer-menu-list">
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/">主页</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/archives">归档</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/categories">分类</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/tags">标签</a>
-                </li>
-            
-                <li class="drawer-menu-item flex-center">
-                    <a class=""
-                       href="/about">关于</a>
-                </li>
-            
-        </ul>
-    </div>
+  
 
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="page-main-content-middle">
-
-            <div class="main-content">
-
-                
-                    <div class="fade-in-down-animation">
-    <div class="article-content-container">
-
-        <div class="article-title">
-            <span class="title-hover-animation">Stanford-CS144-计算机网络Lab0：可信字节流</span>
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Stanford-CS144-计算机网络Lab0：可信字节流"></span>
+          
         </div>
 
         
-            <div class="article-header">
-                <div class="avatar">
-                    <img src="/images/skadi.png">
-                </div>
-                <div class="info">
-                    <div class="author">
-                        <span class="name">RandomStar</span>
-                        
-                            <span class="author-label">Lv6</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;2021-12-26 14:58:30
-    </span>
+          
+  <div class="mt-3">
     
-        <span class="article-categories article-meta-item">
-            <i class="fas fa-folder"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Zhang-Each
+      </span>
     
     
-        <span class="article-tags article-meta-item">
-            <i class="fas fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">计算机系统</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/C/">C++</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/TCP-IP/">TCP/IP</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-12-26 14:58" pubdate>
+          2021年12月26日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          50 分钟
+        
+      </span>
     
 
     
     
-        <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>2.6k 字</span>
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
         </span>
+        
+      
     
-    
-        <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>10 分钟</span>
-        </span>
-    
-    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
 </div>
 
-                    </div>
-                </div>
-            </div>
-        
+</div>
 
-        <div class="article-content markdown-body">
-            <blockquote>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Stanford-CS144-计算机网络Lab0：可信字节流</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
 <p>开了新坑CS144计算机网络课程，这门课的授课内容是根据《计算机网络自顶向下方法》来的，但是听说授课质量比较一般，我也没具体看过Lecture，这门课价值最大的地方在于它的Project, 一共包含8个lab, 可以实现一套自己的简易TCP/IP协议栈，使用C++完成。因为我本科期间计网这门课学的不是很好，所以打算再做一做CS144的lab补一补，希望能坚持做完这些lab</p>
 </blockquote>
 <span id="more"></span>
 <!-- excerpt -->
 <!-- toc -->
-<h2 id="前言">前言</h2>
-<p>CS144 Introduction to Computer Networking的Project 共分为8个lab，每个lab都需要实现简单的TCP/IP协议栈(课程称之为Sponge) 的一个关键部分。首先是lab0 Warm Up，在lab0中我们需要尝试运行一些计算机网络相关指令(这一部分略去)，尝试<strong>Linux环境下的网络编程</strong>，以及动手实现一个基本的数据结构：ByteStream作为TCP通信过程中的<strong>可信字节流</strong>对象。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CS144 Introduction to Computer Networking的Project 共分为8个lab，每个lab都需要实现简单的TCP/IP协议栈(课程称之为Sponge) 的一个关键部分。首先是lab0 Warm Up，在lab0中我们需要尝试运行一些计算机网络相关指令(这一部分略去)，尝试<strong>Linux环境下的网络编程</strong>，以及动手实现一个基本的数据结构：ByteStream作为TCP通信过程中的<strong>可信字节流</strong>对象。</p>
 <p>项目提供了初始代码，但是需要自己配置开发环境，我选择了按照课程网站中的指示，下载了VirtualBox并安装了课程指定的虚拟机镜像，然后通过VSCode便捷的SSH连接来写代码</p>
 <blockquote>
 <p>这里提一句，在Linux虚拟机上写代码我一开始尝试了一下感觉非常不方便，后来听说VSCode的SSH功能做的非常强大，我就尝试用VSCode通过SSH连接本地的虚拟机来写lab的代码，果然非常方便。</p>
 <p>VSCode连接VirtualBox虚拟机可以参考网上的教程，先设置端口映射，然后就可以用SSH连接了。</p>
 </blockquote>
 <p>做好了准备工作之后就可以开始lab的代码部分了。</p>
-<h2 id="关于c">关于C++</h2>
-<p>lab0的实验指导书里对编程实验的C++代码风格提出了一定的要求，指导书建议整个Project使用C++11标准完成(当然我不知道什么是C++11)，整个实验过程中基本的原则是保证每个对象拥有最小的可能公共接口，同时在内部进行足够数量的安全检查使得这个类不容易被误用，并且要在使用结束之后自行清除。</p>
+<h2 id="关于C"><a href="#关于C" class="headerlink" title="关于C++"></a>关于C++</h2><p>lab0的实验指导书里对编程实验的C++代码风格提出了一定的要求，指导书建议整个Project使用C++11标准完成(当然我不知道什么是C++11)，整个实验过程中基本的原则是保证每个对象拥有最小的可能公共接口，同时在内部进行足够数量的安全检查使得这个类不容易被误用，并且要在使用结束之后自行清除。</p>
 <p>实验希望可以避免成对的操作，比如malloc和free，或者new和delete，因为这些操作必须要成对使用才能保证内存不出现泄露，但是因为程序在实际执行过程中，会有各种可能的问题出现导致成对的操作不能都执行，这就会导致<strong>内存泄漏</strong>(C++没有垃圾回收机制，因此要自己进行内存管理，对于我这样的初学者来说，指不定哪里就出问题了)，实验希望能够采用RAII模式进行代码编写，RAII即Resource Acquisition Is Initialization，即在创建对象的时候就对其完成初始化。实验提出了这样一些C++的代码风格建议：</p>
 <ul>
 <li>不要使用malloc和free两个函数</li>
@@ -383,388 +447,416 @@ mjx-container[display="true"] + br {
 <li>避免使用全局变量，并且尽可能缩小每个变量的作用范围</li>
 </ul>
 <p>到这里我其实有点晕了，因为这和我之前写的C++要求完全不同，比如不能用new，不能用模板和虚函数，不能使用C语言风格的类型转换等等，感觉自己C++是真的白学了。</p>
-<h2 id="webget-linux下的socket编程">Webget-Linux下的Socket编程</h2>
-<h3 id="tcpsocket类">TCPSocket类</h3>
-<p>lab0的第一部分需要使用Linux系统提供的Socket API来编写简单的程序，初始代码中已经给我们提供了一个TCPSocket类，这个类继承自Socket类，而Socket类又继承自FileDescriptor这个类，采用这种设计是因为<strong>Linux系统将所有的操作视作文件读写</strong>，Socket的连接和消息传递也不例外，所以<strong>Socket连接也可以视作一种特殊的文件描述符</strong>。</p>
+<h2 id="Webget-Linux下的Socket编程"><a href="#Webget-Linux下的Socket编程" class="headerlink" title="Webget-Linux下的Socket编程"></a>Webget-Linux下的Socket编程</h2><h3 id="TCPSocket类"><a href="#TCPSocket类" class="headerlink" title="TCPSocket类"></a>TCPSocket类</h3><p>lab0的第一部分需要使用Linux系统提供的Socket API来编写简单的程序，初始代码中已经给我们提供了一个TCPSocket类，这个类继承自Socket类，而Socket类又继承自FileDescriptor这个类，采用这种设计是因为<strong>Linux系统将所有的操作视作文件读写</strong>，Socket的连接和消息传递也不例外，所以<strong>Socket连接也可以视作一种特殊的文件描述符</strong>。</p>
 <ul>
 <li>文件描述符对应着一个打开的文件，来描述一个打开的文件的基本信息，因此TCPSocket作为一种特殊的文件描述符，也对应了一个TCP连接所包含的基本信息，包括连接的端口等等，同时可以执行TCP消息发送等操作(这个过程也就对应了文件的读写)</li>
 </ul>
 <p>同时初始代码中提供了一个Address类用来包装IP地址，新建一个TCPSocket对象之后，用connect函数可以连接Address对应的设备，然后通过write函数输入TCP通信的内容。</p>
-<h3 id="http协议">HTTP协议</h3>
-<p>HTTP协议分为请求和回复两种格式，对于HTTP请求来说，它的基本格式要求如下：</p>
-<figure>
-<img lazyload="" src="/images/loading.svg" data-src="image-20211225232917632.png" alt="image-20211225232917632"><figcaption aria-hidden="true">image-20211225232917632</figcaption>
-</figure>
+<h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p>HTTP协议分为请求和回复两种格式，对于HTTP请求来说，它的基本格式要求如下：</p>
+<p><img src="image-20211225232917632.png" srcset="/img/loading.gif" lazyload alt="image-20211225232917632"></p>
 <p>具体的八股文知识这里也不多讲，只讲和做这个lab有关的内容，要注意的是，HTTP协议的每一行结尾包括一个回车符和一个换行符，即<code>\r\n</code>，不是只有一个换行符，另外头部字段结束之后还有一个空行，这一行只有<code>\r\n</code></p>
 <p>其他的也没啥，这个lab并不关注HTTP的细节，只要我们把一个HTTP请求用字符</p>
-<h3 id="代码实现">代码实现</h3>
-<p>而我们的具体任务就是实现一个webget函数，和指定的服务器建立连接，并且发送HTTP协议并接收返回的消息，具体的实现代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">get_URL</span><span class="params">(<span class="keyword">const</span> string &amp;host, <span class="keyword">const</span> string &amp;path)</span> </span>{</span><br><span class="line">    <span class="comment">// Your code here.</span></span><br><span class="line">    TCPSocket socket;</span><br><span class="line">    <span class="function">Address <span class="title">address</span><span class="params">(host, <span class="string">"http"</span>)</span></span>;</span><br><span class="line">    socket.<span class="built_in">connect</span>(address);</span><br><span class="line">    string request = <span class="string">"GET "</span> + path + <span class="string">" HTTP/1.1\r\nHost: "</span> + host + <span class="string">"\r\nConnection: close\r\n\r\n"</span>;</span><br><span class="line">    cout &lt;&lt; request &lt;&lt; endl;</span><br><span class="line">    socket.<span class="built_in">write</span>(request);</span><br><span class="line">    <span class="keyword">while</span> (!socket.<span class="built_in">eof</span>()) {</span><br><span class="line">        string content = socket.<span class="built_in">read</span>();</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%s"</span>, content.<span class="built_in">c_str</span>());</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-<h2 id="可信字节流bytestream">可信字节流ByteStream</h2>
-<h3 id="基本要求">基本要求</h3>
-<p>整个lab需要实现一个TCP/IP协议栈，而lab0需要实现其中最重要的抽象之一，可信字节流。我们知道建立的通信连接可能是不可靠的，在通信连接上发送的数据包在发送过程中可能出现丢失，重复，延迟的情况。</p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>而我们的具体任务就是实现一个webget函数，和指定的服务器建立连接，并且发送HTTP协议并接收返回的消息，具体的实现代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs C++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">get_URL</span><span class="hljs-params">(<span class="hljs-keyword">const</span> string &amp;host, <span class="hljs-keyword">const</span> string &amp;path)</span> </span>{<br>    <span class="hljs-comment">// Your code here.</span><br>    TCPSocket socket;<br>    <span class="hljs-function">Address <span class="hljs-title">address</span><span class="hljs-params">(host, <span class="hljs-string">"http"</span>)</span></span>;<br>    socket.<span class="hljs-built_in">connect</span>(address);<br>    string request = <span class="hljs-string">"GET "</span> + path + <span class="hljs-string">" HTTP/1.1\r\nHost: "</span> + host + <span class="hljs-string">"\r\nConnection: close\r\n\r\n"</span>;<br>    cout &lt;&lt; request &lt;&lt; endl;<br>    socket.<span class="hljs-built_in">write</span>(request);<br>    <span class="hljs-keyword">while</span> (!socket.<span class="hljs-built_in">eof</span>()) {<br>        string content = socket.<span class="hljs-built_in">read</span>();<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s"</span>, content.<span class="hljs-built_in"><code class="language-hljs C++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">get_URL</span><span class="hljs-params">(<span class="hljs-keyword">const</span> string &amp;host, <span class="hljs-keyword">const</span> string &amp;path)</span> </span>{<br>    <span class="hljs-comment">// Your code here.</span><br>    TCPSocket socket;<br>    <span class="hljs-function">Address <span class="hljs-title">address</span><span class="hljs-params">(host, <span class="hljs-string">"http"</span>)</span></span>;<br>    socket.<span class="hljs-built_in">connect</span>(address);<br>    string request = <span class="hljs-string">"GET "</span> + path + <span class="hljs-string">" HTTP/1.1\r\nHost: "</span> + host + <span class="hljs-string">"\r\nConnection: close\r\n\r\n"</span>;<br>    cout &lt;&lt; request &lt;&lt; endl;<br>    socket.<span class="hljs-built_in">write</span>(request);<br>    <span class="hljs-keyword">while</span> (!socket.<span class="hljs-built_in">eof</span>()) {<br>        string content = socket.<span class="hljs-built_in">read</span>();<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s"</span>, content.<span class="hljs-built_in">c_str</span>());<br>    }<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
+<h2 id="可信字节流ByteStream"><a href="#可信字节流ByteStream" class="headerlink" title="可信字节流ByteStream"></a>可信字节流ByteStream</h2><h3 id="基本要求"><a href="#基本要求" class="headerlink" title="基本要求"></a>基本要求</h3><p>整个lab需要实现一个TCP/IP协议栈，而lab0需要实现其中最重要的抽象之一，可信字节流。我们知道建立的通信连接可能是不可靠的，在通信连接上发送的数据包在发送过程中可能出现丢失，重复，延迟的情况。</p>
 <p>而TCP是一个reliable的传输协议，这就需要我们实现一个可信的数据流类，这个类要保证存储在其中的字节都是可信的，并且可以从输入端输入新的字节，从输出端读取已有的字节，当输入流读取到末尾的时候，字节流就会进入EOF的状态并且不能再被读取。</p>
 <p>同时，字节流需要进行流控制来避免内存的过度消耗，ByteStream对象会使用一个capacity初始化，这个参数代表了ByteStream中<strong>能够存放的字节的最大数量</strong>，即对写入操作有一定的限制，当前能写入的字节数量不能超过ByteStream的剩余容量。为了简单处理，ByteStream运行在单线程的环境中，不需要担心并发的问题。</p>
 <ul>
 <li>比如ByteStream的容量设定为了1，而我们的输入有10字节，那么ByteStream中每次只能write 1字节的内容，然后ByteStream的读取1字节，之后才能继续写入。但是这10个字节的数据流是可以存在的，因为ByteStream的容量限制的是它自己对输入数据流的读取，而不会限制输入数据流的长度</li>
 </ul>
-<h3 id="代码实现-1">代码实现</h3>
-<p>我们需要实现这样几个关键的函数：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ByteStream</span> {</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">//! Construct a stream with room for `capacity` bytes.</span></span><br><span class="line">    <span class="built_in">ByteStream</span>(<span class="keyword">const</span> <span class="keyword">size_t</span> capacity);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! Write a string of bytes into the stream. Write as many</span></span><br><span class="line">    <span class="comment">//! as will fit, and return how many were written.</span></span><br><span class="line">    <span class="comment">//! \returns the number of bytes accepted into the stream</span></span><br><span class="line">    <span class="function"><span class="keyword">size_t</span> <span class="title">write</span><span class="params">(<span class="keyword">const</span> std::string &amp;data)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! \returns the number of additional bytes that the stream has space for</span></span><br><span class="line">    <span class="function"><span class="keyword">size_t</span> <span class="title">remaining_capacity</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! Signal that the byte stream has reached its ending</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">end_input</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! Indicate that the stream suffered an error.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">set_error</span><span class="params">()</span> </span>{ _error = <span class="literal">true</span>; }</span><br><span class="line">    <span class="comment">//!@}</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//! Peek at next "len" bytes of the stream</span></span><br><span class="line">    <span class="comment">//! \returns a string</span></span><br><span class="line">    <span class="function">std::string <span class="title">peek_output</span><span class="params">(<span class="keyword">const</span> <span class="keyword">size_t</span> len)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! Remove bytes from the buffer</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pop_output</span><span class="params">(<span class="keyword">const</span> <span class="keyword">size_t</span> len)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! Read (i.e., copy and then pop) the next "len" bytes of the stream</span></span><br><span class="line">    <span class="comment">//! \returns a string</span></span><br><span class="line">    <span class="function">std::string <span class="title">read</span><span class="params">(<span class="keyword">const</span> <span class="keyword">size_t</span> len)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! \returns `true` if the stream input has ended</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">input_ended</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! \returns `true` if the stream has suffered an error</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">error</span><span class="params">()</span> <span class="keyword">const</span> </span>{ <span class="keyword">return</span> _error; }</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! \returns the maximum amount that can currently be read from the stream</span></span><br><span class="line">    <span class="function"><span class="keyword">size_t</span> <span class="title">buffer_size</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! \returns `true` if the buffer is empty</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">buffer_empty</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! \returns `true` if the output has reached the ending</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">eof</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="comment">//!@}</span></span><br><span class="line">    <span class="comment">//! Total number of bytes written</span></span><br><span class="line">    <span class="function"><span class="keyword">size_t</span> <span class="title">bytes_written</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! Total number of bytes popped</span></span><br><span class="line">    <span class="function"><span class="keyword">size_t</span> <span class="title">bytes_read</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="comment">//!@}</span></span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><p>我们需要实现这样几个关键的函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ByteStream</span> {</span><br>  <span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">//! Construct a stream with room for `capacity` bytes.</span><br>    <span class="hljs-built_in">ByteStream</span>(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> capacity);<br><br>    <span class="hljs-comment">//! Write a string of bytes into the stream. Write as many</span><br>    <span class="hljs-comment">//! as will fit, and return how many were written.</span><br>    <span class="hljs-comment">//! \returns the number of bytes accepted into the stream</span><br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">write</span><span class="hljs-params">(<span class="hljs-keyword">const</span> std::string &amp;data)</span></span>;<br><br>    <span class="hljs-comment">//! \returns the number of additional bytes that the stream has space for</span><br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">remaining_capacity</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br><br>    <span class="hljs-comment">//! Signal that the byte stream has reached its ending</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">end_input</span><span class="hljs-params">()</span></span>;<br><br>    <span class="hljs-comment">//! Indicate that the stream suffered an error.</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">set_error</span><span class="hljs-params">()</span> </span>{ _error = <span class="hljs-literal">true</span>; }<br>    <span class="hljs-comment">//!@}</span><br>    <br>    <span class="hljs-comment">//! Peek at next "len" bytes of the stream</span><br>    <span class="hljs-comment">//! \returns a string</span><br>    <span class="hljs-function">std::string <span class="hljs-title">peek_output</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> len)</span> <span class="hljs-keyword">const</span></span>;<br><br>    <span class="hljs-comment">//! Remove bytes from the buffer</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">pop_output</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> len)</span></span>;<br><br>    <span class="hljs-comment">//! Read (i.e., copy and then pop) the next "len" bytes of the stream</span><br>    <span class="hljs-comment">//! \returns a string</span><br>    <span class="hljs-function">std::string <span class="hljs-title">read</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> len)</span></span>;<br><br>    <span class="hljs-comment">//! \returns `true` if the stream input has ended</span><br>    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">input_ended</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br><br>    <span class="hljs-comment">//! \returns `true` if the stream has suffered an error</span><br>    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">error</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{ <span class="hljs-keyword">return</span> _error; }<br><br>    <span class="hljs-comment">//! \returns the maximum amount that can currently be read from the stream</span><br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">buffer_size</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br><br>    <span class="hljs-comment">//! \returns `true` if the buffer is empty</span><br>    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">buffer_empty</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br><br>    <span class="hljs-comment">//! \returns `true` if the output has reached the ending</span><br>    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">eof</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br>    <span class="hljs-comment">//!@}</span><br>    <span class="hljs-comment">//! Total number of bytes written</span><br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">bytes_written</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br><br>    <span class="hljs-comment">//! Total number of bytes popped</span><br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">bytes_read</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br>    <span class="hljs-comment"><code class="language-hljs c++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ByteStream</span> {</span><br>  <span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">//! Construct a stream with room for `capacity` bytes.</span><br>    <span class="hljs-built_in">ByteStream</span>(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> capacity);<br><br>    <span class="hljs-comment">//! Write a string of bytes into the stream. Write as many</span><br>    <span class="hljs-comment">//! as will fit, and return how many were written.</span><br>    <span class="hljs-comment">//! \returns the number of bytes accepted into the stream</span><br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">write</span><span class="hljs-params">(<span class="hljs-keyword">const</span> std::string &amp;data)</span></span>;<br><br>    <span class="hljs-comment">//! \returns the number of additional bytes that the stream has space for</span><br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">remaining_capacity</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br><br>    <span class="hljs-comment">//! Signal that the byte stream has reached its ending</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">end_input</span><span class="hljs-params">()</span></span>;<br><br>    <span class="hljs-comment">//! Indicate that the stream suffered an error.</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">set_error</span><span class="hljs-params">()</span> </span>{ _error = <span class="hljs-literal">true</span>; }<br>    <span class="hljs-comment">//!@}</span><br>    <br>    <span class="hljs-comment">//! Peek at next "len" bytes of the stream</span><br>    <span class="hljs-comment">//! \returns a string</span><br>    <span class="hljs-function">std::string <span class="hljs-title">peek_output</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> len)</span> <span class="hljs-keyword">const</span></span>;<br><br>    <span class="hljs-comment">//! Remove bytes from the buffer</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">pop_output</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> len)</span></span>;<br><br>    <span class="hljs-comment">//! Read (i.e., copy and then pop) the next "len" bytes of the stream</span><br>    <span class="hljs-comment">//! \returns a string</span><br>    <span class="hljs-function">std::string <span class="hljs-title">read</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> len)</span></span>;<br><br>    <span class="hljs-comment">//! \returns `true` if the stream input has ended</span><br>    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">input_ended</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br><br>    <span class="hljs-comment">//! \returns `true` if the stream has suffered an error</span><br>    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">error</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{ <span class="hljs-keyword">return</span> _error; }<br><br>    <span class="hljs-comment">//! \returns the maximum amount that can currently be read from the stream</span><br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">buffer_size</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br><br>    <span class="hljs-comment">//! \returns `true` if the buffer is empty</span><br>    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">buffer_empty</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br><br>    <span class="hljs-comment">//! \returns `true` if the output has reached the ending</span><br>    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">eof</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br>    <span class="hljs-comment">//!@}</span><br>    <span class="hljs-comment">//! Total number of bytes written</span><br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">bytes_written</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br><br>    <span class="hljs-comment">//! Total number of bytes popped</span><br>    <span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">bytes_read</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;<br>    <span class="hljs-comment">//!@}</span><br>};<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <p>要实现的内容里有很大一部分是<code>Get/Set</code>类型的函数，最关键的几个函数是<code>write</code> 和<code>read</code>, 分别对应了对ByteStream的写和读取等操作。同时我们还需要自己设计一些类内变量，来实现ByteStream的功能。</p>
 <p>根据ByteStream一头进一头出的要求，使用STL中的双端队列可以满足要求，所以这个类的一些类内变量定义如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ByteStream</span> {</span></span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">// Your code here -- add private members as necessary.</span></span><br><span class="line">    std::deque&lt;<span class="keyword">char</span>&gt; buffer;</span><br><span class="line">    <span class="keyword">int</span> capacity;</span><br><span class="line">    <span class="keyword">bool</span> is_end_input;</span><br><span class="line">    <span class="keyword">size_t</span> num_read;</span><br><span class="line">    <span class="keyword">size_t</span> num_write;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs C++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ByteStream</span> {</span><br>  <span class="hljs-keyword">private</span>:<br>    <span class="hljs-comment">// Your code here -- add private members as necessary.</span><br>    std::deque&lt;<span class="hljs-keyword">char</span>&gt; buffer;<br>    <span class="hljs-keyword">int</span> capacity;<br>    <span class="hljs-keyword">bool</span> is_end_input;<br>    <span class="hljs-keyword">size_t</span> num_read;<br>    <span class="hljs-keyword"><code class="language-hljs C++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ByteStream</span> {</span><br>  <span class="hljs-keyword">private</span>:<br>    <span class="hljs-comment">// Your code here -- add private members as necessary.</span><br>    std::deque&lt;<span class="hljs-keyword">char</span>&gt; buffer;<br>    <span class="hljs-keyword">int</span> capacity;<br>    <span class="hljs-keyword">bool</span> is_end_input;<br>    <span class="hljs-keyword">size_t</span> num_read;<br>    <span class="hljs-keyword">size_t</span> num_write;<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <ul>
 <li>这里的write主要操作就是限制写入数据的长度，而read分成读取字节和移除读的字节两个部分，具体实现如下：</li>
 </ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">ByteStream::write</span><span class="params">(<span class="keyword">const</span> string &amp;data)</span> </span>{</span><br><span class="line">    <span class="keyword">size_t</span> len = <span class="built_in">min</span>(<span class="built_in">remaining_capacity</span>(), data.<span class="built_in">length</span>());</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; len; i ++) {</span><br><span class="line">        buffer.<span class="built_in">push_back</span>(data[i]);</span><br><span class="line">    }</span><br><span class="line">    num_write += len;</span><br><span class="line">    <span class="keyword">return</span> len;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">//! \param[in] len bytes will be copied from the output side of the buffer</span></span><br><span class="line"><span class="function">string <span class="title">ByteStream::peek_output</span><span class="params">(<span class="keyword">const</span> <span class="keyword">size_t</span> len)</span> <span class="keyword">const</span> </span>{</span><br><span class="line">    std::string result = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; len; i ++) {</span><br><span class="line">        result += buffer.<span class="built_in">at</span>(i);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">//! \param[in] len bytes will be removed from the output side of the buffer</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ByteStream::pop_output</span><span class="params">(<span class="keyword">const</span> <span class="keyword">size_t</span> len)</span> </span>{</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; len; i ++) {</span><br><span class="line">        buffer.<span class="built_in">pop_front</span>();</span><br><span class="line">    }</span><br><span class="line">    num_read += len;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">//! Read (i.e., copy and then pop) the next "len" bytes of the stream</span></span><br><span class="line"><span class="comment">//! \param[in] len bytes will be popped and returned</span></span><br><span class="line"><span class="comment">//! \returns a string</span></span><br><span class="line"><span class="function">std::string <span class="title">ByteStream::read</span><span class="params">(<span class="keyword">const</span> <span class="keyword">size_t</span> len)</span> </span>{</span><br><span class="line">    string res = <span class="built_in">peek_output</span>(len);</span><br><span class="line">    <span class="built_in">pop_output</span>(len);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre class="line-numbers language-hljs c++"><span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">ByteStream::write</span><span class="hljs-params">(<span class="hljs-keyword">const</span> string &amp;data)</span> </span>{<br>    <span class="hljs-keyword">size_t</span> len = <span class="hljs-built_in">min</span>(<span class="hljs-built_in">remaining_capacity</span>(), data.<span class="hljs-built_in">length</span>());<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> i = <span class="hljs-number">0</span>; i &lt; len; i ++) {<br>        buffer.<span class="hljs-built_in">push_back</span>(data[i]);<br>    }<br>    num_write += len;<br>    <span class="hljs-keyword">return</span> len;<br>}<br><br><span class="hljs-comment">//! \param[in] len bytes will be copied from the output side of the buffer</span><br><span class="hljs-function">string <span class="hljs-title">ByteStream::peek_output</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> len)</span> <span class="hljs-keyword">const</span> </span>{<br>    std::string result = <span class="hljs-string">""</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> i = <span class="hljs-number">0</span>; i &lt; len; i ++) {<br>        result += buffer.<span class="hljs-built_in">at</span>(i);<br>    }<br>    <span class="hljs-keyword">return</span> result;<br>}<br><br><span class="hljs-comment">//! \param[in] len bytes will be removed from the output side of the buffer</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">ByteStream::pop_output</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> len)</span> </span>{<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> i = <span class="hljs-number">0</span>; i &lt; len; i ++) {<br>        buffer.<span class="hljs-built_in">pop_front</span>();<br>    }<br>    num_read += len;<br>}<br><br><span class="hljs-comment">//! Read (i.e., copy and then pop) the next "len" bytes of the stream</span><br><span class="hljs-comment">//! \param[in] len bytes will be popped and returned</span><br><span class="hljs-comment">//! \returns a string</span><br><span class="hljs-function">std::string <span class="hljs-title">ByteStream::read</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> len)</span> </span>{<br>    string res = <span class="hljs-built_in">peek_output</span>(len);<br>    <span class="hljs-built_in">pop_output</span>(len);<br>    <span class="hljs-keyword"><code class="language-hljs c++"><span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">ByteStream::write</span><span class="hljs-params">(<span class="hljs-keyword">const</span> string &amp;data)</span> </span>{<br>    <span class="hljs-keyword">size_t</span> len = <span class="hljs-built_in">min</span>(<span class="hljs-built_in">remaining_capacity</span>(), data.<span class="hljs-built_in">length</span>());<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> i = <span class="hljs-number">0</span>; i &lt; len; i ++) {<br>        buffer.<span class="hljs-built_in">push_back</span>(data[i]);<br>    }<br>    num_write += len;<br>    <span class="hljs-keyword">return</span> len;<br>}<br><br><span class="hljs-comment">//! \param[in] len bytes will be copied from the output side of the buffer</span><br><span class="hljs-function">string <span class="hljs-title">ByteStream::peek_output</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> len)</span> <span class="hljs-keyword">const</span> </span>{<br>    std::string result = <span class="hljs-string">""</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> i = <span class="hljs-number">0</span>; i &lt; len; i ++) {<br>        result += buffer.<span class="hljs-built_in">at</span>(i);<br>    }<br>    <span class="hljs-keyword">return</span> result;<br>}<br><br><span class="hljs-comment">//! \param[in] len bytes will be removed from the output side of the buffer</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">ByteStream::pop_output</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> len)</span> </span>{<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> i = <span class="hljs-number">0</span>; i &lt; len; i ++) {<br>        buffer.<span class="hljs-built_in">pop_front</span>();<br>    }<br>    num_read += len;<br>}<br><br><span class="hljs-comment">//! Read (i.e., copy and then pop) the next "len" bytes of the stream</span><br><span class="hljs-comment">//! \param[in] len bytes will be popped and returned</span><br><span class="hljs-comment">//! \returns a string</span><br><span class="hljs-function">std::string <span class="hljs-title">ByteStream::read</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">size_t</span> len)</span> </span>{<br>    string res = <span class="hljs-built_in">peek_output</span>(len);<br>    <span class="hljs-built_in">pop_output</span>(len);<br>    <span class="hljs-keyword">return</span> res;<br>}<br><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></td></tr></table></figure>
 <ul>
 <li>写完代码之后编译运行<code>make check_lab0</code> 全部测试点都通过了，这里比较坑的地方是，统计read的字节数量需要在pop_ouput的时候就更新，而不是read的时候更新。一开始因为这个有好几个测试点没过。</li>
 </ul>
 
-        </div>
-
-        
-            <div class="post-copyright-info">
-                <div class="article-copyright-info-container">
-    <ul>
-        <li>本文标题：Stanford-CS144-计算机网络Lab0：可信字节流</li>
-        <li>本文作者：RandomStar</li>
-        <li>创建时间：2021-12-26 14:58:30</li>
-        <li>
-            本文链接：https://zhang-each.github.com/2021/12/26/sponge0/
-        </li>
-        <li>
-            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
-        </li>
-    </ul>
-</div>
-
-            </div>
-        
-
-        
-            <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2021/12/28/reading31/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">论文阅读笔记31：大规模知识图谱对齐LargeEA</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/2021/12/22/reading30/"
-                        >
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">论文阅读笔记30：异构分布式机器学习Partial Reduce</span>
-                                <span class="post-nav-item">下一篇</span>
-                            </span>
-                            <span class="right arrow-icon flex-center">
-                              <i class="fas fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-        
-            <div class="comment-container">
-                <div class="comments-container">
-    <div id="comment-anchor"></div>
-    <div class="comment-area-title">
-        <i class="fas fa-comments">&nbsp;评论</i>
-    </div>
-    
-
-        
+              </div>
             
-    <div class="valine-container">
-        <script 
-                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
-        <div id="vcomments"></div>
-        <script >
-            function loadValine() {
-                new Valine({
-                    el: '#vcomments',
-                    appId: 'b6BpXpwUq5wyUMcLtbnNMD8N-gzGzoHsz',
-                    appKey: 'Qtl7JkpdLDat2Niacks6SyT5',
-                    meta: ['nick', 'mail', 'link'],
-                    avatar: 'wavatar',
-                    enableQQ: true,
-                    placeholder: '快来发表你的看法吧！',
-                    lang: 'zh-cn'.toLowerCase()
-                });
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
 
-                function getAuthor(language) {
-                    switch (language) {
-                        case 'en':
-                            return 'Author';
-                        case 'zh-CN':
-                            return '博主';
-                        default:
-                            return 'Master';
-                    }
-                }
-
-                // Add "Author" identify
-                const getValineDomTimer = setInterval(() => {
-                    const vcards = document.querySelectorAll('#vcomments .vcards .vcard');
-                    if (vcards.length > 0) {
-                        let author = 'RandomStar';
-
-                        if (author) {
-                            for (let vcard of vcards) {
-                                const vnick_dom = vcard.querySelector('.vhead .vnick');
-                                const vnick = vnick_dom.innerHTML;
-                                if (vnick === author) {
-                                    vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
-                                }
-                            }
-                        }
-                        clearInterval(getValineDomTimer);
-                    } else {
-                        clearInterval(getValineDomTimer);
-                    }
-                }, 2000);
-            }
-
-            if ('false') {
-                const loadValineTimeout = setTimeout(() => {
-                    loadValine();
-                    clearTimeout(loadValineTimeout);
-                }, 1000);
-            } else {
-                window.addEventListener('DOMContentLoaded', loadValine);
-            }
-        </script>
-    </div>
-
-
-
-        
+<span class="category-chains">
+  
+  
     
-</div>
-
-            </div>
+      <span class="category-chain">
         
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
     </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">#计算机系统</a>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+      
+        <a href="/tags/TCP-IP/">#TCP/IP</a>
+      
+        <a href="/tags/C/">#C++</a>
+      
+    </div>
+  
 </div>
 
 
-                
-            </div>
+              
+  
 
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Stanford-CS144-计算机网络Lab0：可信字节流</div>
+      <div>http://zhang-each.github.io/2021/12/26/sponge0/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Zhang-Each</div>
         </div>
-
-        <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年12月26日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
             
-              <span>2020</span>
-              -
             
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">RandomStar</a>
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
         </div>
-        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
-        </script>
-            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">399.9k</span>&nbsp;字
-            <span>
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            <span>
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
-            <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
-        
-        <div class="theme-info info-item">
-            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.3</a>
-        </div>
-        
-        
+      </div>
     </div>
-</footer>
-
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="tools-list">
-        <!-- TOC aside toggle -->
-        
-            <li class="tools-item page-aside-toggle">
-                <i class="fas fa-outdent"></i>
-            </li>
-        
-
-        <!-- go comment -->
-        
-            <li class="go-comment">
-                <i class="fas fa-comment"></i>
-            </li>
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-bottom-side-tools">
-        <div class="side-tools-container">
-    <ul class="side-tools-list">
-        <li class="tools-item tool-font-adjust-plus flex-center">
-            <i class="fas fa-search-plus"></i>
-        </li>
-
-        <li class="tools-item tool-font-adjust-minus flex-center">
-            <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
-        </li>
-
-        <li class="tools-item tool-dark-light-toggle flex-center">
-            <i class="fas fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-
-        <li class="tools-item tool-scroll-to-bottom flex-center">
-            <i class="fas fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="exposed-tools-list">
-        <li class="tools-item tool-toggle-show flex-center">
-            <i class="fas fa-cog fa-spin"></i>
-        </li>
-        
-            <li class="tools-item tool-scroll-to-top flex-center">
-                <i class="arrow-up fas fa-arrow-up"></i>
-                <span class="percent"></span>
-            </li>
-        
-    </ul>
-</div>
-
-    </div>
-
-    
-        <aside class="page-aside">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Ec"><span class="nav-number">2.</span> <span class="nav-text">关于C++</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webget-linux%E4%B8%8B%E7%9A%84socket%E7%BC%96%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">Webget-Linux下的Socket编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tcpsocket%E7%B1%BB"><span class="nav-number">3.1.</span> <span class="nav-text">TCPSocket类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http%E5%8D%8F%E8%AE%AE"><span class="nav-number">3.2.</span> <span class="nav-text">HTTP协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.3.</span> <span class="nav-text">代码实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E4%BF%A1%E5%AD%97%E8%8A%82%E6%B5%81bytestream"><span class="nav-number">4.</span> <span class="nav-text">可信字节流ByteStream</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%A6%81%E6%B1%82"><span class="nav-number">4.1.</span> <span class="nav-text">基本要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-1"><span class="nav-number">4.2.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol>
-    </div>
-</div>
-        </aside>
-    
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
+    <div class="license-icon iconfont"></div>
+  </div>
 
 
-    
-        <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-          <span class="search-input-field-pre">
-            <i class="fas fa-keyboard"></i>
-          </span>
-            <div class="search-input-container">
-                <input autocomplete="off"
-                       autocorrect="off"
-                       autocapitalize="off"
-                       placeholder="搜索..."
-                       spellcheck="false"
-                       type="search"
-                       class="search-input"
-                >
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/12/28/reading31/" title="论文阅读笔记31：大规模知识图谱对齐LargeEA">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">论文阅读笔记31：大规模知识图谱对齐LargeEA</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/12/22/reading30/" title="论文阅读笔记30：异构分布式机器学习Partial Reduce">
+                        <span class="hidden-mobile">论文阅读笔记30：异构分布式机器学习Partial Reduce</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
             </div>
-            <span class="popup-btn-close">
-                <i class="fas fa-times"></i>
-            </span>
+
+            
+          </article>
         </div>
-        <div id="search-result">
-            <div id="no-result">
-                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
-            </div>
-        </div>
+      </div>
     </div>
-</div>
 
-    
-
-</main>
-
-
-
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-
-
-    
-<script src="/js/local-search.js"></script>
-
-
-
-
-    
-<script src="/js/code-copy.js"></script>
-
-
-
-
-    
-<script src="/js/lazyload.js"></script>
-
-
-
-<div class="post-scripts">
-    
-        
-<script src="/js/left-side-toggle.js"></script>
-
-<script src="/js/libs/anime.min.js"></script>
-
-<script src="/js/toc.js"></script>
-
-    
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
 
 
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+
+  </script>
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+  &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+        class="white-color">402.1k</span>&nbsp;字
+    <span>
+        |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+            class="white-color"></span>&nbsp;次
+    </span>
+    <span>
+        |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+            class="white-color"></span>&nbsp;人
+    </span>
+    <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff&w=400"></script>
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 </html>
