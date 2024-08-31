@@ -18,9 +18,9 @@ redirect_from:
 {% endif %}
 {% assign url = gsDataBaseUrl | append: "google-scholar-stats/gs_data_shieldsio.json" %}
 
-I am now a master student of computer science in Zhejiang University [KG Lab](https://www.zjukg.org/), advised by Prof. [Huajun Chen](https://scholar.google.com/citations?user=T6om-m4AAAAJ&hl=zh-CN&oi=ao) and Prof. [Wen Zhang](https://scholar.google.com/citations?user=Ig9ho4kAAAAJ&hl=zh-CN). My research interest includes **Multi-modal Knowledge Graphs** (MMKG), **Large Language Models** (LLMs), and their application in real scenarios. I have published several papers at the top conferences such as SIGIR, ACL, SIGKDD, ICDE, ACM MM, COLING, ISWC, IJCNN, NLPCC.
+I am now a master student of computer science in Zhejiang University [KG Lab](https://www.zjukg.org/), advised by Prof. [Huajun Chen](https://scholar.google.com/citations?user=T6om-m4AAAAJ&hl=zh-CN&oi=ao) and Prof. [Wen Zhang](https://scholar.google.com/citations?user=Ig9ho4kAAAAJ&hl=zh-CN). My research interest includes **Multi-modal Knowledge Graphs** (<span style="color:#8866FF;">MMKG</span>), **Large Language Models** (<span style="color:orange">LLM</span>), and their application (<span style="color:SeaGreen;">KG&LLM Application</span>) in real-world scenarios. I have published several papers at the top conferences such as SIGIR, ACL, ACM MM, SIGKDD, ICDE, COLING, ISWC, IJCNN, NLPCC.
 
-I have a online noteboook (mainly in Chinese) on [this link](https://zhang-each.github.io/My-CS-Notebook/) to share my learning notes and daily life.
+I maintain a online noteboook (mainly in Chinese) on [this link](https://zhang-each.github.io/My-CS-Notebook/) to share my learning notes and daily life.
 
 I am looking for a Ph.D. position of 2025 spring and fall.
 
@@ -35,7 +35,6 @@ I am looking for a Ph.D. position of 2025 spring and fall.
 - *2024.02*: 😄 We pre-print our survey paper [Knowledge Graphs Meet Multi-Modal Learning: A Comprehensive Survey](http://arxiv.org/abs/2402.05391).
 - *2023.12*: 😄 I join Ant Group for a research intern, focusing on knowledge pre-training for recommender systems.
 - *2023.10*: 😄 We pre-print a paper about **large language model for knowledge graph reasoning** on ArXiv.
-- *2023.07*: 🎉 One paper is accepted by NLPCC 2023.
 
 # 🌟 Preprints
 
@@ -46,8 +45,8 @@ I am looking for a Ph.D. position of 2025 spring and fall.
 
 Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen
 
-[**Project**](https://github.com/zjukg/MoMoK) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- Mixture-of-experts networks in multi-modal knowledge graphs.
+[**Project Page**](https://github.com/zjukg/MoMoK) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
+- TL;DR: Mixture-of-experts networks in <span style="color:#8866FF;">MMKG</span>.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/MoMoK)](https://github.com/zjukg/MoMoK) 🌟
 </div>
 </div>
@@ -59,8 +58,8 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang,
 
 **Yichi Zhang**, Binbin Hu, Zhuo Chen, Lingbing Guo, Ziqi Liu, Zhiqiang Zhang, Lei Liang, Huajun Chen, Wen Zhang
 
-[**Project**](https://github.com/zjukg/MuDoK) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- Unified pre-training and prompt tuning for item knowledge graphs to serve diverse downstream tasks like recommendation and text understanding.
+[**Project Page**](https://github.com/zjukg/MuDoK) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
+- TL;DR: Unified pre-training and prompt tuning for item knowledge graphs to serve diverse downstream tasks like recommendation and text understanding.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/MuDoK)](https://github.com/zjukg/MuDoK) 🌟
 </div>
 </div>
@@ -72,8 +71,8 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang,
 
 **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen
 
-[**Project**](https://github.com/zjukg/MyGO) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- Fine-grained modality information tokenization, fusion, and augmentation in multi-modal knowledge graphs.
+[**Project Page**](https://github.com/zjukg/MyGO) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
+- TL;DR: Fine-grained modality information tokenization, fusion, and augmentation in multi-modal knowledge graphs.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/MyGO)](https://github.com/zjukg/MyGO) 🌟
 </div>
 </div>
@@ -85,8 +84,8 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang,
 
 **Yichi Zhang**, Zhuo Chen, Yin Fang, Lei Cheng, Yanxi Lu, Fangming Li, Wen Zhang, Huajun Chen
 
-[**Project**](https://github.com/zjukg/KnowPAT) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- Aligning large language model with knowledgeable human preference with external knowledge graphs for domain-specific application.
+[**Project Page**](https://github.com/zjukg/KnowPAT) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
+- TL;DR: Aligning <span style="color:orange">LLMs</span> with knowledgeable human preference with external KGs for domain-specific application.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/KnowPAT)](https://github.com/zjukg/KnowPAT) 🌟
 </div>
 </div>
@@ -99,8 +98,8 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang,
 
 **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen
 
-[**Project**](https://github.com/zjukg/NATIVE) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- Multi-modal knowledge graphs completion with diverse and imbalanced modality information.
+[**Project Page**](https://github.com/zjukg/NATIVE) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
+- TL;DR: <span style="color:#8866FF;">MMKG</span> completion with diverse and imbalanced modality information.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/NATIVE)](https://github.com/zjukg/NATIVE) 🌟
 </div>
 </div>
@@ -112,8 +111,8 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang,
 
 **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Wen Zhang, Huajun Chen
 
-[**Project**](https://github.com/zjukg/KoPA) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- Incorporating structural information from knowledge graphs into large language models to conduct structure-aware knowledge reasoning.
+[**Project Page**](https://github.com/zjukg/KoPA) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
+- TL;DR: Incorporating structural information from KGs into <span style="color:orange">LLMs</span> to conduct structure-aware knowledge reasoning.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/KoPA)](https://github.com/zjukg/KoPA) 🌟
 </div>
 </div>
@@ -127,8 +126,8 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang,
 Zhuo Chen, **Yichi Zhang**, Yin Fang, Yuxia Geng, Lingbing Guo, Xiang Chen, Qian Li, Wen Zhang
 , Jiaoyan Chen, Yushan Zhu, Jiaqi Li, Xiaoze Liu, Jeff Z. Pan, Ningyu Zhang, Huajun Chen
 
-[**Project**](https://github.com/zjukg/KG-MM-Survey) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- Comprehensive survey about multi-modal knowledge graphs and knowledge graph enhanced multi-modal learning.
+[**Project Page**](https://github.com/zjukg/KG-MM-Survey) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
+- TL;DR: Comprehensive survey about <span style="color:#8866FF;">MMKG</span> and KG-enhanced multi-modal learning.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/KG-MM-Survey)](https://github.com/zjukg/KG-MM-Survey) 🌟
 </div>
 </div>
@@ -140,8 +139,8 @@ Zhuo Chen, **Yichi Zhang**, Yin Fang, Yuxia Geng, Lingbing Guo, Xiang Chen, Qian
 
 **Yichi Zhang**, Zhuo Chen, Lei Liang, Huajun Chen, Wen Zhang
 
-[**Project**](https://github.com/zjukg/AdaMF-MAT) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- Augmenting the imbalanced modality information of knowledge graphs with an adversarial framework.
+[**Project Page**](https://github.com/zjukg/AdaMF-MAT) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
+- TL;DR: Augmenting the imbalanced modality information of <span style="color:#8866FF;">MMKG</span>s with adversarial training.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/AdaMF-MAT)](https://github.com/zjukg/AdaMF-MAT) 🌟
 </div>
 </div>
