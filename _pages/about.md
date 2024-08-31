@@ -18,7 +18,7 @@ redirect_from:
 {% endif %}
 {% assign url = gsDataBaseUrl | append: "google-scholar-stats/gs_data_shieldsio.json" %}
 
-I am now a master student of computer science in Zhejiang University [KG Lab](https://www.zjukg.org/), advised by Prof. [Huajun Chen](https://scholar.google.com/citations?user=T6om-m4AAAAJ&hl=zh-CN&oi=ao) and Prof. [Wen Zhang](https://scholar.google.com/citations?user=Ig9ho4kAAAAJ&hl=zh-CN). My research interest includes **Multi-modal Knowledge Graphs** (<span style="color:#8866FF;">MMKG</span>), **Large Language Models** (<span style="color:orange">LLM</span>), and their application (<span style="color:SeaGreen;">KG&LLM Application</span>) in real-world scenarios. I have published several papers at the top conferences such as SIGIR, ACL, ACM MM, SIGKDD, ICDE, COLING, ISWC, IJCNN, NLPCC.
+I am now a master student of computer science in Zhejiang University [KG Lab](https://www.zjukg.org/), advised by Prof. [Huajun Chen](https://scholar.google.com/citations?user=T6om-m4AAAAJ&hl=zh-CN&oi=ao) and Prof. [Wen Zhang](https://scholar.google.com/citations?user=Ig9ho4kAAAAJ&hl=zh-CN). My research interest includes **Multi-modal Knowledge Graphs** (<span style="color:#D70761;">MMKG</span>), **Large Language Models** (<span style="color:#c68864">LLM</span>), and their application (<span style="color:SeaGreen;">KG&LLM Application</span>) in real-world scenarios. I have published several papers at the top conferences such as SIGIR, ACL, ACM MM, SIGKDD, ICDE, COLING, ISWC, IJCNN, NLPCC.
 
 I maintain a online noteboook (mainly in Chinese) on [this link](https://zhang-each.github.io/My-CS-Notebook/) to share my learning notes and daily life.
 
@@ -46,7 +46,7 @@ I am looking for a Ph.D. position of 2025 spring and fall.
 Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen
 
 [**Project Page**](https://github.com/zjukg/MoMoK) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- TL;DR: Mixture-of-experts networks in <span style="color:#8866FF;">MMKG</span>.
+- TL;DR: Mixture-of-experts networks in <span style="color:#D70761;">MMKG</span>.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/MoMoK)](https://github.com/zjukg/MoMoK) 🌟
 </div>
 </div>
@@ -85,7 +85,7 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang,
 **Yichi Zhang**, Zhuo Chen, Yin Fang, Lei Cheng, Yanxi Lu, Fangming Li, Wen Zhang, Huajun Chen
 
 [**Project Page**](https://github.com/zjukg/KnowPAT) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- TL;DR: Aligning <span style="color:orange">LLMs</span> with knowledgeable human preference with external KGs for domain-specific application.
+- TL;DR: Aligning <span style="color:#c68864">LLMs</span> with knowledgeable human preference with external KGs for domain-specific application.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/KnowPAT)](https://github.com/zjukg/KnowPAT) 🌟
 </div>
 </div>
@@ -99,7 +99,7 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang,
 **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen
 
 [**Project Page**](https://github.com/zjukg/NATIVE) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- TL;DR: <span style="color:#8866FF;">MMKG</span> completion with diverse and imbalanced modality information.
+- TL;DR: <span style="color:#D70761;">MMKG</span> completion with diverse and imbalanced modality information.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/NATIVE)](https://github.com/zjukg/NATIVE) 🌟
 </div>
 </div>
@@ -107,12 +107,12 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang,
 <div class='paper-box'><div class='paper-box-image'><div><div class="badge">ACM MM 2024</div><img src='images/kopa.png' alt="sym" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
 
-[Making Large Language Models Perform Better in Knowledge Graph Completion](https://arxiv.org/pdf/2310.06671.pdf)
+[**Making Large Language Models Perform Better in Knowledge Graph Completion**](https://arxiv.org/pdf/2310.06671.pdf)
 
 **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Wen Zhang, Huajun Chen
 
 [**Project Page**](https://github.com/zjukg/KoPA) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- TL;DR: Incorporating structural information from KGs into <span style="color:orange">LLMs</span> to conduct structure-aware knowledge reasoning.
+- TL;DR: Incorporating structural information from KGs into <span style="color:#c68864">LLMs</span> to conduct structure-aware knowledge reasoning.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/KoPA)](https://github.com/zjukg/KoPA) 🌟
 </div>
 </div>
@@ -127,7 +127,7 @@ Zhuo Chen, **Yichi Zhang**, Yin Fang, Yuxia Geng, Lingbing Guo, Xiang Chen, Qian
 , Jiaoyan Chen, Yushan Zhu, Jiaqi Li, Xiaoze Liu, Jeff Z. Pan, Ningyu Zhang, Huajun Chen
 
 [**Project Page**](https://github.com/zjukg/KG-MM-Survey) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- TL;DR: Comprehensive survey about <span style="color:#8866FF;">MMKG</span> and KG-enhanced multi-modal learning.
+- TL;DR: Comprehensive survey about <span style="color:#D70761;">MMKG</span> and KG-enhanced multi-modal learning.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/KG-MM-Survey)](https://github.com/zjukg/KG-MM-Survey) 🌟
 </div>
 </div>
@@ -140,7 +140,7 @@ Zhuo Chen, **Yichi Zhang**, Yin Fang, Yuxia Geng, Lingbing Guo, Xiang Chen, Qian
 **Yichi Zhang**, Zhuo Chen, Lei Liang, Huajun Chen, Wen Zhang
 
 [**Project Page**](https://github.com/zjukg/AdaMF-MAT) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- TL;DR: Augmenting the imbalanced modality information of <span style="color:#8866FF;">MMKG</span>s with adversarial training.
+- TL;DR: Augmenting the imbalanced modality information of <span style="color:#D70761;">MMKG</span>s with adversarial training.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/AdaMF-MAT)](https://github.com/zjukg/AdaMF-MAT) 🌟
 </div>
 </div>
