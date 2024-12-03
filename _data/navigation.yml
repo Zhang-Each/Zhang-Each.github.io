@@ -1,23 +1,23 @@
 # main links links
 main:
   - title: "About Me"
-    url: "/CV/#about-me"
+    url: "/#about-me"
 
   - title: "News"
-    url: "/CV/#-news"
+    url: "/#-news"
 
   - title: "Preprints"
-    url: "/CV/#-preprints"
+    url: "/#-preprints"
   
   - title: "Publications"
-    url: "/CV/#-publications"
+    url: "/#-publications"
 
   - title: "Honors and Awards"
-    url: "/CV/#-honors-and-awards"
+    url: "/#-honors-and-awards"
 
   - title: "Educations"
-    url: "/CV/#-educations"
+    url: "/#-educations"
 
 
   - title: "Internships"
-    url: "/CV/#-internships"
+    url: "/#-internships"
