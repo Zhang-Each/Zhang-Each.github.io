@@ -18,7 +18,7 @@ redirect_from:
 {% endif %}
 {% assign url = gsDataBaseUrl | append: "google-scholar-stats/gs_data_shieldsio.json" %}
 
-I am now a master student of computer science in Zhejiang University [KG Lab](https://www.zjukg.org/), advised by Prof. [Huajun Chen](https://scholar.google.com/citations?user=T6om-m4AAAAJ&hl=zh-CN&oi=ao) and Prof. [Wen Zhang](https://scholar.google.com/citations?user=Ig9ho4kAAAAJ&hl=zh-CN). My research interest includes **Multi-modal Knowledge Graphs** (<span style="color:#D70761;">MMKG</span>), **Large Language Models** (<span style="color:#c68864">LLM</span>), and their application (<span style="color:SeaGreen;">KG&LLM Application</span>) in real-world scenarios. I have published several papers at the top conferences such as SIGIR, ACL, ACM MM, SIGKDD, ICDE, COLING, ISWC, IJCNN, NLPCC. Here is an overview of my research area and publications:
+I am now a master student of computer science in Zhejiang University [KG Lab](https://www.zjukg.org/), advised by Prof. [Huajun Chen](https://scholar.google.com/citations?user=T6om-m4AAAAJ&hl=zh-CN&oi=ao) and Prof. [Wen Zhang](https://scholar.google.com/citations?user=Ig9ho4kAAAAJ&hl=zh-CN). My research interest includes **Multi-modal Knowledge Graphs** (<span style="color:#D70761;">MMKG</span>), **Large Language Models** (<span style="color:#c68864">LLM</span>), and their application (<span style="color:SeaGreen;">KG&LLM Application</span>) in real-world scenarios. I have published several papers at the top conferences such as SIGIR, ACL, ACM MM, SIGKDD, ICDE, AAAI, COLING, ISWC, IJCNN, NLPCC. Here is an overview of my research area and publications:
 
 <img src='images/bigmap.png' align="center" width="60%">
 
@@ -28,9 +28,10 @@ I am looking for a **CS Ph.D. position of 2025 spring and fall**. I am also look
 
 
 # 🔥 News
-- *2024.07*: 🎉 Our paper about [structural knowledge incorporation for large language models](https://arxiv.org/pdf/2310.06671.pdf) has been accepted by [ACM MM 2024](https://2024.acmmm.org/) (oral presentation).
+- *2024.12*: 🎉 Our paper about [Fine-grained Multi-modal Entity Representation](https://arxiv.org/pdf/2310.06671.pdf) has been accepted by [AAAI 2025](https://aaai.org/conference/aaai/aaai-25/).
+- *2024.07*: 🎉 Our paper about [Structural Knowledge Incorporation for LLMs](https://arxiv.org/pdf/2310.06671.pdf) has been accepted by [ACM MM 2024](https://2024.acmmm.org/) (oral presentation).
 - *2024.05*:  😄 We pre-print two papers about [knowledge pre-training for diverse downstream tasks](https://arxiv.org/abs/2405.13085) and [mixture of modality knowledge experts in multi-modal knowledge graph](https://arxiv.org/abs/2405.16869).
-- *2024.05*: 🎉 Our paper about knowledgeable alignment for large language models has been accepted by [ACL 2024](https://2024.aclweb.org/) (Findings).
+- *2024.05*: 🎉 Our paper about Knowledgeable Alignment for LLMs has been accepted by [ACL 2024](https://2024.aclweb.org/) (Findings).
 - *2024.04*:  😄 We pre-print a paper about **[fine-grained tokenization for multi-modal knowledge graphs](https://arxiv.org/abs/2404.09468)** on ArXiv.
 - *2024.03*: 🎉 [Our paper](https://www.techrxiv.org/doi/pdf/10.36227/techrxiv.171259566.60211714) about multi-modal knowledge graph completion is accepted by [SIGIR 2024](https://sigir-2024.github.io/index.html).
 - *2024.02*: 🎉 [One paper](https://arxiv.org/abs/2402.15444) about multi-modal knowledge graph completion is accepted by [LREC-COLING 2024](https://lrec-coling-2024.org/).
@@ -66,10 +67,10 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang,
 </div>
 </div>
 
-<div class='paper-box'><div class='paper-box-image'><div><div class="badge">Preprint 2024</div><img src='images/mygo.png' alt="sym" width="100%"></div></div>
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">AAAI 2025</div><img src='images/mygo.png' alt="sym" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
 
-[MyGO: Discrete Modality Information as Fine-Grained Tokens for Multi-modal Knowledge Graph Completion](https://arxiv.org/abs/2404.09468)
+[(MyGO)Tokenization, Fusion, and Augmentation: Towards Fine-grained Multi-modal Entity Representation](https://arxiv.org/abs/2404.09468)
 
 **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen
 
@@ -150,12 +151,13 @@ Zhuo Chen, **Yichi Zhang**, Yin Fang, Yuxia Geng, Lingbing Guo, Xiang Chen, Qian
 
 
 # 📝 Publications
+- `AAAI 2025`Tokenization, Fusion, and Augmentation: Towards Fine-grained Multi-modal Entity Representation. **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen (CCF-A, Oral)
 - `ACM MM 2024` Making Large Language Models Perform Better in Knowledge Graph Completion. **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Wen Zhang, Huajun Chen (CCF-A, Oral)
 - `ACL 2024 (Findings)` Knowledgeable Preference Alignment for LLMs in Domain-specific Question Answering. **Yichi Zhang**, Zhuo Chen, Yin Fang, Lei Cheng, Yanxi Lu, Fangming Li, Wen Zhang, Huajun Chen (CCF-A)
 - `SIGIR 2024` NativE: Multi-modal Knowledge Graph Completion in the Wild. **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen. (CCF-A)
 - `KBS 2024` Distributed representations of entities in open-world knowledge graphs. Lingbing Guo, Zhuo Chen, Jiaoyan Chen, **Yichi Zhang**, Zequn Sun, Zhongpu Bo, Yin Fang, Xiaoze Liu, Huajun Chen, Wen Zhang. (CCF-C, JCR Section 1)
 - `COLING 2024` Unleashing the Power of Imbalanced Modality Information for Multi-modal Knowledge Graph Completion. **Yichi Zhang**, Zhuo Chen, Lei Liang, Huajun Chen, Wen Zhang. (CCF-B)
-- `ISWC 2023` Rethinking Uncertainly Missing and Ambiguous Visual Modality in Multi-Modal Entity Alignment. Zhuo Chen, Lingbing Guo, Yin Fang, **Yichi Zhang**, Jiaoyan Chen, Jeff Z Pan, Yangning Li, Huajun Chen, Wen Zhang (CCF-G, Oral, Best Paper Candidate)
+- `ISWC 2023` Rethinking Uncertainly Missing and Ambiguous Visual Modality in Multi-Modal Entity Alignment. Zhuo Chen, Lingbing Guo, Yin Fang, **Yichi Zhang**, Jiaoyan Chen, Jeff Z Pan, Yangning Li, Huajun Chen, Wen Zhang (CCF-B, Oral, Best Paper Candidate)
 - `ACM MM 2023` MEAformer: Multi-modal Entity Alignment Transformer for Meta Modality Hybrid. Zhuo Chen, Jiaoyan Chen, Wen Zhang, Lingbing Guo, Yin Fang, Yufeng Huang, **Yichi Zhang**, Yuxia Geng, Jeff Z Pan, Wenting Song, Huajun Chen (CCF-A, Poster)
 - `NLPCC 2023` MACO: A Modality Adversarial and Contrastive Framework for Modality-missing Multi-modal Knowledge Graph Completion. **Yichi Zhang**, Zhuo Chen, Wen Zhang (CCF-C, Oral)
 - `CCKS 2023` CausE: Towards Causal Knowledge Graph Embedding. **Yichi Zhang**, Wen Zhang (EI, Poster)
@@ -168,10 +170,14 @@ Zhuo Chen, **Yichi Zhang**, Yin Fang, Yuxia Geng, Lingbing Guo, Xiang Chen, Qian
 - [NeuralKG](https://github.com/zjukg/NeuralKG). An open-source python library for diverse knowledge graphs representation learning. (2021-2022)
 
 # 👨‍🔬 Patents
-- 一种基于图神经网络与对抗学习的多模态知识图谱补全方法。
+- 一种基于图神经网络与对抗学习的多模态知识图谱补全方法
+- 一种多领域知识图谱预训练和微调方法
+- 一种基于混合模态知识专家的多模态知识图谱补全方法
 
 
 # 🎖 Honors and Awards
+- *2024.11* National Scholarship (国家奖学金)
+- *2024.04* Chiang Chen Scholarship (蒋震奖学金)
 - *2023.04* Chiang Chen Scholarship (蒋震奖学金)
 - *2022.06* Outstanding Bachelor's Degree Graduates (优秀毕业生)
 - *2022.04* Distinguished Engineer Scholarship (卓越工程师奖学金)
