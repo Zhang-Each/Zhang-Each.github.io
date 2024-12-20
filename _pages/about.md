@@ -24,20 +24,18 @@ I am now a master student of computer science in Zhejiang University [KG Lab](ht
 
 I maintain a online noteboook (mainly in Chinese) on [this link](https://zhang-each.github.io/My-CS-Notebook/) to share my learning notes and daily life.
 
-I am looking for a **CS Ph.D. position of 2025 spring and fall**. I am also looking for **LLM related positions in the job market**.
+I am an incoming Ph.D. student of Zhejiang University in 2025 Spring.
 
 
 # 🔥 News
-- *2024.12*: 🎉 Our paper about [Fine-grained Multi-modal Entity Representation](https://arxiv.org/pdf/2310.06671.pdf) has been accepted by [AAAI 2025](https://aaai.org/conference/aaai/aaai-25/).
+- *2024.12*: 🎉 Our paper about [Fine-grained Multi-modal Entity Representation](https://arxiv.org/abs/2404.09468) has been accepted by [AAAI 2025](https://aaai.org/conference/aaai/aaai-25/).
 - *2024.07*: 🎉 Our paper about [Structural Knowledge Incorporation for LLMs](https://arxiv.org/pdf/2310.06671.pdf) has been accepted by [ACM MM 2024](https://2024.acmmm.org/) (oral presentation).
 - *2024.05*:  😄 We pre-print two papers about [knowledge pre-training for diverse downstream tasks](https://arxiv.org/abs/2405.13085) and [mixture of modality knowledge experts in multi-modal knowledge graph](https://arxiv.org/abs/2405.16869).
 - *2024.05*: 🎉 Our paper about Knowledgeable Alignment for LLMs has been accepted by [ACL 2024](https://2024.aclweb.org/) (Findings).
-- *2024.04*:  😄 We pre-print a paper about **[fine-grained tokenization for multi-modal knowledge graphs](https://arxiv.org/abs/2404.09468)** on ArXiv.
 - *2024.03*: 🎉 [Our paper](https://www.techrxiv.org/doi/pdf/10.36227/techrxiv.171259566.60211714) about multi-modal knowledge graph completion is accepted by [SIGIR 2024](https://sigir-2024.github.io/index.html).
 - *2024.02*: 🎉 [One paper](https://arxiv.org/abs/2402.15444) about multi-modal knowledge graph completion is accepted by [LREC-COLING 2024](https://lrec-coling-2024.org/).
 - *2024.02*: 😄 We pre-print our survey paper [Knowledge Graphs Meet Multi-Modal Learning: A Comprehensive Survey](http://arxiv.org/abs/2402.05391).
 - *2023.12*: 😄 I join Ant Group for a research intern, focusing on knowledge pre-training for recommender systems.
-- *2023.10*: 😄 We pre-print a paper about **large language model for knowledge graph reasoning** on ArXiv.
 
 # 🌟 Preprints
 
