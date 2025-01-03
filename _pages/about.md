@@ -28,7 +28,8 @@ I am an incoming Ph.D. student of Zhejiang University in 2025 Spring.
 
 
 # 🔥 News
-- *2024.12*: 🎉 Our paper about [Fine-grained Multi-modal Entity Representation](https://arxiv.org/abs/2404.09468) has been accepted by [AAAI 2025](https://aaai.org/conference/aaai/aaai-25/).
+- *2025.01*: 😄 We pre-print our paper [Have We Designed Generalizable Structural Knowledge Promptings? Systematic Evaluation and Rethinking](https://arxiv.org/abs/2501.00244).
+- *2024.12*: 🎉 Our papers about [Fine-grained Multi-modal Entity Representation](https://arxiv.org/abs/2404.09468) and LLM-based Knowledge Graph Completion has been accepted by [AAAI 2025](https://aaai.org/conference/aaai/aaai-25/).
 - *2024.07*: 🎉 Our paper about [Structural Knowledge Incorporation for LLMs](https://arxiv.org/pdf/2310.06671.pdf) has been accepted by [ACM MM 2024](https://2024.acmmm.org/) (oral presentation).
 - *2024.05*:  😄 We pre-print two papers about [knowledge pre-training for diverse downstream tasks](https://arxiv.org/abs/2405.13085) and [mixture of modality knowledge experts in multi-modal knowledge graph](https://arxiv.org/abs/2405.16869).
 - *2024.05*: 🎉 Our paper about Knowledgeable Alignment for LLMs has been accepted by [ACL 2024](https://2024.aclweb.org/) (Findings).
@@ -38,6 +39,19 @@ I am an incoming Ph.D. student of Zhejiang University in 2025 Spring.
 - *2023.12*: 😄 I join Ant Group for a research intern, focusing on knowledge pre-training for recommender systems.
 
 # 🌟 Preprints
+
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">Preprint 2025</div><img src='images/subaru.png' alt="sym" width="100%"></div></div>
+<div class='paper-box-text' markdown="1">
+
+[**Have We Designed Generalizable Structural Knowledge Promptings? Systematic Evaluation and Rethinking**](https://arxiv.org/abs/2501.00244)
+
+Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Shaokai Chen, Mengshu Sun, Binbin Hu, Zhiqiang Zhang, Lei Liang, Wen Zhang, Huajun Chen
+
+[**Project Page**](https://github.com/zjukg/SUBARU) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
+- TL;DR: Mixture-of-experts networks in <span style="color:#c68864;">LLM</span>.
+- Github Stars: [![](https://img.shields.io/github/stars/zjukg/SUBARU)](https://github.com/zjukg/SUBARU) 🌟
+</div>
+</div>
 
 <div class='paper-box'><div class='paper-box-image'><div><div class="badge">Preprint 2024</div><img src='images/momok.png' alt="sym" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
@@ -51,6 +65,8 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang,
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/MoMoK)](https://github.com/zjukg/MoMoK) 🌟
 </div>
 </div>
+
+
 
 <div class='paper-box'><div class='paper-box-image'><div><div class="badge">Preprint 2024</div><img src='images/mudok.png' alt="sym" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
@@ -149,7 +165,8 @@ Zhuo Chen, **Yichi Zhang**, Yin Fang, Yuxia Geng, Lingbing Guo, Xiang Chen, Qian
 
 
 # 📝 Publications
-- `AAAI 2025` Tokenization, Fusion, and Augmentation: Towards Fine-grained Multi-modal Entity Representation. **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen (CCF-A, Poster)
+- `AAAI 2025` Tokenization, Fusion, and Augmentation: Towards Fine-grained Multi-modal Entity Representation. **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen (CCF-A)
+- `AAAI 2025` K-ON: Stacking Knowledge On the Head Layer of Large Language Model. Lingbing Guo, **Yichi Zhang**, Zhongpu Bo, Zhuo Chen, Mengshu Sun, Zhiqiang Zhang, Wen Zhang, Huajun Chen (CCF-A)
 - `ACM MM 2024` Making Large Language Models Perform Better in Knowledge Graph Completion. **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Wen Zhang, Huajun Chen (CCF-A, Oral)
 - `ACL 2024 (Findings)` Knowledgeable Preference Alignment for LLMs in Domain-specific Question Answering. **Yichi Zhang**, Zhuo Chen, Yin Fang, Lei Cheng, Yanxi Lu, Fangming Li, Wen Zhang, Huajun Chen (CCF-A)
 - `SIGIR 2024` NativE: Multi-modal Knowledge Graph Completion in the Wild. **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen. (CCF-A)
