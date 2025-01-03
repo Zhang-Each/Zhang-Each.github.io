@@ -61,7 +61,7 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Shaokai Chen, Mengshu Sun, Binb
 Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen
 
 [**Project Page**](https://github.com/zjukg/MoMoK) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- TL;DR: Mixture-of-experts networks in <span style="color:#D70761;">MMKG</span>.
+- TL;DR: A comprehensive evaluation about **structural knowledge prompting** <span style="color:#D70761;">MMKG</span>.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/MoMoK)](https://github.com/zjukg/MoMoK) 🌟
 </div>
 </div>
