@@ -48,7 +48,7 @@ I am an incoming Ph.D. student of Zhejiang University in 2025 Spring.
 Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Shaokai Chen, Mengshu Sun, Binbin Hu, Zhiqiang Zhang, Lei Liang, Wen Zhang, Huajun Chen
 
 [**Project Page**](https://github.com/zjukg/SUBARU) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- TL;DR: Mixture-of-experts networks in <span style="color:#c68864;">LLM</span>.
+- TL;DR: A comprehensive evaluation of **structural knowledge promptings** <span style="color:#c68864;">LLM</span>.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/SUBARU)](https://github.com/zjukg/SUBARU) 🌟
 </div>
 </div>
@@ -61,7 +61,7 @@ Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Shaokai Chen, Mengshu Sun, Binb
 Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen
 
 [**Project Page**](https://github.com/zjukg/MoMoK) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- TL;DR: A comprehensive evaluation about **structural knowledge prompting** <span style="color:#D70761;">MMKG</span>.
+- TL;DR: Mixture-of-experts networks in <span style="color:#D70761;">MMKG</span>.
 - Github Stars: [![](https://img.shields.io/github/stars/zjukg/MoMoK)](https://github.com/zjukg/MoMoK) 🌟
 </div>
 </div>
