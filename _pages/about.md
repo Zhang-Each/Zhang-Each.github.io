@@ -138,30 +138,25 @@ Zhuo Chen, **Yichi Zhang**, Yin Fang, Yuxia Geng, Lingbing Guo, Xiang Chen, Qian
 
 
 # 📝 Publications
-- `AAAI 2025` [Tokenization, Fusion, and Augmentation: Towards Fine-grained Multi-modal Entity Representation](https://arxiv.org/abs/2404.09468) 
-> **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen (CCF-A)
-- `AAAI 2025` K-ON: Stacking Knowledge On the Head Layer of Large Language Model. Lingbing Guo, **Yichi Zhang**, Zhongpu Bo, Zhuo Chen, Mengshu Sun, Zhiqiang Zhang, Wen Zhang, Huajun Chen (CCF-A)
-- `ACM MM 2024` Making Large Language Models Perform Better in Knowledge Graph Completion. **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Wen Zhang, Huajun Chen (CCF-A, Oral)
-- `ACL 2024 (Findings)` Knowledgeable Preference Alignment for LLMs in Domain-specific Question Answering. **Yichi Zhang**, Zhuo Chen, Yin Fang, Lei Cheng, Yanxi Lu, Fangming Li, Wen Zhang, Huajun Chen (CCF-A)
-- `SIGIR 2024` NativE: Multi-modal Knowledge Graph Completion in the Wild. **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen. (CCF-A)
-- `KBS 2024` Distributed representations of entities in open-world knowledge graphs. Lingbing Guo, Zhuo Chen, Jiaoyan Chen, **Yichi Zhang**, Zequn Sun, Zhongpu Bo, Yin Fang, Xiaoze Liu, Huajun Chen, Wen Zhang. (CCF-C, JCR Section 1)
-- `COLING 2024` Unleashing the Power of Imbalanced Modality Information for Multi-modal Knowledge Graph Completion. **Yichi Zhang**, Zhuo Chen, Lei Liang, Huajun Chen, Wen Zhang. (CCF-B)
-- `ISWC 2023` Rethinking Uncertainly Missing and Ambiguous Visual Modality in Multi-Modal Entity Alignment. Zhuo Chen, Lingbing Guo, Yin Fang, **Yichi Zhang**, Jiaoyan Chen, Jeff Z Pan, Yangning Li, Huajun Chen, Wen Zhang (CCF-B, Oral, Best Paper Candidate)
-- `ACM MM 2023` MEAformer: Multi-modal Entity Alignment Transformer for Meta Modality Hybrid. Zhuo Chen, Jiaoyan Chen, Wen Zhang, Lingbing Guo, Yin Fang, Yufeng Huang, **Yichi Zhang**, Yuxia Geng, Jeff Z Pan, Wenting Song, Huajun Chen (CCF-A, Poster)
-- `NLPCC 2023` MACO: A Modality Adversarial and Contrastive Framework for Modality-missing Multi-modal Knowledge Graph Completion. **Yichi Zhang**, Zhuo Chen, Wen Zhang (CCF-C, Oral)
-- `CCKS 2023` CausE: Towards Causal Knowledge Graph Embedding. **Yichi Zhang**, Wen Zhang (EI, Poster)
-- `ICDE 2023` Tele-Knowledge Pre-training for Fault Analysis. Zhuo Chen, Wen Zhang, Yufeng Huang, Mingyang Chen, Yuxia Geng, Hongtao Yu, Zhen Bi, **Yichi Zhang**, Zhen Yao, Wenting Song, Xinliang Wu, Yi Yang, Song Jiang, Zhaoyang Lian, Yingying Li, Huajun Chen (CCF-A, Industry Track, Oral)
-- `IJCNN 2023` Modality-Aware Negative Sampling for Multi-modal Knowledge Graph Embedding. **Yichi Zhang**, Mingyang Chen, Wen Zhang (CCF-C, Oral)
-- `KDD 2022` Knowledge Graph Completion with Pre-trained Multimodal Transformer and Twins Negative Sampling. **Yichi Zhang**, Wen Zhang (CCF-A, UC Track)
+- `ICLR 2025` [Multiple Heads are Better than One: Mixture of Modality Knowledge Experts for Entity Representation Learning](https://arxiv.org/abs/2405.16869). Yichi Zhang, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen (CCF-A, Poster)
+- `AAAI 2025` [Tokenization, Fusion, and Augmentation: Towards Fine-grained Multi-modal Entity Representation](https://arxiv.org/abs/2404.09468). **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen (CCF-A, Poster)
+- `AAAI 2025` [K-ON: Stacking Knowledge On the Head Layer of Large Language Model](https://arxiv.org/pdf/2502.06257). Lingbing Guo, **Yichi Zhang**, Zhongpu Bo, Zhuo Chen, Mengshu Sun, Zhiqiang Zhang, Wen Zhang, Huajun Chen (CCF-A, Oral)
+- `ACM MM 2024` [Making Large Language Models Perform Better in Knowledge Graph Completion](https://arxiv.org/pdf/2310.06671). **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Wen Zhang, Huajun Chen (CCF-A, Oral)
+- `ACL 2024 (Findings)` [Knowledgeable Preference Alignment for LLMs in Domain-specific Question Answering](https://arxiv.org/pdf/2311.06503). **Yichi Zhang**, Zhuo Chen, Yin Fang, Lei Cheng, Yanxi Lu, Fangming Li, Wen Zhang, Huajun Chen (CCF-A, Poster)
+- `SIGIR 2024` [NativE: Multi-modal Knowledge Graph Completion in the Wild](https://arxiv.org/pdf/2406.17605). **Yichi Zhang**, Zhuo Chen, Lingbing Guo, Yajing Xu, Binbin Hu, Ziqi Liu, Wen Zhang, Huajun Chen. (CCF-A, Oral)
+- `KBS 2024` [Distributed representations of entities in open-world knowledge graphs](https://arxiv.org/pdf/2010.08114). Lingbing Guo, Zhuo Chen, Jiaoyan Chen, **Yichi Zhang**, Zequn Sun, Zhongpu Bo, Yin Fang, Xiaoze Liu, Huajun Chen, Wen Zhang. (CCF-C, JCR Section 1)
+- `COLING 2024` [Unleashing the Power of Imbalanced Modality Information for Multi-modal Knowledge Graph Completion](https://aclanthology.org/2024.lrec-main.1487/). **Yichi Zhang**, Zhuo Chen, Lei Liang, Huajun Chen, Wen Zhang. (CCF-B, Poster)
+- `ISWC 2023` [Rethinking Uncertainly Missing and Ambiguous Visual Modality in Multi-Modal Entity Alignment](https://arxiv.org/pdf/2307.16210). Zhuo Chen, Lingbing Guo, Yin Fang, **Yichi Zhang**, Jiaoyan Chen, Jeff Z Pan, Yangning Li, Huajun Chen, Wen Zhang (CCF-B, Oral, **Best Paper Candidate**)
+- `ACM MM 2023` [MEAformer: Multi-modal Entity Alignment Transformer for Meta Modality Hybrid](https://arxiv.org/pdf/2212.14454). Zhuo Chen, Jiaoyan Chen, Wen Zhang, Lingbing Guo, Yin Fang, Yufeng Huang, **Yichi Zhang**, Yuxia Geng, Jeff Z Pan, Wenting Song, Huajun Chen (CCF-A, Poster)
+- `NLPCC 2023` [MACO: A Modality Adversarial and Contrastive Framework for Modality-missing Multi-modal Knowledge Graph Completion](https://arxiv.org/pdf/2308.06696). **Yichi Zhang**, Zhuo Chen, Wen Zhang (CCF-C, Oral)
+- `CCKS 2023` [CausE: Towards Causal Knowledge Graph Embedding](https://arxiv.org/abs/2307.11610). **Yichi Zhang**, Wen Zhang (EI, Poster)
+- `ICDE 2023` [Tele-Knowledge Pre-training for Fault Analysis](https://arxiv.org/abs/2210.11298). Zhuo Chen, Wen Zhang, Yufeng Huang, Mingyang Chen, Yuxia Geng, Hongtao Yu, Zhen Bi, **Yichi Zhang**, Zhen Yao, Wenting Song, Xinliang Wu, Yi Yang, Song Jiang, Zhaoyang Lian, Yingying Li, Huajun Chen (CCF-A, Industry Track, Oral)
+- `IJCNN 2023` [Modality-Aware Negative Sampling for Multi-modal Knowledge Graph Embedding](https://ieeexplore.ieee.org/document/10191314). **Yichi Zhang**, Mingyang Chen, Wen Zhang (CCF-C, Oral)
+- `KDD 2022` [Knowledge Graph Completion with Pre-trained Multimodal Transformer and Twins Negative Sampling](https://arxiv.org/abs/2209.07084). **Yichi Zhang**, Wen Zhang (CCF-A, UC Track)
 
 # 🐘 Projects
 - Knowledge Graph Enhanced Telecom Fault Analysis. Core participants. Cooperation with Huawei Technology. (2021-2024)
 - [NeuralKG](https://github.com/zjukg/NeuralKG). An open-source python library for diverse knowledge graphs representation learning. (2021-2022)
-
-# 👨‍🔬 Patents
-- 一种基于图神经网络与对抗学习的多模态知识图谱补全方法
-- 一种多领域知识图谱预训练和微调方法
-- 一种基于混合模态知识专家的多模态知识图谱补全方法
 
 
 # 🎖 Honors and Awards
