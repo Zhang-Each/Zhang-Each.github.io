@@ -36,7 +36,7 @@
   <meta name="keywords" lang="en" content="Yichi Zhang." />
   
 
-  <link rel="shortcut icon" href="images/icon/z.jpg">
+  <link rel="shortcut icon" href="images/icon/zju.png">
   <link rel="stylesheet" href="main.css">
   <link rel="stylesheet" href="css/custom.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -49,6 +49,127 @@
 
 
   <script src="js/jquery-2.1.3.min.js"> </script>
+
+
+  <script type="text/javascript">
+    function toggle_vis(id) {
+        // var e = document.getElementById(id);
+        var e = document.getElementsByClassName(id);
+        var showText = document.getElementById("showText");
+        for (var i = 0; i < e.length; i++) {
+            if (e[i].style.display == "none") {
+                e[i].style.display = "inline";
+                showText.innerHTML = "[Show less]";
+            } else {
+                e[i].style.display = "none";
+                showText.innerHTML = "[Show more]";
+            }
+        }
+    }
+
+    function toggle_my_vis(id, showid, t1="[hide]", t2="[show]") {
+        // var e = document.getElementById(id);
+        var e = document.getElementsByClassName(id);
+        var showText = document.getElementById(showid);
+        for (var i = 0; i < e.length; i++) {
+            if (e[i].style.display == "none") {
+                e[i].style.display = "inline";
+                showText.innerHTML = t1;
+            } else {
+                e[i].style.display = "none";
+                showText.innerHTML = t2;
+            }
+        }
+    }
+
+
+    function toggle_research_vis(target, tabElement) {
+        var is_current_summary = 0;
+
+        var e = document.getElementsByClassName("research_summary");
+        for (var i = 0; i < e.length; i++) {
+            if (e[i].id == target) {
+                if (e[i].style.display == "inline") {
+                    is_current_summary = 1;
+                } else {
+                    e[i].style.display = "inline";
+                }
+            } else {
+                e[i].style.display = "none";
+            }
+        }
+
+        var e = document.getElementsByClassName("progress_button");
+        for (var i = 0; i < e.length; i++) {
+            if (e[i].id == target + "_button") {
+                if (is_current_summary == 0) {
+                    e[i].style.display = "inline";
+                }
+            } else {
+                e[i].style.display = "none";
+            }
+        }
+
+        var e = document.getElementsByClassName("goal_tabs");
+        for (var i = 0; i < e.length; i++) {
+            if (e[i].id != target + "_goal_tabs") {
+                e[i].style.display = "none";
+            }
+        }
+
+        var e = document.getElementsByClassName("highlight_research_tab");
+        for (var i = 0; i < e.length; i++) {
+            e[i].className = "research_tab";
+        }
+        tabElement.className = "highlight_research_tab"
+    }
+
+    function toggle_goal_vis(id, goal_tabs_id, goal) {
+        var e = document.getElementById(id);
+        e.style.display = "none";
+        var goal_tabs = document.getElementById(goal_tabs_id);
+        goal_tabs.style.display = "inline";
+
+        var goal_tab = document.getElementById(goal + "_tab");
+        toggle_goal_progress_vis(goal_tab);
+        // add_goal_progress_div(goal);
+    }
+
+    function toggle_goal_progress_vis(tabElement) {
+        var target = tabElement.id;
+        target = target.substring(0, target.length - 4);
+
+        var e = document.getElementsByClassName("goal_progress");
+        for (var i = 0; i < e.length; i++) {
+            if (e[i].id == target) {
+                e[i].style.display = "inline";
+            } else {
+                e[i].style.display = "none";
+            }
+        }
+
+        var e = document.getElementsByClassName("highlight_goal_tab");
+        for (var i = 0; i < e.length; i++) {
+            e[i].className = "goal_tab";
+        }
+        tabElement.className = "highlight_goal_tab"
+
+        add_goal_progress_div(target);
+    }
+
+    function add_goal_progress_div(goal) {
+        var e = document.getElementById(goal);
+        if (e && e.children.length == 0) {
+            var children = Array.from(document.getElementsByClassName(goal));
+            for (var i = 0; i < children.length; i++) {
+                var cloned_div = children[i].cloneNode(true);
+                cloned_div.className = "publication_container";
+                e.appendChild(cloned_div);
+            }
+        }
+    }
+</script>
+
 
   <!--[if lt IE 9]>
 <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js">
@@ -255,6 +376,82 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   
   </div>
 </div>
+
+
+<div id="misc" class="bio">
+  <div class="bio-body" style="overflow:hidden;">
+    <h1 class="md-heading text-left">
+      <i class="fa fa-id-card" aria-hidden="true"></i>
+      Research Summary
+    </h1>
+
+    <div style="display: flex;">
+      <div class="highlight_research_tab" onclick="toggle_research_vis('mmkg', this)"><b>Multi-modal Knowledge Graphs</b></div>
+      <div class="research_tab" onclick="toggle_research_vis('llm', this)"><b>Large Language Models</b></div>
+      <div class="research_tab" onclick="toggle_research_vis('application', this)"><b>Application</b></div>
+    </div>
+    
+    <div class="research_summary" id="mmkg" style="display:inline">
+      
+    <div class="research_box">
+    
+      <p style="margin-left: 20px;margin-right: 20px;margin-top: 10px;">
+        <b>Multi-modal Knowledge Graph Representation & Reasoning & Completion: </b> Represent the entities and relations in the vector spaces to conduct structured knowledge reasoning and new knowledge discovery. Our research mainly focuses on <b>incorporate diverse modalities (image, text, numeric, audio, video)</b> of the entities to enhance the representation learning and further benifit the MMKG reasoning and completion. Besides, we introduce more popular and effective representation learning techniques to solve the problems in this field and better achieve this goal:
+        <ul>
+          <li> <b>Imbalanced Modality Distribution</b>: Adversarial Training (<a class="author" href="https://aclanthology.org/2024.lrec-main.1487/"><b>AdaMF-MAT</b></a>, <a class="author" href="https://arxiv.org/pdf/2406.17605"><b>NATIVE</b></a>)
+          <li> <b>Fine-grained Modality Fusion</b>: Modality Tokenization and Hierarchical Modeling (<a class="author" href="https://arxiv.org/abs/2404.09468"><b>MyGO</b></a>)
+          <li> <b>Modality Entanglement and Disentanglement</b>: Mixture-of-Experts Networks (<a class="author" href="https://arxiv.org/pdf/2405.16869"><b>MoMoK</b></a>)
+        </ul>
+      </p>
+    
+    </div>
+    
+      
+    
+    
+      <!--<img class="research_picture" src="images/KnowledgeTransfer.jpg"> -->
+    
+    
+
+    </div>
+    
+    <div class="research_summary" id="llm" style="display:none">
+    
+      <div class="research_box">
+    
+          <p style="margin-left: 20px;margin-right: 20px;margin-top: 10px;">
+            <b>Knowledge-enhanced Large Language Models: </b>: Incorporating structural knowledge into large language models to achieve the harmonious combination of KGs and LLMs. Our research consists of two points: employing LLMs to enhance structured reasoning, and utilizing structured knowledge (both parameterized and non-parameterized) to improve LLMs' performance in certain tasks:
+            <ul>
+              <li> <b>Incorporate Parameterized Structural Information into LLMs</b>: Knowledge Prefix Adapter (<a class="author" href="https://arxiv.org/pdf/2310.06671"><b>KoPA</b></a>)
+              <li> <b>Systematic Evaluation of LLM's Structural Understanding Ability</b>: Structural Knowledge Prompting Benchmark with Reasoning and Understanding Tasks (<a class="author" href="https://arxiv.org/pdf/2501.00244"><b>SUBARU</b></a>)
+              <li> <b>Select Better Context Knowledge</b>: Knowledgeable Preference Alignment (<a class="author" href="https://arxiv.org/pdf/2311.06503"><b>KnowPAT</b></a>)
+            </ul>
+          </p>
+      
+      </div>
+    
+      <!-- <img class="research_picture" src="images/CollaborativeLearning.jpg"> -->
+    
+    </div>
+    
+    <div class="research_summary" id="application" style="display:none">
+      <!-- <img class="research_picture" src="images/AppliedResearch.jpg"> -->
+      <div class="research_box">
+    
+        <p style="margin-left: 20px;margin-right: 20px;margin-top: 10px;">
+          <b>Application of KGs and LLMs in Specific Domains: </b>: Utilizing KGs and LLMs to solve real-world problems in specific domains. Our research mainly focuces on the telecom network service and E-commerce recommendation system. We have developed the following algorithms and frameworks in our collaborative PROJECTS with companies:
+          <ul>
+            <li> <b>Telecom Network Analysis and Fault Diagnosis</b>: KG-enhanced Domain BERT Pre-training (<a class="author" href="https://arxiv.org/pdf/2210.11298"><b>TeleBERT</b></a>)
+            <li> <b>Intelligent Telecom Customer Service</b>: Knowledgeable Preference Alignment (<a class="author" href="https://arxiv.org/pdf/2311.06503"><b>KnowPAT</b></a>)
+            <li> <b>E-commerce Recommendation/QA/Review Prediction</b>: Transferable Text-informed KG Pre-training (<a class="author" href="https://arxiv.org/pdf/2405.13085"><b>MuDoK</b></a>)
+          </ul>
+        </p>
+    
+    </div>
+    </div>
+    </div>
+</div>
+
 
 
 
@@ -537,47 +734,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <div id="teaching" class="bio">
-      <h1 class="md-heading text-left">
-        <i class="fa fa-tasks" aria-hidden="true"></i>
-        Academic Service
-      </h1>  
-      <ul>
-        <li> Conference Reviewer: ICLR 2025, Neurips 2024, WWW 2024/2025, ARR 2023/2024/2025, ACM MM 2024, IJCNN 2024/2025.
-        <li> Conference Volunteer: ISWC 2023, IJCKG 2022.
-        <li> Journal Reviewer: IEEE TAI, IEEE TKDE
-      </ul>
-</div>
-
-<!-- <div class="wrapper">
-  <div id="academicservices" class="bio">
-    <div class="bio-body" style="overflow:hidden;">
-      <h1 class="md-heading text-left">
-        <i class="fa fa-tasks" aria-hidden="true"></i>
-        Academic Services
-      </h1>  
-      <b>Journal/Conference Reviewer:</b> NeurIPS, IEEE Transactions on Big Data, PLOS ONE<br>
-      <b>Volunteer:</b> KDD 2023, NeurIPS 2023
-    </div>
-  </div>
-</div> -->
-
-
-<div id="misc" class="bio">
-  <div class="bio-body" style="overflow:hidden;">
     <h1 class="md-heading text-left">
-      <i class="fa fa-id-card" aria-hidden="true"></i>
-      Miscellaneous
+      <i class="fa fa-tasks" aria-hidden="true"></i>
+      Academic Service
     </h1>  
-    <p>
-    <table style="width:80%;max-width:400px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
-      <tbody><tr>
-        <td style="width:100%; vertical-align:middle; text-align:center;"><p>
-          <script type="text/javascript" id="clustrmaps" src="//www.clustrmaps.com/map_v2.png?d=QXAUn7a1zmV720XLTFBQ4ihAmOcUWG0QtA3xa9jfevg&cl=ffffff"></script>
-        </a></p></td>
-        </tr></tbody>
-      </table>
-    </div>
+    <ul>
+      <li> Conference Reviewer: ICLR 2025, Neurips 2024, WWW 2024/2025, ARR 2023/2024/2025, ACM MM 2024, IJCNN 2024/2025.
+      <li> Conference Volunteer: ISWC 2023, IJCKG 2022.
+      <li> Journal Reviewer: IEEE TAI, IEEE TKDE
+    </ul>
 </div>
+
 
 
 
@@ -606,7 +773,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
 	<div class="footer-col footer-col-3">
     <a href="https://info.flagcounter.com/YCFC"><img src="https://s11.flagcounter.com/mini/YCFC/bg_FFFFFF/txt_000000/border_CCCCCC/flags_0/" alt="Flag Counter" border="0"></a>
-		<p class="text">Last updated: March, 2026.<br>The style of this website is borrowed from <a href='http://hexianghu.com/'>Hexiang Hu's</a>.</p>
+		<p class="text">Last updated: March, 2025.<br>The style of this website is borrowed from <a href='http://hexianghu.com/'>Hexiang Hu's</a>.</p>
 	</div>
   </div>
   </div>
@@ -635,17 +802,7 @@ jQuery(document).ready(function() {
 </script>
   </body>
 
-<!--
-  <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-60071442-1', 'auto');
-  ga('send', 'pageview');
-</script>
--->
 
 <!--<script src="custom-pub.js"></script>-->
 </html>

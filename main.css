@@ -46,7 +46,7 @@ body {
 
 body:after {
     display: none;
-    content: url("images/background/background1.JPG") url("images/background/background2.jpg")
+    content: url("images/background/background1.JPG")
 }
 
 h1,
@@ -1971,4 +1971,52 @@ div.paginate-container li:nth-last-child(2) a:after {
     .project-content h4 {
         font-size: 18px
     }
+}
+
+
+.research_tab {
+	flex: 1;
+	/* flex-grow: 1; */
+	text-align: center; /* 文字居中 */
+	cursor: pointer;
+	padding: 10px 10px;
+	margin: 1px;
+	background-color: #f0f0f0;
+	border: 2px solid #c0c0c0;
+	border-radius: 5px;
+	transition: background-color 0.3s, border-color 0.3s;
+}
+
+.research_tab:hover {
+	background-color: #e0e0e0;
+}
+
+.highlight_research_tab {
+	color: white;
+	font-weight: bold;
+	flex: 1;
+	/* flex-grow: 1; */
+	text-align: center; /* 文字居中 */
+	cursor: pointer;
+	padding: 10px 10px;
+	margin: 1px;
+	background-color: #828282;
+	border: 2px solid #d6d2d2;
+	border-radius: 5px;
+	transition: background-color 0.3s, border-color 0.3s;
+}
+
+.research_picture {
+	width: calc(100% - 1px);
+	margin: 1px;
+	margin-top: 10px;
+}
+
+.research_progress {
+	margin-top: 5px;
+}
+
+.progress_button {
+	margin-left: 1px;
+	/* flex: 1; */
 }
