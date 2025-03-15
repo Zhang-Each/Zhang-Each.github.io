@@ -46,7 +46,7 @@ body {
 
 body:after {
     display: none;
-    content: url("images/background/background1.JPG")
+    content: url("images/background/background.png")
 }
 
 h1,
@@ -678,7 +678,7 @@ pre>code {
 }
 
 .shallow-bg {
-    background-image: url("images/background/background1.JPG");
+    background-image: url("images/background/background.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center
@@ -2020,3 +2020,27 @@ div.paginate-container li:nth-last-child(2) a:after {
 	margin-left: 1px;
 	/* flex: 1; */
 }
+
+
+/* 标签样式 */
+.tag {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white; /* 标签文字颜色为白色 */
+    background-color: #888;
+    transition: background-color 0.3s ease;
+}
+
+.tag:hover {
+    background-color: #555;
+}
+
+/* 标签颜色 */
+.tag-mmkg { background-color: #009688; } /* ML标签颜色 */
+.tag-llm { background-color: #3f51b5; } /* AI标签颜色 */
+.tag-other1 { background-color: #ff9800; } /* 深度学习标签颜色 */
+.tag-other2 { background-color: #9b3022; } /* 深度学习标签颜色 */
+.tag-other3 { background-color: #3388bb; } /* 深度学习标签颜色 */
