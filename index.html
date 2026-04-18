@@ -401,6 +401,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <li> <b>Imbalanced Modality Distribution</b>: Adversarial Training (<a class="author" href="https://aclanthology.org/2024.lrec-main.1487/"><b>AdaMF-MAT</b></a>, <a class="author" href="https://arxiv.org/pdf/2406.17605"><b>NATIVE</b></a>)
           <li> <b>Fine-grained Modality Fusion</b>: Modality Tokenization and Hierarchical Modeling (<a class="author" href="https://arxiv.org/abs/2404.09468"><b>MyGO</b></a>)
           <li> <b>Modality Entanglement and Disentanglement</b>: Mixture-of-Experts Networks (<a class="author" href="https://arxiv.org/pdf/2405.16869"><b>MoMoK</b></a>)
+          <li> <b>Federated Multi-modal Knowledge Aggregation</b>: Multi-modal Codebook-based Knowledge Sharing (<a class="author" href="https://dl.acm.org/doi/10.1145/3746027.3755311"><b>MUCO</b></a>)
         </ul>
       </p>
     
@@ -425,7 +426,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <li> <b>Incorporate Parameterized Structural Information into LLMs</b>: Knowledge Prefix Adapter (<a class="author" href="https://arxiv.org/pdf/2310.06671"><b>KoPA</b></a>)
               <li> <b>Systematic Evaluation of LLM's Structural Understanding Ability</b>: Structural Knowledge Prompting Benchmark with Reasoning and Understanding Tasks (<a class="author" href="https://arxiv.org/pdf/2501.00244"><b>SUBARU</b></a>)
               <li> <b>Select Better Context Knowledge</b>: Knowledgeable Preference Alignment (<a class="author" href="https://arxiv.org/pdf/2311.06503"><b>KnowPAT</b></a>)
-              <li> <b>Understand and Reasoning with Structured Visual Contents</b>: Abstractive and Strcutured Visual Reasoning (<a class="author" href="https://arxiv.org/abs/2506.01293"><b>M3STR</b></a>)
+              <li> <b>Understand and Reasoning with Structured Visual Contents</b>: Abstractive and Strcutured Visual Reasoning (<a class="author" href="https://arxiv.org/abs/2506.01293"><b>M3STR</b></a>), Knowledge-informed GRPO for MLLM Abstractive Reasoning (<a class="author" href="https://arxiv.org/abs/2510.21828"><b>STAR & KGRPO</b></a>).
             </ul>
           </p>
       
@@ -445,6 +446,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li> <b>Telecom Network Analysis and Fault Diagnosis</b>: KG-enhanced Domain BERT Pre-training (<a class="author" href="https://arxiv.org/pdf/2210.11298"><b>TeleBERT</b></a>)
             <li> <b>Intelligent Telecom Customer Service</b>: Knowledgeable Preference Alignment (<a class="author" href="https://arxiv.org/pdf/2311.06503"><b>KnowPAT</b></a>)
             <li> <b>E-commerce Recommendation/QA/Review Prediction</b>: Transferable Text-informed KG Pre-training (<a class="author" href="https://arxiv.org/pdf/2405.13085"><b>MuDoK</b></a>)
+            <li> <b>Reliable Answer Generation with Entity-level Citations</b>: Knowledge-informed Citation (<a class="author" href="https://arxiv.org/"><b>Self-KFC</b></a>)
           </ul>
         </p>
     
@@ -468,13 +470,80 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="pub">
       <div class="pub-left">
+        <img class="intro-img frame" src="images/paper/star.png">
+      </div>
+      <div class="pub-right">
+        <div class="title">
+          Structured and Abstractive Reasoning on Multi-modal Relational Knowledge Images
+        </div>
+        <div class="desc">
+        </div>
+        <div class="authors">
+          <font style="font-size: 11pt;">
+            <a class="author" href="https://zhang-each.github.io/"><b>Yichi Zhang</b></a>,
+            <a class="author" href="https://hackerchenzhuo.github.io/">Zhuo Chen</a>,
+            <a class="author" href="https://guolingbing.github.io/">Lingbing Guo</a>,
+            <a class="author" >Wen Zhang</a>,
+            <a class="author" >Huajun Chen</a>
+            <!-- (*: Equal contribution) -->
+          </font>
+        </div>
+        <div class="publish">
+          <span class="publisher">ACL 2026 (Findings)</span>
+          <span class="place"></span>
+        </div>
+        <div class="tags">
+          [<a href="https://arxiv.org/abs/2510.21828" class="publication-button pdf">ArXiV</a>]
+          [<a href="https://github.com/zjukg/STAR" class="publication-button pdf">Code</a>]
+        </div>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div class="pub-left">
+        <img class="intro-img frame" src="images/paper/kfc.png">
+      </div>
+      <div class="pub-right">
+        <div class="title">
+          Know the Known and the Unknown: Reasonable Answer Generation with Knowledge-Informed Citations
+        </div>
+        <div class="desc">
+        </div>
+        <div class="authors">
+          <font style="font-size: 11pt;">
+            <a class="author" href="https://zhang-each.github.io/"><b>Yichi Zhang</b></a>,
+            <a class="author" href="https://hackerchenzhuo.github.io/">Zhuo Chen</a>,
+            <a class="author" href="https://guolingbing.github.io/">Lingbing Guo</a>,
+            <a class="author" >Jun Xu</a>,
+            <a class="author" >Mengshu Sun</a>,
+            <a class="author" >Zhizheng Liu</a>,
+            <a class="author" >Lei Liang</a>,
+            <a class="author" >Wen Zhang</a>,
+            <a class="author" >Huajun Chen</a>
+            <!-- (*: Equal contribution) -->
+          </font>
+        </div>
+        <div class="publish">
+          <span class="publisher">ACL 2026 (Findings)</span>
+          <span class="place"></span>
+        </div>
+        <div class="tags">
+          [<a href="https://dl.acm.org/doi/abs/10.1145/3746027.3758158" class="publication-button pdf">Paper</a>]
+          [<a href="https://arxiv.org/abs/2506.01293" class="publication-button pdf">ArXiV</a>]
+          [<a href="https://github.com/zjukg/M3STR" class="publication-button pdf">Code</a>]
+          [<a href="https://huggingface.co/datasets/Zhang-Each/M3STR" class="publication-button pdf">Dataset</a>]
+        </div>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div class="pub-left">
         <img class="intro-img frame" src="images/paper/m3str.png">
       </div>
       <div class="pub-right">
         <div class="title">
           Abstractive Visual Understanding of Multi-modal Structured Knowledge: A New Perspective for MLLM Evaluation
         </div>
-        <a href="https://arxiv.org/abs/2506.01293" class="publication-button pdf"><i class="iconfont icon-wenjian_pdf"></i></a>
         <div class="desc">
         </div>
         <div class="authors">
@@ -868,7 +937,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       Academic Service
     </h1>  
     <ul>
-      <li> Conference Reviewer: ICLR 2025, Neurips 2024, WWW 2024/2025, ARR 2023/2024/2025, ACM MM 2024, IJCNN 2024/2025.
+      <li> Conference Reviewer: ICLR 2025/2026, Neurips 2024/2025, WWW 2024/2025, ARR 2023/2024/2025/2026, ACM MM 2024/2025, IJCNN 2024/2025.
       <li> Conference Volunteer: ISWC 2023, IJCKG 2022.
       <li> Journal Reviewer: IEEE TAI, IEEE TKDE
     </ul>
