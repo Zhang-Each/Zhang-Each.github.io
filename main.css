@@ -46,7 +46,7 @@ body {
 
 body:after {
     display: none;
-    content: url("images/background/background.png")
+    content: url("images/background/background1.JPG") url("images/background/background2.jpg")
 }
 
 h1,
@@ -673,12 +673,12 @@ pre>code {
 
 @media screen and (max-width: 600px) {
     .cover {
-        height: 600px
+        height: 400px
     }
 }
 
 .shallow-bg {
-    background-image: url("images/background/background.png");
+    background-image: url("images/background/background1.JPG");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center
@@ -740,6 +740,7 @@ pre>code {
 }
 
 @media screen and (max-width: 800px) {
+
     .profile-col-1,
     .profile-col-2 {
         width: -webkit-calc(50% - (30px / 2));
@@ -792,9 +793,10 @@ pre>code {
 }
 
 #my-title {
-    font-size: 20px;
+    font-size: 24px;
     color: #292929;
-    font-weight: 200
+    font-weight: 200;
+    margin-top: 14px;
 }
 
 #my-email {
@@ -804,6 +806,7 @@ pre>code {
 }
 
 #my-desc-title {
+
     font-size: 28px;
     color: #fff;
     font-weight: bold
@@ -932,20 +935,21 @@ hr.soft {
 
 .icon-button {
     background-color: white;
-    border-radius: 3.6rem;
+    border-radius: 3.2rem;  /* 减小边框圆角以适应更小的尺寸 */
     cursor: pointer;
     display: inline-block;
-    font-size: 2.0rem;
-    height: 3.6rem;
-    line-height: 3.6rem;
+    font-size: 1.8rem;  /* 减小字体大小以适应更小的按钮 */
+    height: 3.2rem;  /* 减小高度 */
+    line-height: 3rem;  /* 调整行高以保持文字垂直居中 */
     margin: 0 5px;
     position: relative;
     text-align: center;
+    top: 25px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    width: 3.6rem
+    width: 3.2rem;  /* 减小宽度 */
 }
 
 .icon-button span {
@@ -960,48 +964,18 @@ hr.soft {
     -moz-transition: all 0.3s;
     -o-transition: all 0.3s;
     transition: all 0.3s;
-    width: 0
+    width: 0;
 }
 
 .icon-button:hover span {
-    width: 3.6rem;
-    height: 3.6rem;
-    border-radius: 3.6rem;
-    margin: -1.8rem
+    width: 3.2rem;  /* 保持与按钮同宽 */
+    height: 3.2rem;  /* 保持与按钮同高 */
+    border-radius: 3.2rem;  /* 圆角与按钮保持一致 */
+    margin: -1.5rem;  /* 由于大小变化，调整外边距以保持居中 */
 }
 
 
-.publication-button {
-    color: #9b3022;
-    /* background-color: rgba(255, 255, 255, 0); */ 
-    border-radius: 1.0rem;
-    /* cursor: pointer; */
-    display: inline-block;
-    /* font-size: 4.0rem; */
-    transform: scale(2.0);
-    height: -1rem;
-    line-height: 2.5rem;
-    margin: 0 5px;
-    position: relative;
-    text-align: center;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    width: 1.5rem;
-    text-decoration: none
-}
-
-
-.publication-button:hover {
-    text-decoration: none;
-}
-
-.publication-button:visited{
-    color: #9b3022;
-}
-
-.codeforces span {
+.twitter span {
     background-color: #4099ff
 }
 
@@ -1017,26 +991,23 @@ hr.soft {
     background-color: #000
 }
 
-
 .icon-button i {
     background: none;
     color: white;
-    height: 3.6rem;
+    height: 3.2rem;
     left: 0;
-    line-height: 3.6rem;
+    line-height: 3.2rem;
     position: absolute;
     top: 0;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     -o-transition: all 0.3s;
     transition: all 0.3s;
-    width: 3.6rem;
+    width: 3.2rem;
     z-index: 10
 }
 
-
-.icon-button .icon-codeforces {
-    transform: scale(2.0);
+.icon-button .icon-twitter {
     color: #4099ff
 }
 
@@ -1052,13 +1023,7 @@ hr.soft {
     color: #0077B5
 }
 
-/* .publication-button .icon-pdf {
-    transform: scale(3.0);
-    color: #4099ff
-} */
-
-/* .publication-button:hover .icon-pdf, */
-.icon-button:hover .icon-codeforces,
+.icon-button:hover .icon-twitter,
 .icon-button:hover .icon-facebook,
 .icon-button:hover .icon-github,
 .icon-button:hover .icon-linkedin {
@@ -1613,67 +1578,70 @@ div.paginate-container li:nth-last-child(2) a:after {
 }
 
 .publications {
-    max-width: -webkit-calc(100% - (30px / 2));
-    max-width: calc(100% - (30px / 2));
+    /* max-width: -webkit-calc(100% - (10px / 2));
+    max-width: calc(100% - (10px / 2)); */
     margin-top: 10px;
+    margin-left: 0;
     font-family: 'Roboto', sans-serif, Helvetica
 }
 
+.pub-list {
+    overflow: auto
+}
 
 .pub {
     /* border-top: thin solid #c0c0c0; */
     /* radius: 15px; */
     /* float: left !important; */
     margin-top: 5px;
-    margin-bottom: 3px;
+    margin-bottom: 10px;
     /* padding-top: 15px; */
-    /* height: 7.0rem; */
-    /* overflow: auto */
+    overflow: auto
 }
 
-/* .pub-left {
+.pub-left {
     float: left;
-    width: -webkit-calc(10% - (30px / 2));
-    width: calc(10% - (30px / 2));
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto
+    width: -webkit-calc(25% );
+    width: calc(25% );
+    /* text-align: center; */
+    margin-left: 40px;
 }
 
 .pub-left>.intro-img {
-    width: 80px;
+    width: 245px;
     border-style: solid;
     border-color: #9b3022
-} */
+}
 
 .pub-right {
     float: right;
-    width: -webkit-calc(100% - (30px / 2));
-    width: calc(100% - (30px / 2))
+    width: -webkit-calc(68% );
+    width: calc(68% )
 }
 
-@media screen and (max-width: 1000px) {
-    /* .pub-left, */
+@media screen and (max-width: 800px) {
+
+    .pub-left,
     .pub-right {
         float: none;
         margin: 10px auto;
-        width: -webkit-calc(100% - (30px / 2));
-        width: calc(100% - (30px / 2))
+        width: -webkit-calc(100% );
+        width: calc(100% )
     }
 }
 
-/* @media screen and (max-width: 800px) {
+@media screen and (max-width: 600px) {
     .pub {
         position: relative;
         margin: 10px auto;
         float: none;
-        width: -webkit-calc(100% - (30px / 2));
-        width: calc(100% - (30px / 2))
+        width: -webkit-calc(100% );
+        width: calc(100% )
     }
-} */
+}
 
 .pub-right>.title {
-    font-weight: 650
+    font-weight: 600
 }
 
 .pub-right>.authors>.author {
@@ -1706,7 +1674,7 @@ div.paginate-container li:nth-last-child(2) a:after {
     font-size: 16px
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 600px) {
     .pub-right>.publish>.status {
         display: none
     }
@@ -1722,13 +1690,6 @@ div.paginate-container li:nth-last-child(2) a:after {
     .pub-right>.publish>.place {
         display: none
     }
-}
-
-.HonorsAwards {
-    max-width: -webkit-calc(100% - (30px / 2));
-    max-width: calc(100% - (30px / 2));
-    margin-top: 10px;
-    font-family: 'Roboto', sans-serif, Helvetica
 }
 
 .bio {
@@ -1973,7 +1934,12 @@ div.paginate-container li:nth-last-child(2) a:after {
     }
 }
 
-
+.pub-divider {
+  border: none;
+  border-top: 1px solid #aaa;
+  margin-left: 40px;          /* 跟 .pub-left 左边对齐 */
+  width: calc(100% - 40px);   /* 保证右边对齐 */
+}
 .research_tab {
 	flex: 1;
 	/* flex-grow: 1; */
@@ -2015,32 +1981,3 @@ div.paginate-container li:nth-last-child(2) a:after {
 .research_progress {
 	margin-top: 5px;
 }
-
-.progress_button {
-	margin-left: 1px;
-	/* flex: 1; */
-}
-
-
-/* 标签样式 */
-.tag {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 500;
-    color: white; /* 标签文字颜色为白色 */
-    background-color: #888;
-    transition: background-color 0.3s ease;
-}
-
-.tag:hover {
-    background-color: #555;
-}
-
-/* 标签颜色 */
-.tag-mmkg { background-color: #009688; } /* ML标签颜色 */
-.tag-llm { background-color: #3f51b5; } /* AI标签颜色 */
-.tag-other1 { background-color: #ff9800; } /* 深度学习标签颜色 */
-.tag-other2 { background-color: #9b3022; } /* 深度学习标签颜色 */
-.tag-other3 { background-color: #3388bb; } /* 深度学习标签颜色 */
